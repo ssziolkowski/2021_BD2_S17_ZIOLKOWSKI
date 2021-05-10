@@ -4225,6 +4225,167 @@ input[type="button"].btn-block {
   }
 }
 
+
+
+
+
+/* Sidebar */
+#content .sidebar {
+	font-family: 'Montserrat', sans-serif;
+	color: #FFFFFF;
+	float: left;
+	width: 20%;
+	padding-left: 3%;
+	padding-right: 3%;
+	text-align: center;
+	background-color: #343a40;
+	padding-top: 36px;
+	height: 900px;
+}
+/* main content of the site */
+#content .mainContent {
+	float: left;
+	width: 80%;
+	text-align: center;
+	padding-left: 4%;
+}
+/*menubar's properties for menus in sidebar */
+#content .sidebar #menubar {
+	text-align: left;
+	color: rgba(146,146,146,1.00);
+	position: relative;
+	left: 0%;
+}
+/* Search field in sidebar */
+#content .sidebar #search {
+	width: 100%;
+	border-radius: 0px;
+	height: 42px;
+	text-align: center;
+	color: rgba(208,207,207,1.00);
+	font-size: 14px;
+	;
+	margin-bottom: 21px;
+}
+/* Whole page content */
+#mainWrapper {
+	width: 100%;
+	padding-left: 10%;
+}
+/*menu elements */
+.menu ul li {
+	list-style-type: none;
+	font-size: x-large;
+	position: relative;
+	left: -35px;
+	padding-top: 12px;
+}
+/* Product rows for catalog */
+#content .mainContent .productRow {
+	overflow: auto;
+	color: rgba(146,146,146,1.00);
+}
+/* Each product Information in the catalog */
+.mainContent .productRow .productInfo {
+	float: left;
+	padding-left: 5%;
+	padding-right: 5%;
+	width: 30%;
+}
+/* Prices of a products in catalog */
+.productRow .productInfo .price {
+	font-family: 'Montserrat', sans-serif;
+	color: rgba(146,146,146,1.00);
+	font-size: 22px;
+	position: relative;
+	top: 0px;
+}
+/* Content holder for products in catalog*/
+.productRow .productInfo .productContent {
+	position: relative;
+	top: -10px;
+	font-size: 14px;
+	font-family: source-sans-pro, sans-serif;
+	font-style: normal;
+	font-weight: 200;
+	color: rgba(146,146,146,1.00);
+	white-space: pre-wrap;
+}
+/* Buy button for products in catalog */
+.productRow .productInfo .buyButton {
+	position: relative;
+	top: -30px;
+	width: 84%;
+	background-color: #343a40;
+	height: 35px;
+	color: rgba(255,255,255,1.00);
+	border-style: none;
+	font-size: 14px;
+	text-transform: uppercase;
+	margin-top: 8px;
+}
+
+/* Product's images in catalog */
+.productInfo div img {
+	width: 100%;
+}
+/*Links in sidebar */
+.sidebar #menubar .menu ul li a {
+	color: rgba(146,146,146,1.00);
+	text-decoration: none;
+}
+.sidebar #menubar .menu ul li a:hover {
+	color: rgba(107,97,97,1.00);
+	text-decoration: none;
+}
+/* Menu headings in sidebar */
+#menubar .menu h2 {
+	font-size: 14px;
+}
+/*Links under menus in sidebar */
+#menubar .menu ul li a {
+	font-size: 14px;
+}
+/* Menus in sidebar */
+.sidebar #menubar .menu {
+	margin-bottom: 29px;
+}
+
+/* footer */
+#mainWrapper footer {
+	clear: both;
+	overflow: auto;
+	background-color: #343A40;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";;
+	font-style: normal;
+	font-weight: 400;
+	line-height: inherit;
+	padding-top: 20px;
+	padding-left: 22px;
+	text-align: center;
+	width: 90%;
+	height: 200px;
+	padding-bottom: 22px;
+	padding-right: 220px;
+}
+/*Each footer content */
+#mainWrapper footer div {
+	width: 100%;
+	float: left;
+	padding-left: 4%;
+	padding-right: 4%;
+	color: rgba(255,255,255,1.00);
+	text-align: justify;
+}
+/* Links in footer */
+footer div a {
+	color: #0056b3
+	display: block;
+	text-decoration: none;
+}
+
+
+
 .nav {
   display: -ms-flexbox;
   display: flex;
@@ -4827,9 +4988,15 @@ input[type="button"].btn-block {
   padding: 1.25rem;
 }
 
-.card-img,
 .card-img-top,
 .card-img-bottom {
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  width: 100%;
+  height: 250px;
+}
+
+.card-img{
   -ms-flex-negative: 0;
   flex-shrink: 0;
   width: 100%;
