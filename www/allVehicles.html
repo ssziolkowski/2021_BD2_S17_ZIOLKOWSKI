@@ -4,20 +4,52 @@
 <meta charset="utf-8">
 <title>FleetManager</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="css/eCommerceStyle.css" rel="stylesheet" type="text/css">
+<link href="css/bootstrap-4.4.1.css" rel="stylesheet">
 <!--The following script tag downloads a font from the Adobe Edge Web Fonts server for use within the web page. We recommend that you do not modify it.-->
 <script>var __adobewebfontsappname__="dreamweaver"</script><script src="http://use.edgefonts.net/montserrat:n4:default;source-sans-pro:n2:default.js" type="text/javascript"></script>
 </head>
 
 <body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="FleetManager.html">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="allVehicles.html">All vehicles</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+				 aria-expanded="false">Your vehicles</a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="login.html">Login/Register</a>
+            </li>
+          </ul>
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
 <div id="mainWrapper">
-  <header> 
-    <!-- This is the header content. It contains Logo and links -->
-    <div id="headerLinks"><a href="FleetManager.html" title="Login/Register">Home&nbsp;</a></div>
-  </header>
-  <section id="offer"> 
+  <section id="offer">
     <!-- The offer section displays a banner text for promotions -->
-    <h2><center>GET YOUR VEHICLE NOW!!!</center></h2>
+    <h2><center></center></h2>
   </section>
   <div id="content">
     <section class="sidebar"> 
@@ -28,7 +60,6 @@
           <h2><!-- Title for menuset 1 -->PASSENGER CARS AND VANS</h2>
           <hr>
           <ul>
-            <!-- List of links under menuset 1 -->
             <li><a href="#" title="Link">Sedan</a></li>
             <li><a href="#" title="Link">Wagon</a></li>
             <li><a href="#" title="Link">Hatchback</a></li>
@@ -39,10 +70,8 @@
         </nav>
         <nav class="menu">
           <h2>TRUCKS AND SPECIALIZED VEHICLES</h2>
-          <!-- Title for menuset 2 -->
           <hr>
           <ul>
-            <!--List of links under menuset 2 -->
             <li><a href="#" title="Link">Trucks</a></li>
             <li><a href="#" title="Link">Construction</a></li>
             <li><a href="#" title="Link">Agriculture</a></li>
@@ -114,10 +143,46 @@
           <input type="button" name="button" value="Rent" onclick="window.location.href='selectedVehicle.html'" class="buyButton">
         </article>
       </div>
+	  <div class="productRow">
+        <article class="productInfo"> <!-- Each individual product description -->
+          <div><img alt="sample" src="images/200x200.png"></div>
+          <p class="price">$50</p>
+          <p class="productContent">Content holder</p>
+          <input type="button" name="button" value="Rent" onclick="window.location.href='selectedVehicle.html'" class="buyButton">
+        </article>
+        <article class="productInfo"><!-- Each individual product description -->
+          <div><img alt="sample" src="images/200x200.png"></div>
+          <p class="price">$50</p>
+          <p class="productContent">Content holder</p>
+          <input type="button" name="button" value="Rent" onclick="window.location.href='selectedVehicle.html'" class="buyButton">
+        </article>
+        <article class="productInfo"><!-- Each individual product description -->
+          <div><img alt="sample" src="images/200x200.png"></div>
+          <p class="price">$50</p>
+          <p class="productContent">Content holder</p>
+          <input type="button" name="button" value="Rent" onclick="window.location.href='selectedVehicle.html'" class="buyButton">
+        </article>
+      </div>
     </section>
   </div>
-  <footer> 
-  <!-- This is the footer with default 3 divs --></footer>
+<footer>
+        <div>
+          <address>
+            <strong>FleetManager, Inc.</strong><br>
+            Akademicka 1<br>
+            Gliwice, 44-100<br>
+            Phone: +48 123 456 789<br>
+          </address>
+          <address>
+          <strong>FleetManager</strong><br>
+            <a href="mailto:#">FleetManager@example.com</a>
+          </address>
+        </div>
+</footer>
 </div>
+  <script src="js/jquery-3.4.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap-4.4.1.js"></script>
 </body>
 </html>
