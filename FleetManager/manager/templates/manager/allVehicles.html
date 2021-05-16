@@ -90,143 +90,22 @@
       <section class="mainContent">
         <div class="container">
           <div class="row text-center mt-4">
+            {% for vehicle in vehicles %}
             <div class="col-md-4 pb-1 pb-md-0">
               <div class="card">
-                <img class="card-img-top" src="{% static 'manager/images/f64b0864e862d3c122851be4770d6e9a_XL.jpg' %}"
-                  alt="Card image cap">
+                <img class="card-img-top" src="{% static 'manager/images/'|add:vehicle.path %}" alt="Card image cap">
                 <div class="card-body">
-                  <h5 class="card-title">Ursus</h5>
+                  <h5 class="card-title">{{vehicle.model}}</h5>
                   <p class="card-text">&nbsp;</p>
                   <a href="{% url 'selectedVehicle' %}" class="btn btn-primary">Rent</a>
                 </div>
               </div>
             </div>
-            <div class="col-md-4 pb-1 pb-md-0">
-              <div class="card">
-                <img class="card-img-top" src="{% static 'manager/images/f64b0864e862d3c122851be4770d6e9a_XL.jpg' %}"
-                  alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Ursus</h5>
-                  <p class="card-text">&nbsp;</p>
-                  <a href="{% url 'selectedVehicle' %}" class="btn btn-primary">Rent</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 pb-1 pb-md-0">
-              <div class="card">
-                <img class="card-img-top"
-                  src="{% static 'manager/images/1d96f93186b635279bd7d3054bcfa104_800x600.jpg' %}" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Ursus S-class AMG</h5>
-                  <p class="card-text">&nbsp;</p>
-                  <a href="{% url 'selectedVehicle' %}" class="btn btn-primary">Rent</a>
-                </div>
-              </div>
-            </div>
+            {% if forloop.counter|divisibleby:3 %}
           </div>
           <div class="row text-center mt-4">
-            <div class="col-md-4 pb-1 pb-md-0">
-              <div class="card">
-                <img class="card-img-top" src="{% static 'manager/images/pobrane.jpg' %}" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Lambo tylko kiepska jakość</h5>
-                  <p class="card-text">&nbsp;</p>
-                  <a href="{% url 'selectedVehicle' %}" class="btn btn-primary">Rent</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 pb-1 pb-md-0">
-              <div class="card">
-                <img class="card-img-top" src="{% static 'manager/images/pobrane (1).jpg' %}" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Lambo trochę lepsza jakość</h5>
-                  <p class="card-text">&nbsp;</p>
-                  <a href="{% url 'selectedVehicle' %}" class="btn btn-primary">Rent</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 pb-1 pb-md-0">
-              <div class="card">
-                <img class="card-img-top"
-                  src="{% static 'manager/images/61169147-dedilovo-russia-aug-6-2016-old-soviet-tractor-t-74-one-of-the-most-mass-soviet-tractors-produced-in-.jpg' %}"
-                  alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Traktor do orania linii frontu</h5>
-                  <p class="card-text">&nbsp;</p>
-                  <a href="{% url 'selectedVehicle' %}" class="btn btn-primary">Rent</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row text-center mt-4">
-            <div class="col-md-4 pb-1 pb-md-0">
-              <div class="card">
-                <img class="card-img-top" src="{% static 'manager/images/f64b0864e862d3c122851be4770d6e9a_XL.jpg' %}"
-                  alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Ursus</h5>
-                  <p class="card-text">&nbsp;</p>
-                  <a href="{% url 'selectedVehicle' %}" class="btn btn-primary">Rent</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 pb-1 pb-md-0">
-              <div class="card">
-                <img class="card-img-top" src="{% static 'manager/images/f64b0864e862d3c122851be4770d6e9a_XL.jpg' %}"
-                  alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Ursus</h5>
-                  <p class="card-text">&nbsp;</p>
-                  <a href="{% url 'selectedVehicle' %}" class="btn btn-primary">Rent</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 pb-1 pb-md-0">
-              <div class="card">
-                <img class="card-img-top"
-                  src="{% static 'manager/images/1d96f93186b635279bd7d3054bcfa104_800x600.jpg' %}" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Ursus S-class AMG</h5>
-                  <p class="card-text">&nbsp;</p>
-                  <a href="{% url 'selectedVehicle' %}" class="btn btn-primary">Rent</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row text-center mt-4">
-            <div class="col-md-4 pb-1 pb-md-0">
-              <div class="card">
-                <img class="card-img-top" src="{% static 'manager/images/f64b0864e862d3c122851be4770d6e9a_XL.jpg' %}"
-                  alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Ursus</h5>
-                  <p class="card-text">&nbsp;</p>
-                  <a href="{% url 'selectedVehicle' %}" class="btn btn-primary">Rent</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 pb-1 pb-md-0">
-              <div class="card">
-                <img class="card-img-top" src="{% static 'manager/images/f64b0864e862d3c122851be4770d6e9a_XL.jpg' %}"
-                  alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Ursus</h5>
-                  <p class="card-text">&nbsp;</p>
-                  <a href="{% url 'selectedVehicle' %}" class="btn btn-primary">Rent</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 pb-1 pb-md-0">
-              <div class="card">
-                <img class="card-img-top"
-                  src="{% static 'manager/images/1d96f93186b635279bd7d3054bcfa104_800x600.jpg' %}" alt="Card image cap">
-                <div class="card-body">
-                  <h5 class="card-title">Ursus S-class AMG</h5>
-                  <p class="card-text">&nbsp;</p>
-                  <a href="{% url 'selectedVehicle' %}" class="btn btn-primary">Rent</a>
-                </div>
-              </div>
-            </div>
+            {% endif %}
+            {% endfor %}
           </div>
         </div>
       </section>

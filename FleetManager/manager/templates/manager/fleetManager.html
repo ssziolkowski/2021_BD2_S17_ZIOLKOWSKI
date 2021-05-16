@@ -121,9 +121,8 @@
   <h2 class="text-center">RECOMMENDED VEHICLES</h2>
   <hr>
   <div class="container">
-    {% for vehicle in vehicles %}
     <div class="row text-center mt-4">
-      {% for i in '123' %}
+      {% for vehicle in vehicles %}
       <div class="col-md-4 pb-1 pb-md-0">
         <div class="card">
           <img class="card-img-top" src="{% static 'manager/images/'|add:vehicle.path %}" alt="Card image cap">
@@ -134,9 +133,12 @@
           </div>
         </div>
       </div>
+      {% if forloop.counter|divisibleby:3 %}
+    </div>
+    <div class="row text-center mt-4">
+      {% endif %}
       {% endfor %}
     </div>
-    {% endfor %}
   </div>
   <div class="container">
     <div class="row"></div>

@@ -54,6 +54,19 @@ vehicles = [
         'manager_id': 'models.ForeignKey4',
         'status': 'models.TextField(choices=STATUS)4',
         'path': '61169147-dedilovo-russia-aug-6-2016-old-soviet-tractor-t-74-one-of-the-most-mass-soviet-tractors-produced-in-.jpg'
+    },
+    {
+        'VIN': 'models.TextField(primary_key=True)5',
+        'brand': 'models.TextField()5',
+        'model': 'models.TextField()5',
+        'version': 'models.TextField()5',
+        'accessories': 'models.TextField()5',
+        'plate_number': 'models.TextField()5',
+        'current_mileage': 'models.IntegerField(default:0)5',
+        'propose': 'models.TextField()5',
+        'manager_id': 'models.ForeignKey5',
+        'status': 'models.TextField(choices=STATUS)5',
+        'path': 'pobrane (1).jpg'
     }
 ]
 
@@ -66,7 +79,10 @@ def fleetManager(request):
 
 
 def allVehicles(request):
-    return render(request, 'manager/allVehicles.html')
+    context = {
+        'vehicles': vehicles
+    }
+    return render(request, 'manager/allVehicles.html', context)
 
 
 def login(request):
