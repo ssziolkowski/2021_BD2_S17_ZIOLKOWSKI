@@ -4,12 +4,56 @@ from django.http import HttpResponse
 
 vehicles = [
     {
-        'a1': 'dupa',
-        'a2': 'tralala'
+        'VIN': 'models.TextField(primary_key=True)1',
+        'brand': 'models.TextField()1',
+        'model': 'models.TextField()1',
+        'version': 'models.TextField()1',
+        'accessories': 'models.TextField()1',
+        'plate_number': 'models.TextField()1',
+        'current_mileage': 'models.IntegerField(default:0)1',
+        'propose': 'models.TextField()1',
+        'manager_id': 'models.ForeignKey1',
+        'status': 'models.TextField(choices=STATUS)1',
+        'path': 'f64b0864e862d3c122851be4770d6e9a_XL.jpg'
     },
     {
-        'a1': 'dupa2',
-        'a2': 'tralala2'
+        'VIN': 'models.TextField(primary_key=True)2',
+        'brand': 'models.TextField()2',
+        'model': 'models.TextField()2',
+        'version': 'models.TextField()2',
+        'accessories': 'models.TextField()2',
+        'plate_number': 'models.TextField()2',
+        'current_mileage': 'models.IntegerField(default:0)2',
+        'propose': 'models.TextField()2',
+        'manager_id': 'models.ForeignKey2',
+        'status': 'models.TextField(choices=STATUS)2',
+        'path': '1d96f93186b635279bd7d3054bcfa104_800x600.jpg'
+    },
+    {
+        'VIN': 'models.TextField(primary_key=True)3',
+        'brand': 'models.TextField()3',
+        'model': 'models.TextField()3',
+        'version': 'models.TextField()3',
+        'accessories': 'models.TextField()3',
+        'plate_number': 'models.TextField()3',
+        'current_mileage': 'models.IntegerField(default:0)3',
+        'propose': 'models.TextField()3',
+        'manager_id': 'models.ForeignKey3',
+        'status': 'models.TextField(choices=STATUS)3',
+        'path': 'pobrane.jpg'
+    },
+    {
+        'VIN': 'models.TextField(primary_key=True)4',
+        'brand': 'models.TextField()4',
+        'model': 'models.TextField()4',
+        'version': 'models.TextField()4',
+        'accessories': 'models.TextField()4',
+        'plate_number': 'models.TextField()4',
+        'current_mileage': 'models.IntegerField(default:0)4',
+        'propose': 'models.TextField()4',
+        'manager_id': 'models.ForeignKey4',
+        'status': 'models.TextField(choices=STATUS)4',
+        'path': '61169147-dedilovo-russia-aug-6-2016-old-soviet-tractor-t-74-one-of-the-most-mass-soviet-tractors-produced-in-.jpg'
     }
 ]
 
