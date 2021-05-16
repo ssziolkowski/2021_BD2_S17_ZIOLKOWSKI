@@ -99,3 +99,19 @@ def rentVehicle(request):
 
 def selectedVehicle(request):
     return render(request, 'manager/selectedVehicle.html')
+
+
+def adminpanel(request):
+    return render(request, 'manager/adminpanel.html')
+
+
+def addperson(request):
+    return render(request, 'manager/addperson.html')
+
+
+def addservice(request):
+    return render(request, 'manager/addservice.html')
+
+
+def addserviceplan(request):
+    return render(request, 'manager/addserviceplan.html')
