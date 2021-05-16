@@ -67,6 +67,19 @@ vehicles = [
         'manager_id': 'models.ForeignKey5',
         'status': 'models.TextField(choices=STATUS)5',
         'path': 'pobrane (1).jpg'
+    },
+    {
+        'VIN': 'models.TextField(primary_key=True)6',
+        'brand': 'models.TextField()6',
+        'model': 'models.TextField()6',
+        'version': 'models.TextField()6',
+        'accessories': 'models.TextField()6',
+        'plate_number': 'models.TextField()6',
+        'current_mileage': 'models.IntegerField(default:0)6',
+        'propose': 'models.TextField()6',
+        'manager_id': 'models.ForeignKey6',
+        'status': 'models.TextField(choices=STATUS)6',
+        'path': 't34.jpg'
     }
 ]
 
