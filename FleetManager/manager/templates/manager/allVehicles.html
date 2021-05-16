@@ -108,11 +108,17 @@
             {% endfor %}
           </div> 
         </div>
-        &nbsp;
+        {% if vehicles|length < 3 %}
+        {% for i in '0123456789012'|make_list %}
+        <p>&nbsp;</p>
+        {% endfor %}
+        {% elif vehicles|length < 6 %}
+        {% for i in '01'|make_list %}
+        <p>&nbsp;</p>
+        {% endfor %}
+        {% endif %}
       </section>
-      &nbsp;
     </div>
-    &nbsp;
     <footer>
         <div>
           <address>
