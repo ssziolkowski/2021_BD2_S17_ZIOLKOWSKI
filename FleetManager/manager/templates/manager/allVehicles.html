@@ -91,7 +91,7 @@
         <div class="container">
           <div class="row text-center mt-4">
             {% for vehicle in vehicles %}
-            <div class="col-md-4 pb-1 pb-md-0">
+            <div class="col-md-4 pb-1 pb-md-0" >
               <div class="card">
                 <img class="card-img-top" src="{% static 'manager/images/'|add:vehicle.path %}" alt="Card image cap">
                 <div class="card-body">
@@ -106,17 +106,15 @@
           <div class="row text-center mt-4">
             {% endif %}
             {% endfor %}
-          </div>
+          </div> 
         </div>
+        &nbsp;
       </section>
+      &nbsp;
     </div>
-    <div class="container">
-      <div class="row"></div>
-    </div>
-    <hr>
-    <div class="container text-white bg-dark p-4">
-      <div class="row">
-        <div class="col-md-4 col-lg-5 col-6">
+    &nbsp;
+    <footer>
+        <div>
           <address>
             <strong>FleetManager, Inc.</strong><br>
             Akademicka 1<br>
@@ -124,23 +122,13 @@
             Phone: +48 123 456 789<br>
           </address>
           <address>
-            <strong>FleetManager</strong>
-            <br>
+          <strong>FleetManager</strong><br>
             <a href="mailto:#">FleetManager@example.com</a>
           </address>
         </div>
-      </div>
-    </div>
+</footer>
   </div>
-  <footer class="text-center">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <p>&nbsp;</p>
-        </div>
-      </div>
-    </div>
-  </footer>
+
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="{% static 'manager/js/jquery-3.4.1.min.js' %}"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
