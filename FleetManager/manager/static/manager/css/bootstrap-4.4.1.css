@@ -4354,7 +4354,7 @@ input[type="button"].btn-block {
 /* footer */
 #mainWrapper footer {
 	clear: both;
-	overflow: auto;
+	overflow: hidden !important;
 	background-color: #343A40;
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";;
 	font-style: normal;
