@@ -115,3 +115,19 @@ def addservice(request):
 
 def addserviceplan(request):
     return render(request, 'manager/addserviceplan.html')
+
+
+def editperson(request):
+    return render(request, 'manager/editperson.html')
+
+
+def editvehicle(request):
+    return render(request, 'manager/editVehicle.html')
+
+
+def editservice(request):
+    return render(request, 'manager/editservice.html')
+
+
+def editserviceplan(request):
+    return render(request, 'manager/editserviceplan.html')
