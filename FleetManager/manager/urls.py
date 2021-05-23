@@ -12,5 +12,9 @@ urlpatterns = [
     path('adminpanel', views.adminpanel, name='adminpanel'),
     path('addperson', views.addperson, name='addperson'),
     path('addservice', views.addservice, name='addservice'),
-    path('addserviceplan', views.addserviceplan, name='addserviceplan')
+    path('addserviceplan', views.addserviceplan, name='addserviceplan'),
+    path('editperson', views.editperson, name='editperson'),
+    path('editvehicle', views.editvehicle, name='editvehicle'),
+    path('editservice', views.editservice, name='editservice'),
+    path('editserviceplan', views.editserviceplan, name='editserviceplan')
 ]

@@ -49,85 +49,78 @@
   </nav>
   <hr>
   <div>
-    <div style="padding:10px;"></div>
-    <div class="container" style="background-color: #f1f1f1;padding:10px;">
-      <center>
-        <h5><b>Admin Panel</b></h5>
-      </center>
+    <form action="action_page.php" method="post">
+      <div style="padding:10px;"></div>
+      <div class="container" style="background-color: #f1f1f1;padding:10px;">
+      <center><h5><b>Vehicle addition</b></h5></center>
       <hr>
-      <table id="form" align="left" width="70%">
-        <tr>
-          <td>
-            <label for="addper"><b>Personnel addition</b></label>
-          </td>
-          <td>
-            <a href="{% url 'addperson' %}" class="btn btn-secondary">Add Person</a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="addveh"><b>Vehicle addition</b></label>
-          </td>
-          <td>
-            <a href="{% url 'addVehicle' %}" class="btn btn-secondary">Add Vehicle</a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="service"><b>Service manager</b></label>
-          </td>
-          <td>
-            <a href="{% url 'addservice' %}" class="btn btn-secondary">Add Service</a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="serviceplan"><b>Serviceplan Manager</b></label>
-          </td>
-          <td>
-            <a href="{% url 'addserviceplan' %}" class="btn btn-secondary">Serviceplan</a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="edper"><b>Personnel edition</b></label>
-          </td>
-          <td>
-            <a href="{% url 'editperson' %}" class="btn btn-secondary">Edit Person</a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="addveh"><b>Vehicle edition</b></label>
-          </td>
-          <td>
-            <a href="{% url 'editvehicle' %}" class="btn btn-secondary">Edit Vehicle</a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="eservice"><b>Service edit</b></label>
-          </td>
-          <td>
-            <a href="{% url 'editservice' %}" class="btn btn-secondary">Edit Service</a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="eserviceplan"><b>Serviceplan edit</b></label>
-          </td>
-          <td>
-            <a href="{% url 'editserviceplan' %}" class="btn btn-secondary">Edit serviceplan</a>
-          </td>
-        </tr>
+      <table id="form" align="left" width="70%" >
+      <tr><td>
+      <label for="vin"><b>VIN</b></label></td><td>
+      <input type="text" placeholder="Enter VIN" name="vin" required>
+      </td></tr>
+      <tr><td>
+      <label for="VIN"><b>Brand</b></label></td><td>
+      <input type="text" placeholder="Enter Brand" name="brand" required>
+      </td></tr>
+      <tr><td>
+      <label for="model"><b>Model</b></label></td><td>
+      <input type="text" placeholder="Enter Model" name="model" required>
+      </td></tr>
+      <tr><td>
+      <label for="version"><b>Version</b></label></td><td>
+      <input type="text" placeholder="Enter Version" name="version" required>
+      </td></tr>
+      <tr><td>
+      <label for="acc"><b>accessories</b></label></td><td>
+      <input type="text" placeholder="Enter Accessories" name="accessories" required>
+      </td></tr>
+      <tr><td style="padding-right:20px">
+      <label for="plate"><b>Registration plate</b></label></td><td>
+      <input type="text" placeholder="Enter Number plates" name="plate" required>
+      </td></tr>
+      <tr><td>
+      <label for="current_mileage"><b>Current mileage</b></label></td><td>
+      <input type="number" placeholder="Enter current mileage" name="current_mileage" required>
+      </td></tr>
+      <tr><td>
+      <label for="purpose"><b>Purpose</b></label></td><td>
+      <select placeholder="Enter car purpose" name="purpose" required>
+       <option value="civilian">Civilian</option>
+       <option value="special purpose">Special purpose</option>
+      </select>
+      </td></tr>
+      <tr><td>
+      <label for="manager_id"><b>Manager ID</b></label></td><td>
+      <input type="number" placeholder="Enter Manager ID" name="manager_id" required>
+      </td></tr>
+      <tr><td>
+      <label for="status"><b>Status</b></label></td><td>
+      <select placeholder="Enter current status" name="status" required>
+       <option value="operational">Operational</option>
+       <option value="decommisioned">Decommisioned</option>
+      </select>
+      </td></tr>
+      <tr><td>
+      <button type="submit">Submit</button>
+      </td></tr>
       </table>
-
+      <label>
+        <input type="checkbox" checked="checked" name="cirograph" required> I agree to suffer the consequences for any error
+      </label>
+      
+  
+      </div>
+  
+      <div class="container" style="background-color:#f1f1f1">
+      <input type='reset' value='Cancel' name='reset'>
+      </div>
+          
+    </form>
     </div>
 
-    <div class="container" style="background-color:#f1f1f1">
-      <p style="color:#f1f1f1">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
-    </div>
-
+  <div class="container">
+    <div class="row"></div>
   </div>
   <hr>
   <div class="container text-white bg-dark p-4">

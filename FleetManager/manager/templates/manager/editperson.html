@@ -48,87 +48,66 @@
     </div>
   </nav>
   <hr>
-  <div>
-    <div style="padding:10px;"></div>
-    <div class="container" style="background-color: #f1f1f1;padding:10px;">
-      <center>
-        <h5><b>Admin Panel</b></h5>
-      </center>
-      <hr>
-      <table id="form" align="left" width="70%">
-        <tr>
-          <td>
-            <label for="addper"><b>Personnel addition</b></label>
-          </td>
-          <td>
-            <a href="{% url 'addperson' %}" class="btn btn-secondary">Add Person</a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="addveh"><b>Vehicle addition</b></label>
-          </td>
-          <td>
-            <a href="{% url 'addVehicle' %}" class="btn btn-secondary">Add Vehicle</a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="service"><b>Service manager</b></label>
-          </td>
-          <td>
-            <a href="{% url 'addservice' %}" class="btn btn-secondary">Add Service</a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="serviceplan"><b>Serviceplan Manager</b></label>
-          </td>
-          <td>
-            <a href="{% url 'addserviceplan' %}" class="btn btn-secondary">Serviceplan</a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="edper"><b>Personnel edition</b></label>
-          </td>
-          <td>
-            <a href="{% url 'editperson' %}" class="btn btn-secondary">Edit Person</a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="addveh"><b>Vehicle edition</b></label>
-          </td>
-          <td>
-            <a href="{% url 'editvehicle' %}" class="btn btn-secondary">Edit Vehicle</a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="eservice"><b>Service edit</b></label>
-          </td>
-          <td>
-            <a href="{% url 'editservice' %}" class="btn btn-secondary">Edit Service</a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="eserviceplan"><b>Serviceplan edit</b></label>
-          </td>
-          <td>
-            <a href="{% url 'editserviceplan' %}" class="btn btn-secondary">Edit serviceplan</a>
-          </td>
-        </tr>
-      </table>
+<div>
+	<form action="action_page.php" method="post">
+	  <div style="padding:10px;"></div>
+	  <div class="container" style="background-color: #f1f1f1;padding:10px;">
+	  <center><h5><b>Personel addition</b></h5></center>
+	  <hr>
+	  <table id="form" align="left" width="70%" >
+	  <tr><td>
+		<label for="name"><b>Name</b></label></td><td>
+		<input type="text" placeholder="Enter Name" name="name" required>
+	  </td></tr>
+	  <tr><td>
+		<label for="surname"><b>Surname</b></label></td><td>
+		<input type="text" placeholder="Enter Surname" name="brand" required>
+	  </td></tr>
+	  <tr><td>
+		<label for="phone"><b>Phone number</b></label></td><td>
+		<input type="text" placeholder="Enter Phone" name="phone" required>
+	  </td></tr>
+	  <tr><td>
+		<label for="position"><b>Position</b></label></td><td>
+		<input type="text" placeholder="Enter Position" name="position" required>
+	  </td></tr>
+	  <tr><td>
+		<label for="address"><b>Address</b></label></td><td>
+		<input type="text" placeholder="Enter Address" name="address" required>
+	  </td></tr>
+	  <tr><td style="padding-right:20px">
+		<label for="salary"><b>Salary</b></label></td><td>
+		<input type="number" placeholder="Enter Salary" name="salary" required>
+	  </td></tr>
+	  <tr><td>
+		<label for="status"><b>Current Status</b></label></td><td>
+		<select placeholder="Enter current status" name="status" required>
+		 <option value="hired">Hired</option>
+		 <option value="holiday">Holiday</option>
+		 <option value="discharged">Discharged</option>
+		</select>
+	  </td></tr>
+	  <tr><td>
+		<button type="submit">Submit</button>
+		</td></tr>
+	  </table>
+		<label>
+		  <input type="checkbox" checked="checked" name="cirograph" required> I agree to suffer the consequences for any error
+		</label>
+		
 
+	  </div>
+
+	  <div class="container" style="background-color:#f1f1f1">
+		<input type='reset' value='Cancel' name='reset'>
+	  </div>
+	  		
+	</form>
+	</div>
+	
+    <div class="container">
+      <div class="row"></div>
     </div>
-
-    <div class="container" style="background-color:#f1f1f1">
-      <p style="color:#f1f1f1">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
-    </div>
-
-  </div>
   <hr>
   <div class="container text-white bg-dark p-4">
     <div class="row">
