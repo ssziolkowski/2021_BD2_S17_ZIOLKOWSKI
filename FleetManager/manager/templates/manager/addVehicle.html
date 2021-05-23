@@ -42,82 +42,136 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'adminpanel' %}">Admin panel</a>
-          </li>
+          </li> 
         </ul>
       </div>
     </div>
   </nav>
   <hr>
   <div>
-    <form action="action_page.php" method="post">
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+      {{ form.as_p }}
       <div style="padding:10px;"></div>
       <div class="container" style="background-color: #f1f1f1;padding:10px;">
-      <center><h5><b>Vehicle addition</b></h5></center>
-      <hr>
-      <table id="form" align="left" width="70%" >
-      <tr><td>
-      <label for="vin"><b>VIN</b></label></td><td>
-      <input type="text" placeholder="Enter VIN" name="vin" required>
-      </td></tr>
-      <tr><td>
-      <label for="VIN"><b>Brand</b></label></td><td>
-      <input type="text" placeholder="Enter Brand" name="brand" required>
-      </td></tr>
-      <tr><td>
-      <label for="model"><b>Model</b></label></td><td>
-      <input type="text" placeholder="Enter Model" name="model" required>
-      </td></tr>
-      <tr><td>
-      <label for="version"><b>Version</b></label></td><td>
-      <input type="text" placeholder="Enter Version" name="version" required>
-      </td></tr>
-      <tr><td>
-      <label for="acc"><b>accessories</b></label></td><td>
-      <input type="text" placeholder="Enter Accessories" name="accessories" required>
-      </td></tr>
-      <tr><td style="padding-right:20px">
-      <label for="plate"><b>Registration plate</b></label></td><td>
-      <input type="text" placeholder="Enter Number plates" name="plate" required>
-      </td></tr>
-      <tr><td>
-      <label for="current_mileage"><b>Current mileage</b></label></td><td>
-      <input type="number" placeholder="Enter current mileage" name="current_mileage" required>
-      </td></tr>
-      <tr><td>
-      <label for="purpose"><b>Purpose</b></label></td><td>
-      <select placeholder="Enter car purpose" name="purpose" required>
-       <option value="civilian">Civilian</option>
-       <option value="special purpose">Special purpose</option>
-      </select>
-      </td></tr>
-      <tr><td>
-      <label for="manager_id"><b>Manager ID</b></label></td><td>
-      <input type="number" placeholder="Enter Manager ID" name="manager_id" required>
-      </td></tr>
-      <tr><td>
-      <label for="status"><b>Status</b></label></td><td>
-      <select placeholder="Enter current status" name="status" required>
-       <option value="operational">Operational</option>
-       <option value="decommisioned">Decommisioned</option>
-      </select>
-      </td></tr>
-      <tr><td>
-      <button type="submit">Submit</button>
-      </td></tr>
-      </table>
-      <label>
-        <input type="checkbox" checked="checked" name="cirograph" required> I agree to suffer the consequences for any error
-      </label>
-      
-  
+        <center>
+          <h5><b>Vehicle addition</b></h5>
+        </center>
+        <hr>
+        <table id="form" align="left" width="70%">
+          <tr>
+            <td>
+              <label for="vin"><b>VIN</b></label>
+            </td>
+            <td>
+              <input type="text" placeholder="Enter VIN" name="vin" required>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="brand"><b>Brand</b></label>
+            </td>
+            <td>
+              <input type="text" placeholder="Enter Brand" name="brand" required>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="model"><b>Model</b></label>
+            </td>
+            <td>
+              <input type="text" placeholder="Enter Model" name="model" required>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="version"><b>Version</b></label>
+            </td>
+            <td>
+              <input type="text" placeholder="Enter Version" name="version" required>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="acc"><b>accessories</b></label>
+            </td>
+            <td>
+              <input type="text" placeholder="Enter Accessories" name="accessories" required>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding-right:20px">
+              <label for="plate"><b>Registration plate</b></label>
+            </td>
+            <td>
+              <input type="text" placeholder="Enter Number plates" name="plate" required>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="current_mileage"><b>Current mileage</b></label>
+            </td>
+            <td>
+              <input type="number" placeholder="Enter current mileage" name="current_mileage" required>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="pic"><b>Upload picture</b></label>
+            </td>
+            <td>
+              <input type="file" placeholder="Upload picture" name="picture">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="purpose"><b>Purpose</b></label>
+            </td>
+            <td>
+              <select placeholder="Enter car purpose" name="purpose" required>
+                <option value="civilian">Civilian</option>
+                <option value="special purpose">Special purpose</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>  
+              <label for="manager_id"><b>Manager ID</b></label>
+            </td>
+            <td>
+              <input type="number" placeholder="Enter Manager ID" name="manager_id" required>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="status"><b>Status</b></label>
+            </td>
+            <td>
+              <select placeholder="Enter current status" name="status" required>
+                <option value="operational">Operational</option>
+                <option value="decommisioned">Decommisioned</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button type="submit">Submit</button>
+            </td>
+          </tr>
+        </table>
+        <label>
+          <input type="checkbox" checked="checked" name="cirograph" required> I agree to suffer the consequences for any
+          error
+        </label>
+
+
       </div>
-  
+
       <div class="container" style="background-color:#f1f1f1">
-      <input type='reset' value='Cancel' name='reset'>
+        <input type='reset' value='Cancel' name='reset'>
       </div>
-          
+
     </form>
-    </div>
+  </div>
 
   <div class="container">
     <div class="row"></div>

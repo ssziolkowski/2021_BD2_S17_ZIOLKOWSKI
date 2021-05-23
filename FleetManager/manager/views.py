@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+from . import forms
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
 vehicles = [
     {
@@ -89,9 +91,18 @@ def login(request):
     return render(request, 'manager/login.html')
 
 
+@csrf_exempt 
 def addVehicle(request):
+    if request.method == "POST":
+        form = forms.VehiclesForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return forms.redirect('addVehicle', pk=post.pk)
+        else:
+            form = forms.VehiclesForm()
     return render(request, 'manager/addVehicle.html')
-
+    
 
 def rentVehicle(request):
     return render(request, 'manager/rentVehicle.html')
@@ -131,3 +142,5 @@ def editservice(request):
 
 def editserviceplan(request):
     return render(request, 'manager/editserviceplan.html')
+
+
