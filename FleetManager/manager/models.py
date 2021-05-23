@@ -1,7 +1,7 @@
 from django.db import models
 from datetime import date
 
-"""
+
 class Person(models.Model):
     EMPLOYED = 'employed'
     DISCHARGED = 'discharged'
@@ -9,13 +9,13 @@ class Person(models.Model):
         (EMPLOYED, ('Currently employed')),
         (DISCHARGED, ('This worker is no longer employed'))
     ]
-    ID = models.AutoField()
+    ID = models.IntegerField(primary_key=True)
     name = models.TextField()
     surname = models.TextField()
     phone_number = models.TextField()
     position = models.TextField()
     address = models.TextField()
-    salary = models.IntegerField(default=0)
+    salary = models.IntegerField()
     status = models.TextField(choices=STATUS)
 
 
@@ -46,7 +46,7 @@ class Rental(models.Model):
         (PRIVATE, ('Borrowed for private purposes')),
         (BUISNESS, ('Borrowed for buisness purposes'))
     ]
-    rent_id = models.AutoField()
+    rent_id = models.IntegerField(primary_key=True)
     rent_type = models.TextField(choices=STATUS)
     renter_id = models.ForeignKey(Person, on_delete=models.RESTRICT)
     vehicle_id = models.ForeignKey(Vehicle, on_delete=models.RESTRICT)
@@ -59,10 +59,9 @@ class Rental(models.Model):
 
 
 class Service(models.Model):
-    work_id = models.AutoField()
+    work_id = models.IntegerField(primary_key=True)
     vehicle_id = models.ForeignKey(Vehicle, on_delete=models.RESTRICT)
     cost = models.FloatField()
     date = models.DateField(default=date.today)
     service_performed = models.TextField()
     provider = models.TextField()
-"""
