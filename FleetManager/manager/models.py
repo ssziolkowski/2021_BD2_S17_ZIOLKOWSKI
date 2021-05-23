@@ -1,5 +1,16 @@
 from django.db import models
+from django.db.models import Deferrable, UniqueConstraint
 from datetime import date
+
+
+class Company(models.Model):
+    id = models.IntegerField(primary_key=True)
+    NIP = models.IntegerField()
+    name = models.TextField()
+    password = models.TextField()
+    address = models.TextField()
+    phone_number = models.TextField()
+    domain = models.TextField()
 
 
 class Person(models.Model):
@@ -10,6 +21,7 @@ class Person(models.Model):
         (DISCHARGED, ('This worker is no longer employed'))
     ]
     ID = models.IntegerField(primary_key=True)
+    companyID = models.ForeignKey(Company, on_delete=models.RESTRICT) 
     name = models.TextField()
     surname = models.TextField()
     phone_number = models.TextField()
@@ -28,15 +40,26 @@ class Vehicle(models.Model):
     ]
     VIN = models.TextField(primary_key=True)
     brand = models.TextField()
-    model = models.TextField()
     version = models.TextField()
+    model = models.TextField()
     accessories = models.TextField()
+    picture = models.BinaryField()
+    companyID = models.ForeignKey(Company, on_delete=models.RESTRICT)
     plate_number = models.TextField()
     current_mileage = models.IntegerField(default=0)
-    propose = models.TextField()
-    manager_id = models.ForeignKey(
-        Person, on_delete=models.SET_NULL, null=True)
+    purpose = models.TextField()
+    distinctive_marks = models.TextField()
     status = models.TextField(choices=STATUS)
+
+
+class Manager(models.Model):
+    #manager_id = models.IntegerField(primary_key=True, null=True)
+    personal_ID = models.ForeignKey(
+        Person, related_name='%(class)s', on_delete=models.SET_NULL, null=True)
+    VIN = models.ForeignKey(
+        Vehicle, related_name='%(class)s', on_delete=models.SET_NULL, null=True)     
+    date_start = models.DateField(default=date.today)
+    date_end = models.DateField()
 
 
 class Rental(models.Model):
@@ -56,6 +79,7 @@ class Rental(models.Model):
     costs_description = models.TextField()
     rent_start = models.DateField()
     rent_end = models.DateField()
+    rent_status = models.BooleanField(default=False)
 
 
 class Service(models.Model):
@@ -65,3 +89,17 @@ class Service(models.Model):
     date = models.DateField(default=date.today)
     service_performed = models.TextField()
     provider = models.TextField()
+
+
+class Serviceplan(models.Model):
+    UniqueConstraint(fields = ['brand', 'model', 'version', 'accessories'], name = 'serviceplan_id')
+    brand = models.ForeignKey(Vehicle, related_name='%(class)s_brand', on_delete=models.RESTRICT)
+    model = models.ForeignKey(Vehicle, related_name='%(class)s_model', on_delete=models.RESTRICT)
+    version = models.ForeignKey(Vehicle, related_name='%(class)s_version', on_delete=models.RESTRICT)
+    accessories = models.ForeignKey(Vehicle, related_name='%(class)s_accessories', on_delete=models.RESTRICT)
+    service_performed = models.TextField()
+    mileage = models.IntegerField()
+    date = models.DateField(default=date.today)
+    status = models.BooleanField()
+
+
