@@ -1,10 +1,9 @@
 from .models import Vehicle
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from .forms import forms as fs
+from .forms import *
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from django import forms
 
 vehicles = [
     {
@@ -96,15 +95,14 @@ def login(request):
 @csrf_exempt 
 def addVehicle(request):
     if request.method == "POST":
-            form = fs.VehiclesForm(request.POST, request.FILES)
+            form = VehiclesForm(request.POST, request.FILES)
             if form.is_valid():
                 form.save()
                 post = form.save(commit=False)
                 post.save()
-                return forms.redirect('manager/fleetManager.html', pk=post.pk)
-                return render(request,'manager/addVehicle.html',{'form':form,'up':Vehicle.objects.all(), })
+                return redirect('fleetManager')
             else:
-                form = fs.VehiclesForm()
+                form = VehiclesForm()
        
     return render(request, 'manager/addVehicle.html')
     
