@@ -69,7 +69,7 @@ class Rental(models.Model):
         (PRIVATE, ('Borrowed for private purposes')),
         (BUISNESS, ('Borrowed for buisness purposes'))
     ]
-    rent_id = models.IntegerField(primary_key=True)
+    rent_id = models.AutoField(primary_key=True)
     rent_type = models.TextField(choices=STATUS)
     renter_id = models.ForeignKey(Person, on_delete=models.RESTRICT)
     vehicle_id = models.ForeignKey(Vehicle, on_delete=models.RESTRICT)
@@ -83,7 +83,7 @@ class Rental(models.Model):
 
 
 class Service(models.Model):
-    work_id = models.IntegerField(primary_key=True)
+    work_id = models.AutoField(primary_key=True)
     vehicle_id = models.ForeignKey(Vehicle, on_delete=models.RESTRICT)
     cost = models.FloatField()
     date = models.DateField(default=date.today)

@@ -3,7 +3,6 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from .forms import *
 from django.utils import timezone
-from django.views.decorators.csrf import csrf_exempt
 
 def fleetManager(request):
     context = {
@@ -60,11 +59,11 @@ def selectedVehicle(request):
     return render(request, 'manager/selectedVehicle.html')
 
 
-def adminpanel(request):
-    return render(request, 'manager/adminpanel.html')
+def adminPanel(request):
+    return render(request, 'manager/adminPanel.html')
 
 
-def addperson(request):
+def addPerson(request):
     if request.method == "POST":
             form = PersonForm(request.POST)
             if form.is_valid():
@@ -75,30 +74,39 @@ def addperson(request):
                 return redirect('fleetManager')
             else:
                 form = PersonForm()
-    return render(request, 'manager/addperson.html')
+    return render(request, 'manager/addPerson.html')
 
 
-def addservice(request):
-    return render(request, 'manager/addservice.html')
+def addService(request):
+    if request.method == "POST":
+        form = ServiceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            service = form.save(commit=False)
+            service.save()
+            return redirect('addService')
+        else:
+            form = ServiceForm()
+    return render(request, 'manager/addService.html')
+ 
+
+def addServiceplan(request):
+    return render(request, 'manager/addServiceplan.html')
 
 
-def addserviceplan(request):
-    return render(request, 'manager/addserviceplan.html')
+def editPerson(request):
+    return render(request, 'manager/editPerson.html')
 
 
-def editperson(request):
-    return render(request, 'manager/editperson.html')
-
-
-def editvehicle(request):
+def editVehicle(request):
     return render(request, 'manager/editVehicle.html')
 
 
-def editservice(request):
-    return render(request, 'manager/editservice.html')
+def editService(request):
+    return render(request, 'manager/editService.html')
 
 
-def editserviceplan(request):
-    return render(request, 'manager/editserviceplan.html')
+def editServiceplan(request):
+    return render(request, 'manager/editServiceplan.html')
 
 

@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django import forms
 from django.utils import timezone
 from django.utils.translation import templatize
-from .models import Person, Vehicle, models
+from .models import Person, Service, Vehicle, models
 from django.utils.safestring import mark_safe
 
 
@@ -28,3 +28,10 @@ class PersonForm(forms.ModelForm):
     class Meta:
         model = Person
         fields = ('name', 'surname', 'phone_number', 'position', 'address', 'salary', 'status')
+
+
+class ServiceForm(forms.ModelForm):
+    
+    class Meta:
+        model = Service
+        fields = ('vehicle_id', 'cost', 'date', 'service_performed', 'provider')
