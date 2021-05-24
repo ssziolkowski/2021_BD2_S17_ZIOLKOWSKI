@@ -21,7 +21,7 @@ class Person(models.Model):
         (DISCHARGED, ('This worker is no longer employed'))
     ]
     ID = models.AutoField(primary_key=True)
-    companyID = models.ForeignKey(Company, on_delete=models.RESTRICT) 
+    companyID = models.ForeignKey(Company, on_delete=models.RESTRICT)
     name = models.TextField()
     surname = models.TextField()
     phone_number = models.TextField()
@@ -42,8 +42,9 @@ class Vehicle(models.Model):
     brand = models.TextField()
     version = models.TextField()
     model = models.TextField()
+    category = models.TextField(default='other')
     accessories = models.TextField()
-    picture = models.ImageField(upload_to ='uploads/')
+    picture = models.ImageField(upload_to='uploads/')
     companyID = models.ForeignKey(Company, on_delete=models.RESTRICT)
     plate_number = models.TextField()
     current_mileage = models.IntegerField(default=0)
@@ -53,11 +54,10 @@ class Vehicle(models.Model):
 
 
 class Manager(models.Model):
-    #manager_id = models.IntegerField(primary_key=True, null=True)
     personal_ID = models.ForeignKey(
         Person, related_name='%(class)s', on_delete=models.SET_NULL, null=True)
     VIN = models.ForeignKey(
-        Vehicle, related_name='%(class)s', on_delete=models.SET_NULL, null=True)     
+        Vehicle, related_name='%(class)s', on_delete=models.SET_NULL, null=True)
     date_start = models.DateField(default=date.today)
     date_end = models.DateField()
 
@@ -92,14 +92,17 @@ class Service(models.Model):
 
 
 class Serviceplan(models.Model):
-    UniqueConstraint(fields = ['brand', 'model', 'version', 'accessories'], name = 'serviceplan_id')
-    brand = models.ForeignKey(Vehicle, related_name='%(class)s_brand', on_delete=models.RESTRICT)
-    model = models.ForeignKey(Vehicle, related_name='%(class)s_model', on_delete=models.RESTRICT)
-    version = models.ForeignKey(Vehicle, related_name='%(class)s_version', on_delete=models.RESTRICT)
-    accessories = models.ForeignKey(Vehicle, related_name='%(class)s_accessories', on_delete=models.RESTRICT)
+    UniqueConstraint(fields=['brand', 'model', 'version',
+                     'accessories'], name='serviceplan_id')
+    brand = models.ForeignKey(
+        Vehicle, related_name='%(class)s_brand', on_delete=models.RESTRICT)
+    model = models.ForeignKey(
+        Vehicle, related_name='%(class)s_model', on_delete=models.RESTRICT)
+    version = models.ForeignKey(
+        Vehicle, related_name='%(class)s_version', on_delete=models.RESTRICT)
+    accessories = models.ForeignKey(
+        Vehicle, related_name='%(class)s_accessories', on_delete=models.RESTRICT)
     service_performed = models.TextField()
     mileage = models.IntegerField()
     date = models.DateField(default=date.today)
     status = models.BooleanField()
-
-
