@@ -83,7 +83,7 @@ def fleetManager(request):
 
 def allVehicles(request):
     context = {
-        'vehicles': vehicles
+        'vehicles': Vehicle.objects.all()
     }
     return render(request, 'manager/allVehicles.html', context)
 
@@ -106,6 +106,14 @@ def addVehicle(request):
        
     return render(request, 'manager/addVehicle.html')
     
+def object_specific_view(request, ovin): # The url argument oid is automatically supplied by Django as we defined it carefully in our urls.py
+    vehicle = Vehicle.objects.filter(VIN=ovin).first()
+    context={
+      'vehicle':vehicle
+    }
+    return render(request, "manager/selectedVehicle.html", context)
+
+
 
 def rentVehicle(request):
     return render(request, 'manager/rentVehicle.html')

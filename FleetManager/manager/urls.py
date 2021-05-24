@@ -1,3 +1,5 @@
+from django import urls
+from django.conf.urls import url
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
@@ -5,6 +7,7 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
+    url(r'^Vehicles/(?P<ovin>[\w]+)/$', views.object_specific_view, name='Vehicle'),
     path('', views.fleetManager, name='fleetManager'),
     path('allVehicles', views.allVehicles, name='allVehicles'),
     path('addVehicle', views.addVehicle, name='addVehicle'),

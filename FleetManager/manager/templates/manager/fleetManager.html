@@ -126,7 +126,7 @@
           <div class="card-body">
             <h5 class="card-title">{{vehicle.model}}</h5>
             <p class="card-text">&nbsp;</p>
-            <a href="{% url 'selectedVehicle' %}" class="btn btn-primary">Rent</a>
+            <a href="{% url 'Vehicle' ovin=vehicle.VIN %}" class="btn btn-primary">Rent</a>
           </div>
         </div>
       </div>

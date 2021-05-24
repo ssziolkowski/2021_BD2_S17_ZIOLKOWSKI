@@ -50,10 +50,10 @@
   <center>
     <div class="card" style="padding-right: 20%; padding-left: 20%">
       <img class="card-img" width="500" height="500"
-        src="{% static 'manager/images/f64b0864e862d3c122851be4770d6e9a_XL.jpg' %}" alt="Card image cap">
+        src="{{vehicle.picture.url}} " alt="Card image cap">
       <div class="card-body">
-        <h5 class="card-title">Ursus</h5>
-        <p class="card-text">&nbsp;Vehicle description</p>
+        <h5 class="card-title">{{vehicle.model}}</h5>
+        <p class="card-text">&nbsp;{{vehicle.brand}}</p>
         <a href="{% url 'rentVehicle' %}" class="btn btn-primary">Rent</a>
       </div>
     </div>
