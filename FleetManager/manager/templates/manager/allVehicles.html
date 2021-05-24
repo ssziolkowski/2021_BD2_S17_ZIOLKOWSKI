@@ -58,7 +58,9 @@
     <div id="content">
       <section class="sidebar">
         <!-- This adds a sidebar with 1 searchbox,2 menusets, each with 4 links -->
-        <input type="text" id="search" value="search">
+        <form method="GET" action="{% url 'allVehicles' %}">
+        <input type="text" id="search" value="search" name="search">
+      </form>
         <div id="menubar">
           <nav class="menu">
             <h2>

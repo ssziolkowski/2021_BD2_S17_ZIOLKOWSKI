@@ -12,9 +12,15 @@ def fleetManager(request):
 
 
 def allVehicles(request):
-    context = {
-        'vehicles': Vehicle.objects.all()
-    }
+    search=request.GET.get("search",None)
+    if search is None:
+        context = {
+            'vehicles': Vehicle.objects.all()
+        }
+    else:
+        context = {
+            'vehicles': Vehicle.objects.filter(model__icontains=search)
+        }
     return render(request, 'manager/allVehicles.html', context)
 
 def filterVehicle_view(request, otype): 
@@ -23,7 +29,6 @@ def filterVehicle_view(request, otype):
       'vehicles':vehicle
     }
     return render(request, 'manager/allVehicles.html', context)
-
 
 def login(request):
     return render(request, 'manager/login.html')

@@ -53,7 +53,14 @@
         src="{{vehicle.picture.url}} " alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">{{vehicle.model}}</h5>
-        <p class="card-text">&nbsp;{{vehicle.brand}}</p>
+        <p class="card-text">Brand: {{vehicle.brand}}</p>
+        <p class="card-text">VIN: {{vehicle.VIN}}</p>
+        <p class="card-text">Version: {{vehicle.version}}</p>
+        <p class="card-text">Accessories: {{vehicle.accessories}}</p>
+        <p class="card-text">Plate number: {{vehicle.plate_number}}</p>
+        <p class="card-text">Purpose: {{vehicle.purpose}}</p>
+        <p class="card-text">Distinctive marks: {{vehicle.distinctive_marks}}</p>
+        <p class="card-text">Status: {{vehicle.status}}</p>
         <a href="{% url 'rentVehicle' %}" class="btn btn-primary">Rent</a>
       </div>
     </div>
