@@ -49,61 +49,95 @@
   </nav>
   <hr>
   <div>
-	<form action="action_page.php" method="post">
-	  <div style="padding:10px;"></div>
-	  <div class="container" style="background-color: #f1f1f1;padding:10px;">
-	  <center><h5><b>Serviceplan</b></h5></center>
-	  <hr>
-	  <table id="form" align="left" width="70%" >
-	  <tr><td>
-		<label for="brand"><b>Brand</b></label></td><td>
-		<input type="text" placeholder="Enter Brand" name="brand" required>
-	  </td></tr>
-	  <tr><td>
-		<label for="model"><b>Model</b></label></td><td>
-		<input type="text" placeholder="Enter Model" name="model" required>
-	  </td></tr>
-	  <tr><td>
-		<label for="version"><b>Version</b></label></td><td>
-		<input type="text" placeholder="Enter Version" name="version" required>
-	  </td></tr>
-	  <tr><td>
-		<label for="accessories"><b>Accessories</b></label></td><td>
-		<input type="text" placeholder="EnterAccessories" name="accessories" required>
-	  </td></tr>
-	  <tr><td>
-		<label for="mileage"><b>Mileage</b></label></td><td>
-		<input type="number" placeholder="Enter mileage" name="mileage" required>
-	  </td></tr>
-	  <tr><td>
-		<label for="model"><b>Date</b></label></td><td>
-		<input type="date" placeholder="Enter Date" name="date" required>
-	  </td></tr>
-    <tr><td>
-      <label for="service"><b>Service performed</b></label></td><td>
-      <textarea placeholder="Enter Performed service" name="service" required></textarea>
-      </td></tr>
-	  <tr><td>
-		<button type="submit">Submit</button>
-		</td></tr>
-	  </table>
-		<label>
-		  <input type="checkbox" checked="checked" name="cirograph" required> I agree to suffer the consequences for any error
-		</label>
-		
+    <form enctype="multipart/form-data" method="post">{% csrf_token %}
+      {{ form.as_p }}
+      <div style="padding:10px;"></div>
+      <div class="container" style="background-color: #f1f1f1;padding:10px;">
+        <center>
+          <h5><b>Serviceplan</b></h5>
+        </center>
+        <hr>
+        <table id="form" align="left" width="70%">
+          <tr>
+            <td>
+              <label for="brand"><b>Brand</b></label>
+            </td>
+            <td>
+              <input type="text" placeholder="Enter Brand" name="brand" required>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="model"><b>Model</b></label>
+            </td>
+            <td>
+              <input type="text" placeholder="Enter Model" name="model" required>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="version"><b>Version</b></label>
+            </td>
+            <td>
+              <input type="text" placeholder="Enter Version" name="version" required>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="accessories"><b>Accessories</b></label>
+            </td>
+            <td>
+              <input type="text" placeholder="EnterAccessories" name="accessories" required>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="mileage"><b>Mileage</b></label>
+            </td>
+            <td>
+              <input type="number" placeholder="Enter mileage" name="mileage" required>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="model"><b>Date</b></label>
+            </td>
+            <td>
+              <input type="date" placeholder="Enter Date" name="date" required>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="service"><b>Service performed</b></label>
+            </td>
+            <td>
+              <textarea placeholder="Enter Performed service" name="service" required></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button type="submit">Submit</button>
+            </td>
+          </tr>
+        </table>
+        <label>
+          <input type="checkbox" checked="checked" name="cirograph" required> I agree to suffer the consequences for any
+          error
+        </label>
 
-	  </div>
 
-	  <div class="container" style="background-color:#f1f1f1">
-		<input type='reset' value='Cancel' name='reset'>
-	  </div>
-	  		
-	</form>
-	</div>
-	
-    <div class="container">
-      <div class="row"></div>
-    </div>
+      </div>
+
+      <div class="container" style="background-color:#f1f1f1">
+        <input type='reset' value='Cancel' name='reset'>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="container">
+    <div class="row"></div>
+  </div>
   <hr>
   <div class="container text-white bg-dark p-4">
     <div class="row">

@@ -49,7 +49,8 @@
   </nav>
   <hr>
   <div>
-    <form action="action_page.php" method="post">
+    <form enctype="multipart/form-data" method="post">{% csrf_token %}
+      {{ form.as_p }}
       <div style="padding:10px;"></div>
       <div class="container" style="background-color: #f1f1f1;padding:10px;">
         <center>
@@ -67,7 +68,7 @@
           </tr>
           <tr>
             <td>
-              <label for="VIN"><b>Brand</b></label>
+              <label for="brand"><b>Brand</b></label>
             </td>
             <td>
               <input type="text" placeholder="Enter Brand" name="brand" required>

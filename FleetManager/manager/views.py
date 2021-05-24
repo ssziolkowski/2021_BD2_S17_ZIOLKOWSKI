@@ -91,6 +91,15 @@ def addService(request):
  
 
 def addServiceplan(request):
+    if request.method == "POST":
+        form = ServiceplanForm(request.POST)
+        if form.is_valid():
+            form.save()
+            serviceplan = form.save(commit=False)
+            serviceplan.save()
+            return redirect('addServiceplan')
+        else:
+            form = ServiceplanForm()
     return render(request, 'manager/addServiceplan.html')
 
 

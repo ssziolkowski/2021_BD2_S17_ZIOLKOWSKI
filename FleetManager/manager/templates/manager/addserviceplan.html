@@ -49,7 +49,8 @@
   </nav>
   <hr>
   <div>
-    <form action="action_page.php" method="post">
+    <form enctype="multipart/form-data" method="post">{% csrf_token %}
+      {{ form.as_p }}
       <div style="padding:10px;"></div>
       <div class="container" style="background-color: #f1f1f1;padding:10px;">
         <center>
@@ -86,7 +87,7 @@
               <label for="accessories"><b>Accessories</b></label>
             </td>
             <td>
-              <input type="text" placeholder="EnterAccessories" name="accessories" required>
+              <input type="text" placeholder="Enter Accessories" name="accessories" required>
             </td>
           </tr>
           <tr>
@@ -99,10 +100,24 @@
           </tr>
           <tr>
             <td>
-              <label for="model"><b>Date</b></label>
+              <label for="date"><b>Date</b></label>
             </td>
             <td>
-              <input type="date" placeholder="Enter Date" name="date" required>
+              <input id="date" type="date" placeholder="Enter Date" name="date">
+              <script>
+                document.getElementById('date').value = new Date().toISOString().substring(0, 10);
+              </script>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding-right:20px">
+              <label for="status"><b>Status (nie pamietam co to ma byc)</b></label>
+            </td>
+            <td>
+              <select placeholder="Enter Status" name="status" disabled>
+                <option value="status1">Performed</option>
+                <option value="status1">Booked</option>
+              </select>
             </td>
           </tr>
           <tr>
@@ -110,7 +125,7 @@
               <label for="service"><b>Service performed</b></label>
             </td>
             <td>
-              <textarea placeholder="Enter Performed service" name="service" required></textarea>
+              <textarea placeholder="Enter Performed service" name="service_performed" required></textarea>
             </td>
           </tr>
           <tr>
