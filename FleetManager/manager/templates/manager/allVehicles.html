@@ -66,23 +66,23 @@
             </h2>
             <hr>
             <ul>
-              <li><a href="#" title="Link">Sedan</a></li>
-              <li><a href="#" title="Link">Wagon</a></li>
-              <li><a href="#" title="Link">Hatchback</a></li>
-              <li><a href="#" title="Link">Van</a></li>
-              <li><a href="#" title="Link">Pickup</a></li>
-              <li><a href="#" title="Link">Other</a></li>
+              <li><a href="{% url 'VehicleFilter' otype='sedan' %}" title="Link">Sedan</a></li>
+              <li><a href="{% url 'VehicleFilter' otype='wagon' %}" title="Link">Wagon</a></li>
+              <li><a href="{% url 'VehicleFilter' otype='hatchback' %}" title="Link">Hatchback</a></li>
+              <li><a href="{% url 'VehicleFilter' otype='van' %}" title="Link">Van</a></li>
+              <li><a href="{% url 'VehicleFilter' otype='pickup' %}" title="Link">Pickup</a></li>
+              <li><a href="{% url 'VehicleFilter' otype='other' %}" title="Link">Other</a></li>
             </ul>
           </nav>
           <nav class="menu">
             <h2>TRUCKS AND SPECIALIZED VEHICLES</h2>
             <hr>
             <ul>
-              <li><a href="#" title="Link">Trucks</a></li>
-              <li><a href="#" title="Link">Construction</a></li>
-              <li><a href="#" title="Link">Agriculture</a></li>
-              <li><a href="#" title="Link">Storage</a></li>
-              <li><a href="#" title="Link">Other</a></li>
+              <li><a href="{% url 'VehicleFilter' otype='truck' %}" title="Link">Trucks</a></li>
+              <li><a href="{% url 'VehicleFilter' otype='construction' %}" title="Link">Construction</a></li>
+              <li><a href="{% url 'VehicleFilter' otype='agriculture' %}" title="Link">Agriculture</a></li>
+              <li><a href="{% url 'VehicleFilter' otype='storage' %}" title="Link">Storage</a></li>
+              <li><a href="{% url 'VehicleFilter' otype='other' %}" title="Link">Other</a></li>
             </ul>
           </nav>
         </div>
@@ -108,14 +108,20 @@
             {% endfor %}
           </div> 
         </div>
-        {% if vehicles|length < 3 %}
-          {% for i in '0123456789012'|make_list %}
+        {% if vehicles|length < 1 %}
+          {% for i in '01234567890123123456789'|make_list %}
           <p>&nbsp;</p>
           {% endfor %}
-        {% elif vehicles|length < 6 %}
+        {% elif vehicles|length < 4 %}
+          {% for i in '012345678901'|make_list %}
+          <p>&nbsp;</p>
+          {% endfor %}
+        {% elif vehicles|length < 7 %}
           {% for i in '01'|make_list %}
           <p>&nbsp;</p>
           {% endfor %}
+          {% else%}  
+          <p>&nbsp;</p>
         {% endif %}
       </section>
     </div>

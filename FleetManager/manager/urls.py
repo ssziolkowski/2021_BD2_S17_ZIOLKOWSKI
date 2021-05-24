@@ -7,7 +7,8 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    url(r'^Vehicles/(?P<ovin>[\w]+)/$', views.object_specific_view, name='Vehicle'),
+    url(r'^Vehicles/(?P<ovin>[\w]+)/$', views.selectedVehicle_view, name='Vehicle'),
+    url(r'^allVehicle/(?P<otype>[\w]+)/$', views.filterVehicle_view, name='VehicleFilter'),
     path('', views.fleetManager, name='fleetManager'),
     path('allVehicles', views.allVehicles, name='allVehicles'),
     path('addVehicle', views.addVehicle, name='addVehicle'),
