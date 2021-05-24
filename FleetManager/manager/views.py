@@ -92,13 +92,13 @@ def login(request):
     return render(request, 'manager/login.html')
 
 
-@csrf_exempt 
 def addVehicle(request):
     if request.method == "POST":
             form = VehiclesForm(request.POST, request.FILES)
             if form.is_valid():
                 form.save()
                 post = form.save(commit=False)
+                #print(post.picture)
                 post.save()
                 return redirect('fleetManager')
             else:

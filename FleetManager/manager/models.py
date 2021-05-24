@@ -43,7 +43,7 @@ class Vehicle(models.Model):
     version = models.TextField()
     model = models.TextField()
     accessories = models.TextField()
-    picture = models.BinaryField()
+    picture = models.ImageField(upload_to ='uploads/')
     companyID = models.ForeignKey(Company, on_delete=models.RESTRICT)
     plate_number = models.TextField()
     current_mileage = models.IntegerField(default=0)
