@@ -1,4 +1,4 @@
-from .models import Vehicle
+from .models import Company, Vehicle
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from .forms import *
@@ -120,6 +120,16 @@ def adminpanel(request):
 
 
 def addperson(request):
+    if request.method == "POST":
+            form = PersonForm(request.POST)
+            if form.is_valid():
+                form.save()
+                person = form.save(commit=False)
+                person.companyID=Company.objects.get(id=1)
+                person.save()
+                return redirect('fleetManager')
+            else:
+                form = PersonForm()
     return render(request, 'manager/addperson.html')
 
 

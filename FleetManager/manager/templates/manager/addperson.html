@@ -49,7 +49,8 @@
   </nav>
   <hr>
 <div>
-	<form action="action_page.php" method="post">
+	<form enctype="multipart/form-data" method="post">{% csrf_token %}
+    {{ form.as_p }}
 	  <div style="padding:10px;"></div>
 	  <div class="container" style="background-color: #f1f1f1;padding:10px;">
 	  <center><h5><b>Personel addition</b></h5></center>
@@ -61,11 +62,11 @@
 	  </td></tr>
 	  <tr><td>
 		<label for="surname"><b>Surname</b></label></td><td>
-		<input type="text" placeholder="Enter Surname" name="brand" required>
+		<input type="text" placeholder="Enter Surname" name="surname" required>
 	  </td></tr>
 	  <tr><td>
 		<label for="phone"><b>Phone number</b></label></td><td>
-		<input type="text" placeholder="Enter Phone" name="phone" required>
+		<input type="text" placeholder="Enter Phone" name="phone_number" required>
 	  </td></tr>
 	  <tr><td>
 		<label for="position"><b>Position</b></label></td><td>
@@ -82,8 +83,8 @@
 	  <tr><td>
 		<label for="status"><b>Current Status</b></label></td><td>
 		<select placeholder="Enter current status" name="status" required>
-		 <option value="hired">Hired</option>
-		 <option value="holiday">Holiday</option>
+		 <option value="employed">Hired</option>
+		 <option value="discharged">Holiday</option>
 		 <option value="discharged">Discharged</option>
 		</select>
 	  </td></tr>

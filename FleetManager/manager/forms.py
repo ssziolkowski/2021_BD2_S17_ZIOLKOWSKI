@@ -8,10 +8,10 @@ from .models import Person, Vehicle, models
 from django.utils.safestring import mark_safe
 
 
-class PictureWidget(forms.widgets.Widget):
-    def render(self, name, value, attrs=None):
-        html =  templatize("""<img src="$link"/>""")
-        return mark_safe(html.substitute(link=value))
+#class PictureWidget(forms.widgets.Widget):
+   # def render(self, name, value, attrs=None):
+       # html =  templatize("""<img src="$link"/>""")
+      #  return mark_safe(html.substitute(link=value))
 
 
 class VehiclesForm(forms.ModelForm):
@@ -23,4 +23,8 @@ class VehiclesForm(forms.ModelForm):
         pic_field = ('picture')
 
 
-
+class PersonForm(forms.ModelForm):
+    
+    class Meta:
+        model = Person
+        fields = ('name', 'surname', 'phone_number', 'position', 'address', 'salary', 'status')

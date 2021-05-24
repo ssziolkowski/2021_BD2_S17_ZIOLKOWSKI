@@ -4,7 +4,7 @@ from datetime import date
 
 
 class Company(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     NIP = models.IntegerField()
     name = models.TextField()
     password = models.TextField()
@@ -20,7 +20,7 @@ class Person(models.Model):
         (EMPLOYED, ('Currently employed')),
         (DISCHARGED, ('This worker is no longer employed'))
     ]
-    ID = models.IntegerField(primary_key=True)
+    ID = models.AutoField(primary_key=True)
     companyID = models.ForeignKey(Company, on_delete=models.RESTRICT) 
     name = models.TextField()
     surname = models.TextField()
