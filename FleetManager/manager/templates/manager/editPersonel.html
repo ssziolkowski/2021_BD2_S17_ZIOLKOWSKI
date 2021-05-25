@@ -6,21 +6,38 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html body div div.container table#t {
+      align-content: center;
+      margin: auto;
+      column-span: 50px;
+      width:100%;
+      text-align: center;
+    };
+    th{
+
+      margin:7px;
+    }
+    td{
+      text-align: center;
+      vertical-align: center;
+      width: 100%/9;
+      text-align: center;
+    };
+    </style>
   <title>FleetManager</title>
   <!-- Bootstrap -->
   <link href="{% static 'manager/css/bootstrap-4.4.1.css' %}" rel="stylesheet">
   <script>
-    var inval = document.getElementById('ID').value;
     dec()
     {
-      if(inval > 0){
-        inval = "xD";
+      if(document.getElementById('id').value > 0){
+        document.getElementById('id').value--;
       }
     }
-
     inc()
     {
-        inval+=1;
+      document.getElementById('id').value++;
     }
   </script>
 </head>
@@ -78,7 +95,7 @@
             </td>
             <td>
               <input type="button" value ="<" name="prevoius" onclick="dec" >
-              <input type="number" placeholder="Enter Id" name="ID" required>
+              <input type="number" placeholder="Enter Id" name="ID" id="id" required>
               <input type="button" value = ">" name="next" onclick="inc">
             </td>
           </tr>
@@ -97,7 +114,7 @@
     <div class="container" style="background-color: #f1f1f1;padding:10px;">
       <hr>
     <div class="container">
-    <table>
+    <table margin="0" id="t">
       <tr>
         <th>Person ID</th>
         <th>Name</th>
@@ -114,7 +131,7 @@
       <td>{{person.ID }}</td>
       <td>{{person.name }}</td>
       <td>{{person.surname }}</td>
-      <td>{{person.phone }}</td>
+      <td>{{person.phone_number }}</td>
       <td>{{person.position }}</td>
       <td>{{person.address }}</td>
       <td>{{person.salary }}</td>
