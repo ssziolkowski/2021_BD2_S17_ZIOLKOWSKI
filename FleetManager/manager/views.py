@@ -1,5 +1,6 @@
+from django.http.response import HttpResponseRedirect
 from .models import Company, Vehicle
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from .forms import *
 from django.utils import timezone
@@ -23,12 +24,32 @@ def allVehicles(request):
         }
     return render(request, 'manager/allVehicles.html', context)
 
+
 def filterVehicle_view(request, otype): 
     vehicle = Vehicle.objects.filter(category=otype)
     context={
       'vehicles':vehicle
     }
     return render(request, 'manager/allVehicles.html', context)
+
+
+def person_detail_view(request, id):
+    context = {}
+    context["person_data"] = Person.objects.get(id = id)
+    return render(request, "editPerson.html", context)
+
+
+def person_update_view(request, id):
+    context ={}
+    obj = get_object_or_404(Person, ID = id)
+    form = PersonForm(request.POST or None, instance = obj)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect("/"+id)
+    context["form"] = form
+ 
+    return render(request, "editPerson.html", context)
+
 
 def login(request):
     return render(request, 'manager/login.html')
@@ -108,8 +129,25 @@ def addServiceplan(request):
     return render(request, 'manager/addServiceplan.html')
 
 
-def editPerson(request):
-    return render(request, 'manager/editPerson.html')
+def editPerson(request, pid):
+    obj = get_object_or_404(Person, ID = pid)
+    person = obj
+    context={
+      'person':person
+    }
+    form = PersonForm(request.POST, instance = obj)
+    if form.is_valid():
+        form.save()
+        return render(request, 'manager/editPersonel.html')
+
+    return render(request, 'manager/editPerson.html', context)
+
+
+def editPersonel(request):
+    context = {
+        'persons': Person.objects.all()
+    }
+    return render(request, 'manager/editPersonel.html', context)
 
 
 def editVehicle(request):

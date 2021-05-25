@@ -8,14 +8,7 @@ from .models import Person, Service, Serviceplan, Vehicle, models
 from django.utils.safestring import mark_safe
 
 
-#class PictureWidget(forms.widgets.Widget):
-   # def render(self, name, value, attrs=None):
-       # html =  templatize("""<img src="$link"/>""")
-      #  return mark_safe(html.substitute(link=value))
-
-
 class VehiclesForm(forms.ModelForm):
-    #picture = ImageField(widget=PictureWidget)
     
     class Meta:
         model = Vehicle
@@ -27,16 +20,19 @@ class PersonForm(forms.ModelForm):
     
     class Meta:
         model = Person
+        #id_field = ("ID")
         fields = ('name', 'surname', 'phone_number', 'position', 'address', 'salary', 'status')
 
 
-#TODO: validate vin 
+#TODO: validate vin with db
 class ServiceForm(forms.ModelForm):
     
     class Meta:
         model = Service
         fields = ('vehicle_id', 'cost', 'date', 'service_performed', 'provider')
 
+
+#TODO: validate wszystko with db
 class ServiceplanForm(forms.ModelForm):
     
     class Meta:

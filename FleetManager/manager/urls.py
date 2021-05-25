@@ -9,6 +9,7 @@ from . import views
 urlpatterns = [
     url(r'^Vehicles/(?P<ovin>[\w]+)/$', views.selectedVehicle_view, name='Vehicle'),
     url(r'^allVehicle/(?P<otype>[\w]+)/$', views.filterVehicle_view, name='VehicleFilter'),
+    url(r'^editPerson/(?P<pid>[\w]+)/$', views.editPerson, name='editPerson'),
     path('', views.fleetManager, name='fleetManager'),
     path('allVehicles', views.allVehicles, name='allVehicles'),
     path('addVehicle', views.addVehicle, name='addVehicle'),
@@ -20,6 +21,7 @@ urlpatterns = [
     path('addService', views.addService, name='addService'),
     path('addServiceplan', views.addServiceplan, name='addServiceplan'),
     path('editPerson', views.editPerson, name='editPerson'),
+    path('editPersonel', views.editPersonel, name='editPersonel'),
     path('editVehicle', views.editVehicle, name='editVehicle'),
     path('editService', views.editService, name='editService'),
     path('editServiceplan', views.editServiceplan, name='editServiceplan')
