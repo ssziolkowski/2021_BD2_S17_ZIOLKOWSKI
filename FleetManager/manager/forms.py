@@ -24,7 +24,6 @@ class PersonForm(forms.ModelForm):
         fields = ('name', 'surname', 'phone_number', 'position', 'address', 'salary', 'status')
     
 
-
 #TODO: validate vin with db
 class ServiceForm(forms.ModelForm):
     

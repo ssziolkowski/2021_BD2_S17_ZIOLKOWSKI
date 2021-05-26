@@ -129,15 +129,10 @@ def editPerson(request, pid):
     if request.method == "POST":
         obj = get_object_or_404(Person, ID = pid)
         person = obj
-        form = PersonForm(request.POST, instance = person)
         context={
-        'person':person,
-        'persons': Person.objects.all().order_by("ID")
+        'person':person
         }
-        if form.is_valid():
-            form.save()
-            return render(request, 'manager/editPerson.html')
-    return render(request, 'manager/editPersonel.html', context)
+    return render(request, 'manager/editPerson.html', context)
 
 
 def updatePerson(request, pid):
