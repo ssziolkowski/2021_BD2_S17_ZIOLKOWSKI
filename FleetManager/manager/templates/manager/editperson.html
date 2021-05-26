@@ -133,7 +133,10 @@
         </label>
       </div>
       <div class="container" style="background-color:#f1f1f1">
-        <input type='submit' value='Cancel' name='reset' href="{% url 'editPersonel' %}">
+        <input type='reset' value='Reset' name='reset'>
+        <form>
+          <input type='button' onclick="history.back()" value='Back' name='back' >
+        </form>
       </div>
     </form>
   <div class="container">
