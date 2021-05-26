@@ -126,13 +126,15 @@ def addServiceplan(request):
 
 
 def editPerson(request, pid):
+    obj = get_object_or_404(Person, ID = pid)
+    person = obj
+    context={
+    'person':person,
+    'persons': Person.objects.all().order_by("ID")
+    }
     if request.method == "POST":
-        obj = get_object_or_404(Person, ID = pid)
-        person = obj
-        context={
-        'person':person
-        }
-    return render(request, 'manager/editPerson.html', context)
+        return render(request, 'manager/editPerson.html', context)
+    return render(request, 'manager/editPersonel.html', context)
 
 
 def updatePerson(request, pid):
