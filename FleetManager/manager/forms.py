@@ -20,8 +20,9 @@ class PersonForm(forms.ModelForm):
     
     class Meta:
         model = Person
-        #id_field = ("ID")
+        id_field = ("ID")
         fields = ('name', 'surname', 'phone_number', 'position', 'address', 'salary', 'status')
+    
 
 
 #TODO: validate vin with db
