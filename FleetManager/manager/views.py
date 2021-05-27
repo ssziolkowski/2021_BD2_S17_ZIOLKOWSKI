@@ -175,7 +175,7 @@ def addPerson(request):
             person = form.save(commit=False)
             person.companyID = Company.objects.get(id=1)
             person.save()
-            return redirect('fleetManager')
+            return redirect('addPerson')
         else:
             form = PersonForm()
     return render(request, 'manager/addPerson.html')
