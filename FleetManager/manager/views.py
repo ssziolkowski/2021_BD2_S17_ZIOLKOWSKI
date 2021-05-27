@@ -5,101 +5,183 @@ from django.http import HttpResponse
 from .forms import *
 from django.utils import timezone
 
+
 def fleetManager(request):
+    id = request.session.get('id', -1)
     context = {
-        'vehicles': Vehicle.objects.all()
+        'vehicles': Vehicle.objects.all(),
+        'id': id,
+        'user': request.session.get('user', 'none')
     }
+    user = Person.objects.filter(ID=id).first()
+    if user is not None:
+        context['name'] = user.name + ' ' + user.surname
+        context['company'] = user.companyID
+    else:
+        context['name'] = 'FleetManager'
+
     return render(request, 'manager/fleetManager.html', context)
 
 
 def allVehicles(request):
-    search=request.GET.get("search",None)
-    if search is None:
-        context = {
-            'vehicles': Vehicle.objects.all()
-        }
+    id = request.session.get('id', -1)
+    context = {
+        'id': id,
+        'user': request.session.get('user', 'none')
+    }
+    user = Person.objects.filter(ID=id).first()
+    if user is not None:
+        context['name'] = user.name + ' ' + user.surname
+        context['company'] = user.companyID
     else:
-        context = {
-            'vehicles': Vehicle.objects.filter(model__icontains=search)
-        }
+        context['name'] = 'FleetManager'
+
+    search = request.GET.get("search", None)
+    if search is None:
+        context['vehicles'] = Vehicle.objects.all()
+    else:
+        context['vehicles'] = Vehicle.objects.filter(model__icontains=search)
+
     return render(request, 'manager/allVehicles.html', context)
 
 
-def filterVehicle_view(request, otype): 
+def filterVehicle_view(request, otype):
     vehicle = Vehicle.objects.filter(category=otype)
-    context={
-      'vehicles':vehicle
+    context = {
+        'vehicles': vehicle
     }
     return render(request, 'manager/allVehicles.html', context)
 
 
 def person_detail_view(request, id):
     context = {}
-    context["person_data"] = Person.objects.get(id = id)
+    context["person_data"] = Person.objects.get(id=id)
     return render(request, "editPerson.html", context)
 
 
 def person_update_view(request, id):
-    context ={}
-    obj = get_object_or_404(Person, ID = id)
-    form = PersonForm(request.POST or None, instance = obj)
+    context = {}
+    obj = get_object_or_404(Person, ID=id)
+    form = PersonForm(request.POST or None, instance=obj)
     if form.is_valid():
         form.save()
         return HttpResponseRedirect("/"+id)
     context["form"] = form
- 
+
     return render(request, "editPerson.html", context)
 
 
 def login(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            userFilter = Person.objects.filter(
+                login=data['login'], password=data['password'])
+            user = userFilter.first()
+            if user is None:
+                request.session['id'] = -1
+                request.session['user'] = 'none'
+                return render(request, 'manager/login.html')
+            else:
+                request.session['id'] = user.ID
+                request.session['user'] = 'person'
+                return redirect('fleetManager')
+        else:
+            form = VehiclesForm()
+
+    return render(request, 'manager/login.html')
+
+
+def logout(request):
+    request.session['id'] = -1
+    request.session['user'] = 'none'
+
     return render(request, 'manager/login.html')
 
 
 def addVehicle(request):
     if request.method == "POST":
-            form = VehiclesForm(request.POST, request.FILES)
-            if form.is_valid():
-                form.save()
-                post = form.save(commit=False)
-                #print(post.picture)
-                post.save()
-                return redirect('fleetManager')
-            else:
-                form = VehiclesForm()
-       
+        form = VehiclesForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            post = form.save(commit=False)
+            # print(post.picture)
+            post.save()
+            return redirect('fleetManager')
+        else:
+            form = VehiclesForm()
+
     return render(request, 'manager/addVehicle.html')
-    
-def selectedVehicle_view(request, ovin): 
+
+
+def selectedVehicle_view(request, ovin):
     vehicle = Vehicle.objects.filter(VIN=ovin).first()
-    context={
-      'vehicle':vehicle
+    context = {
+        'vehicle': vehicle
     }
     return render(request, "manager/selectedVehicle.html", context)
 
 
 def rentVehicle(request):
-    return render(request, 'manager/rentVehicle.html')
+    id = request.session.get('id', -1)
+    context = {
+        'id': id,
+        'user': request.session.get('user', 'none')
+    }
+    user = Person.objects.filter(ID=id).first()
+    if user is not None:
+        context['name'] = user.name + ' ' + user.surname
+        context['company'] = user.companyID
+    else:
+        context['name'] = 'FleetManager'
+
+    return render(request, 'manager/rentVehicle.html', context)
 
 
 def selectedVehicle(request):
-    return render(request, 'manager/selectedVehicle.html')
+    id = request.session.get('id', -1)
+    context = {
+        'id': id,
+        'user': request.session.get('user', 'none')
+    }
+    user = Person.objects.filter(ID=id).first()
+    if user is not None:
+        context['name'] = user.name + ' ' + user.surname
+        context['company'] = user.companyID
+    else:
+        context['name'] = 'FleetManager'
+
+    return render(request, 'manager/selectedVehicle.html', context)
 
 
 def adminPanel(request):
-    return render(request, 'manager/adminPanel.html')
+    id = request.session.get('id', -1)
+    context = {
+        'id': id,
+        'user': request.session.get('user', 'none')
+    }
+    user = Person.objects.filter(ID=id).first()
+    if user is not None:
+        context['name'] = user.name + ' ' + user.surname
+        context['company'] = user.companyID
+    else:
+        context['name'] = 'FleetManager'
+
+    return render(request, 'manager/adminPanel.html', context)
 
 
 def addPerson(request):
     if request.method == "POST":
-            form = PersonForm(request.POST)
-            if form.is_valid():
-                form.save()
-                person = form.save(commit=False)
-                person.companyID=Company.objects.get(id=1)
-                person.save()
-                return redirect('fleetManager')
-            else:
-                form = PersonForm()
+        form = PersonForm(request.POST)
+        if form.is_valid():
+            form.save()
+            person = form.save(commit=False)
+            person.companyID = Company.objects.get(id=1)
+            person.save()
+            return redirect('fleetManager')
+        else:
+            form = PersonForm()
     return render(request, 'manager/addPerson.html')
 
 
@@ -114,7 +196,7 @@ def addService(request):
         else:
             form = ServiceForm()
     return render(request, 'manager/addService.html')
- 
+
 
 def addServiceplan(request):
     if request.method == "POST":
@@ -130,12 +212,12 @@ def addServiceplan(request):
 
 
 def editPerson(request, pid):
-    obj = get_object_or_404(Person, ID = pid)
+    obj = get_object_or_404(Person, ID=pid)
     person = obj
-    context={
-      'person':person
+    context = {
+        'person': person
     }
-    form = PersonForm(request.POST, instance = obj)
+    form = PersonForm(request.POST, instance=obj)
     if form.is_valid():
         form.save()
         return render(request, 'manager/editPersonel.html')
@@ -160,5 +242,3 @@ def editService(request):
 
 def editServiceplan(request):
     return render(request, 'manager/editServiceplan.html')
-
-

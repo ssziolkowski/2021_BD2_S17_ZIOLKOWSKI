@@ -1,53 +1,6 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FleetManager</title>
-  <!-- Bootstrap -->
-  <link href="{% static 'manager/css/bootstrap-4.4.1.css' %}" rel="stylesheet">
-</head>
-
-<body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand" href="#">Navbar</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="{% url 'fleetManager' %}">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'allVehicles' %}">All vehicles</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">Your vehicles</a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Login/Register</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'adminPanel' %}">Admin panel</a>
-          </li> 
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <hr>
+{%extends "manager/base.html"%}
+  {%block content%}
+  {% load static %}
   <div>
     <form method="post" enctype="multipart/form-data">{% csrf_token %}
       {{ form.as_p }}
@@ -158,52 +111,10 @@
           <input type="checkbox" checked="checked" name="cirograph" required> I agree to suffer the consequences for any
           error
         </label>
-
-
       </div>
-
       <div class="container" style="background-color:#f1f1f1">
         <input type='reset' value='Cancel' name='reset'>
       </div>
-
     </form>
   </div>
-
-  <div class="container">
-    <div class="row"></div>
-  </div>
-  <hr>
-  <div class="container text-white bg-dark p-4">
-    <div class="row">
-      <div class="col-md-4 col-lg-5 col-6">
-        <address>
-          <strong>FleetManager, Inc.</strong><br>
-          Akademicka 1<br>
-          Gliwice, 44-100<br>
-          Phone: +48 123 456 789<br>
-        </address>
-        <address>
-          <strong>FleetManager</strong>
-          <br>
-          <a href="mailto:#">FleetManager@example.com</a>
-        </address>
-      </div>
-    </div>
-  </div>
-  <footer class="text-center">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <p>&nbsp;</p>
-        </div>
-      </div>
-    </div>
-  </footer>
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="{% static 'manager/js/jquery-3.4.1.min.js' %}"></script>
-  <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="{% static 'manager/js/popper.min.js' %}"></script>
-  <script src="{% static 'manager/js/bootstrap-4.4.1.js' %}"></script>
-</body>
-
-</html>
+  {%endblock content%}

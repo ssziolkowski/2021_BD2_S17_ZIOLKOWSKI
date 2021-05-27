@@ -21,12 +21,15 @@ class Person(models.Model):
         (DISCHARGED, ('This worker is no longer employed'))
     ]
     ID = models.AutoField(primary_key=True)
-    companyID = models.ForeignKey(Company, on_delete=models.RESTRICT)
+    companyID = models.ForeignKey(
+        Company, on_delete=models.RESTRICT, default=1)
     name = models.TextField()
     surname = models.TextField()
     phone_number = models.TextField()
     position = models.TextField()
     address = models.TextField()
+    login = models.TextField(default="user", unique=True)
+    password = models.TextField(default="password", unique=True)
     salary = models.IntegerField()
     status = models.TextField(choices=STATUS)
 

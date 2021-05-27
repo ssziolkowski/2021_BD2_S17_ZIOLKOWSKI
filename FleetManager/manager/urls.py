@@ -7,13 +7,16 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    url(r'^Vehicles/(?P<ovin>[\w]+)/$', views.selectedVehicle_view, name='Vehicle'),
-    url(r'^allVehicle/(?P<otype>[\w]+)/$', views.filterVehicle_view, name='VehicleFilter'),
+    url(r'^Vehicles/(?P<ovin>[\w]+)/$',
+        views.selectedVehicle_view, name='Vehicle'),
+    url(r'^allVehicle/(?P<otype>[\w]+)/$',
+        views.filterVehicle_view, name='VehicleFilter'),
     url(r'^editPerson/(?P<pid>[\w]+)/$', views.editPerson, name='editPerson'),
     path('', views.fleetManager, name='fleetManager'),
     path('allVehicles', views.allVehicles, name='allVehicles'),
     path('addVehicle', views.addVehicle, name='addVehicle'),
     path('login', views.login, name='login'),
+    path('logout', views.logout, name='logout'),
     path('rentVehicle', views.rentVehicle, name='rentVehicle'),
     path('selectedVehicle', views.selectedVehicle, name='selectedVehicle'),
     path('adminPanel', views.adminPanel, name='adminPanel'),
@@ -25,4 +28,4 @@ urlpatterns = [
     path('editVehicle', views.editVehicle, name='editVehicle'),
     path('editService', views.editService, name='editService'),
     path('editServiceplan', views.editServiceplan, name='editServiceplan')
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

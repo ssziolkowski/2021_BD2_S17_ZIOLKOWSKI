@@ -6,45 +6,14 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    html body div div.container table#t {
-      align-content: center;
-      margin: auto;
-      column-span: 50px;
-      width:100%;
-      text-align: center;
-    };
-    th{
-      margin:7px;
-    }
-    td{
-      text-align: center;
-      vertical-align: center;
-      width: 100%/9;
-      text-align: center;
-    };
-    </style>
   <title>FleetManager</title>
-  <!-- Bootstrap -->
   <link href="{% static 'manager/css/bootstrap-4.4.1.css' %}" rel="stylesheet">
-  <script>
-    dec()
-    {
-      if(document.getElementById('id').value > 0){
-        document.getElementById('id').value--;
-      }
-    }
-    inc()
-    {
-      document.getElementById('id').value++;
-    }
-  </script>
 </head>
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand" href="#">Navbar</a>
+      <a class="navbar-brand" href="#">{{name}}</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -68,7 +37,9 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Login/Register</a>
+            {%if id == -1 %} <a class="nav-link" href="{% url 'login' %}">Login/Register</a>
+            {%else%} <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            {%endif%}
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'adminPanel' %}">Admin panel</a>
@@ -77,69 +48,7 @@
       </div>
     </div>
   </nav>
-  <div>
-    <form enctype="multipart/form-data" method="post">{% csrf_token %}
-      {{ form.as_ps }}
-      <div style="padding:10px;"></div>
-      <div class="container" style="background-color: #f1f1f1;padding:10px;">
-        <center>
-          <h5><b>Search Person by id</b></h5>
-        </center>
-        <hr>
-        <table id="form" align="left" width="70%">
-          <tr>
-            <td>
-              <label for="id"><b>Person ID:</b></label>
-            </td>
-            <td>
-              <input type="button" value ="<" name="prevoius" onclick="dec" >
-              <input type="number" placeholder="Enter Id" name="ID" id="id" required>
-              <input type="button" value = ">" name="next" onclick="inc">
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <center>
-              <button type="submit" name="search">Search</button>
-              </center>
-            </td>
-          </tr>
-        </table>
-      </form>
-      <br>
-    </div>
-    <div class="container" style="background-color: #f1f1f1;padding:10px;"></div>
-    <div class="container" style="background-color: #f1f1f1;padding:10px;">
-      <hr>
-    <div class="container">
-    <table margin="0" id="t">
-      <tr>
-        <th>Person ID</th>
-        <th>Name</th>
-        <th>Surname</th>
-        <th>Phone</th>
-        <th>Position</th>
-        <th>Address</th>
-        <th>Salary</th>
-        <th>Status</th>
-        <th>Edit?</th>
-      </tr>
-    {% for person in persons %}
-    <tr>
-      <td>{{person.ID }}</td>
-      <td>{{person.name }}</td>
-      <td>{{person.surname }}</td>
-      <td>{{person.phone_number }}</td>
-      <td>{{person.position }}</td>
-      <td>{{person.address }}</td>
-      <td>{{person.salary }}</td>
-      <td>{{person.status }}</td>
-      <td><a href="{% url 'editPerson' pid=person.ID %}"class="btn btn-primary">Edit</a></td>
-    </tr>
-    {% endfor %}
-    </table>
-    </div>
-
+  {%block content%}{%endblock content%}
   <div class="container">
     <div class="row"></div>
   </div>
@@ -170,11 +79,8 @@
       </div>
     </div>
   </footer>
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="{% static 'manager/js/jquery-3.4.1.min.js' %}"></script>
-  <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="{% static 'manager/js/popper.min.js' %}"></script>
   <script src="{% static 'manager/js/bootstrap-4.4.1.js' %}"></script>
 </body>
-
 </html>
