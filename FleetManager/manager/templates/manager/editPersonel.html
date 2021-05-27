@@ -126,15 +126,41 @@
       </tr>
     {% for person in persons %}
     <tr>
-      <td>{{person.ID }}</td>
-      <td>{{person.name }}</td>
-      <td>{{person.surname }}</td>
-      <td>{{person.phone_number }}</td>
-      <td>{{person.position }}</td>
-      <td>{{person.address }}</td>
-      <td>{{person.salary }}</td>
-      <td>{{person.status }}</td>
-      <td><a href="{% url 'editPerson' pid=person.ID %}"class="btn btn-primary">Edit</a></td>
+      <form enctype="multipart/form-data" method="post" action="{% url 'editPerson' pid=person.ID %}">{% csrf_token %}
+      <td>
+        {{person.ID }}
+        <input type="number" placeholder="xD" value="{{ person.ID }}" name="ID" disabled hidden required>
+      </td>
+      <td>
+        {{person.name }}
+        <input type="text" placeholder="N/A" value="{{ person.name }}" name="name" disabled hidden required>
+      </td>
+      <td>
+        {{person.surname }}
+        <input type="text" placeholder="N/A" value="{{ person.surname }}" name="surname" disabled hidden required>
+      </td>
+      <td>
+        {{person.phone_number }}
+        <input type="text" placeholder="N/A" value="{{ person.phone_number }}" name="phone_number" disabled hidden required>
+      </td>
+      <td>
+        {{person.position }}
+        <input type="text" placeholder="N/A" value="{{ person.position }}" name="position" disabled hidden required>
+      </td>
+      <td>
+        {{person.address }}
+        <input type="text" placeholder="N/A" value="{{ person.address }}" name="address" disabled hidden required>
+      </td>
+      <td>
+        {{person.salary }}
+        <input type="number" placeholder="N/A" value="{{ person.salary }}" name="salary" disabled hidden required>
+      </td>
+      <td>
+        {{person.status }}
+        <input type="text" placeholder="Enter current status" value="{{ person.status }}" name="status" disabled hidden required>
+      </td>
+      <td><input type="submit" class="btn btn-primary" value="Edit"></td>
+      </form>
     </tr>
     {% endfor %}
     </table>
@@ -164,9 +190,7 @@
   <footer class="text-center">
     <div class="container">
       <div class="row">
-        <div class="col-12">
-          <p>&nbsp;</p>
-        </div>
+
       </div>
     </div>
   </footer>

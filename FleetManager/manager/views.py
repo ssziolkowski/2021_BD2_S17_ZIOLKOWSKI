@@ -53,22 +53,18 @@ def filterVehicle_view(request, otype):
     return render(request, 'manager/allVehicles.html', context)
 
 
-def person_detail_view(request, id):
+def person_update_view(request, upid):
     context = {}
-    context["person_data"] = Person.objects.get(id=id)
-    return render(request, "editPerson.html", context)
-
-
-def person_update_view(request, id):
-    context = {}
-    obj = get_object_or_404(Person, ID=id)
+    obj = Person.objects.filter(ID=upid).first()
     form = PersonForm(request.POST or None, instance=obj)
+    context = {
+        'person': obj,
+        'persons': Person.objects.all().order_by("ID")
+    }
     if form.is_valid():
         form.save()
-        return HttpResponseRedirect("/"+id)
-    context["form"] = form
-
-    return render(request, "editPerson.html", context)
+        return render(request, "manager/editPersonel.html", context)
+    return render(request, "manager/editPerson.html", context)
 
 
 def login(request):
@@ -215,19 +211,21 @@ def editPerson(request, pid):
     obj = get_object_or_404(Person, ID=pid)
     person = obj
     context = {
-        'person': person
+        'person': person,
+        'persons': Person.objects.all().order_by("ID")
     }
-    form = PersonForm(request.POST, instance=obj)
-    if form.is_valid():
-        form.save()
-        return render(request, 'manager/editPersonel.html')
+    if request.method == "POST":
+        return render(request, 'manager/editPerson.html', context)
+    return render(request, 'manager/editPersonel.html', context)
 
-    return render(request, 'manager/editPerson.html', context)
+
+def updatePerson(request, pid):
+    return render(request, 'manager/editPersonel.html')
 
 
 def editPersonel(request):
     context = {
-        'persons': Person.objects.all()
+        'persons': Person.objects.all().order_by("ID")
     }
     return render(request, 'manager/editPersonel.html', context)
 
