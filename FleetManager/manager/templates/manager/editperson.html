@@ -3,7 +3,7 @@
   {% load static %}
   <div class="container" style="background-color: #f1f1f1;padding:10px;"></div>
   <div class="container" style="background-color: #f1f1f1;padding:10px;">
-    <form enctype="multipart/form-data" method="post" action="{% url 'person_update_view' upid=person.ID %}">{% csrf_token %}
+    <form enctype="multipart/form-data" method="post" action="{% url 'editPerson' pid=person.ID %}">{% csrf_token %}
       {{ form.as_pe }}
       <div style="padding:10px;"></div>
       <div class="container" style="background-color: #f1f1f1;padding:10px;"></div>

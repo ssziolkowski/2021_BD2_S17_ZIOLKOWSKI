@@ -1,7 +1,6 @@
 {%extends "manager/base.html"%}
   {%block content%}
   {% load static %}
-  <hr>
   <div>
     <form method="post" enctype="multipart/form-data">{% csrf_token %}
       {{ form.as_p }}
