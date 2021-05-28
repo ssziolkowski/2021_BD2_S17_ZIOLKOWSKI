@@ -125,8 +125,11 @@ def addVehicle(request):
     return render(request, 'manager/addVehicle.html', context)
 
 
-def selectedVehicle_view(request, ovin):
-    vehicle = Vehicle.objects.filter(VIN=ovin).first()
+def selectedVehicle_view(request):
+    if request.method == "POST":
+        form = VehiclesForm(request.POST)
+        vin=request.POST.get("VIN", "NOVIN")
+    vehicle = Vehicle.objects.filter(VIN=vin).first()
     id = request.session.get('id', -1)
     context = {
         'vehicle': vehicle,

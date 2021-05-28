@@ -80,7 +80,11 @@
           <div class="card-body">
             <h5 class="card-title">{{vehicle.model}}</h5>
             <p class="card-text">&nbsp;</p>
-            <a href="{% url 'Vehicle' ovin=vehicle.VIN %}" class="btn btn-primary">Rent</a>
+            <form action="{% url 'selectedVehicleView' %}" method="post">
+              <input type="hidden" name="VIN" value={{vehicle.VIN}}>
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Rent</button>
+            </form>
           </div>
         </div>
       </div>
