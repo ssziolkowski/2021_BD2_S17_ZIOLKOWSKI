@@ -8,6 +8,9 @@ from django.utils import timezone
 
 def fleetManager(request):
     id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     context = {
         'vehicles': Vehicle.objects.all(),
         'id': id,
@@ -25,6 +28,9 @@ def fleetManager(request):
 
 def allVehicles(request):
     id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     context = {
         'id': id,
         'user': request.session.get('user', 'none')
@@ -46,6 +52,10 @@ def allVehicles(request):
 
 
 def filterVehicle_view(request, otype):
+    id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     vehicle = Vehicle.objects.filter(category=otype)
     context = {
         'vehicles': vehicle
@@ -54,7 +64,10 @@ def filterVehicle_view(request, otype):
 
 
 def person_update_view(request, upid):
-    context = {}
+    id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     obj = Person.objects.filter(ID=upid).first()
     form = PersonForm(request.POST or None, instance=obj)
     context = {
@@ -91,7 +104,7 @@ def login(request):
     context = {
         'id': -1,
         'user': 'none',
-        'name': 'FleetManager'
+        'name': ''
     }
     return render(request, 'manager/login.html', context)
 
@@ -99,12 +112,17 @@ def login(request):
 def logout(request):
     request.session['id'] = -1
     request.session['user'] = 'none'
-    request.session['name'] = 'FleetManager'
+    request.session['name'] = ''
+    request.session['company'] = -1
 
     return redirect('login')
 
 
 def addVehicle(request):
+    id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     if request.method == "POST":
         form = VehiclesForm(request.POST, request.FILES)
         if form.is_valid():
@@ -115,7 +133,6 @@ def addVehicle(request):
         else:
             form = VehiclesForm()
 
-    id = request.session.get('id', -1)
     context = {
         'id': id,
         'user': request.session.get('user', 'none'),
@@ -126,9 +143,14 @@ def addVehicle(request):
 
 
 def selectedVehicle_view(request):
+    id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     if request.method == "POST":
         form = VehiclesForm(request.POST)
-        vin=request.POST.get("VIN", "NOVIN")
+        vin = request.POST.get("VIN", "NOVIN")
+
     vehicle = Vehicle.objects.filter(VIN=vin).first()
     id = request.session.get('id', -1)
     context = {
@@ -143,6 +165,9 @@ def selectedVehicle_view(request):
 
 def rentVehicle(request):
     id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     context = {
         'id': id,
         'user': request.session.get('user', 'none'),
@@ -154,6 +179,9 @@ def rentVehicle(request):
 
 def selectedVehicle(request):
     id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     context = {
         'id': id,
         'user': request.session.get('user', 'none'),
@@ -165,6 +193,9 @@ def selectedVehicle(request):
 
 def adminPanel(request):
     id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     context = {
         'id': id,
         'user': request.session.get('user', 'none'),
@@ -175,6 +206,10 @@ def adminPanel(request):
 
 
 def addPerson(request):
+    id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     if request.method == "POST":
         form = PersonForm(request.POST)
         if form.is_valid():
@@ -186,7 +221,6 @@ def addPerson(request):
         else:
             form = PersonForm()
 
-    id = request.session.get('id', -1)
     context = {
         'id': id,
         'user': request.session.get('user', 'none'),
@@ -196,6 +230,10 @@ def addPerson(request):
 
 
 def addService(request):
+    id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     if request.method == "POST":
         form = ServiceForm(request.POST)
         if form.is_valid():
@@ -206,7 +244,6 @@ def addService(request):
         else:
             form = ServiceForm()
 
-    id = request.session.get('id', -1)
     context = {
         'id': id,
         'user': request.session.get('user', 'none'),
@@ -216,6 +253,10 @@ def addService(request):
 
 
 def addServiceplan(request):
+    id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     if request.method == "POST":
         form = ServiceplanForm(request.POST)
         if form.is_valid():
@@ -226,7 +267,6 @@ def addServiceplan(request):
         else:
             form = ServiceplanForm()
 
-    id = request.session.get('id', -1)
     context = {
         'id': id,
         'user': request.session.get('user', 'none'),
@@ -236,9 +276,12 @@ def addServiceplan(request):
 
 
 def editPerson(request, pid):
+    id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     obj = get_object_or_404(Person, ID=pid)
     person = obj
-    id = request.session.get('id', -1)
     context = {
         'person': person,
         'id': id,
@@ -253,6 +296,9 @@ def editPerson(request, pid):
 
 def updatePerson(request, pid):
     id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     context = {
         'id': id,
         'user': request.session.get('user', 'none'),
@@ -263,6 +309,9 @@ def updatePerson(request, pid):
 
 def editPersonel(request):
     id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     context = {
         'id': id,
         'user': request.session.get('user', 'none'),
@@ -274,6 +323,9 @@ def editPersonel(request):
 
 def editVehicle(request):
     id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     context = {
         'id': id,
         'user': request.session.get('user', 'none'),
@@ -284,6 +336,9 @@ def editVehicle(request):
 
 def editService(request):
     id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     context = {
         'id': id,
         'user': request.session.get('user', 'none'),
@@ -294,6 +349,9 @@ def editService(request):
 
 def editServiceplan(request):
     id = request.session.get('id', -1)
+    if id == -1:
+        return redirect('login')
+
     context = {
         'id': id,
         'user': request.session.get('user', 'none'),
