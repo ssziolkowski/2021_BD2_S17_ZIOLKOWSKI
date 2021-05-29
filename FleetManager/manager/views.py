@@ -1,5 +1,5 @@
 from django.http.response import HttpResponseRedirect
-from .models import Company, Vehicle
+from .models import *
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from .forms import *
@@ -58,7 +58,11 @@ def filterVehicle_view(request, otype):
 
     vehicle = Vehicle.objects.filter(category=otype)
     context = {
-        'vehicles': vehicle
+        'vehicles': vehicle,
+        'id': id,
+        'user': request.session.get('user', 'none'),
+        'name': request.session.get('name', ''),
+        'company': request.session.get('company', -1)
     }
     return render(request, 'manager/allVehicles.html', context)
 
@@ -72,7 +76,11 @@ def person_update_view(request, upid):
     form = PersonForm(request.POST or None, instance=obj)
     context = {
         'person': obj,
-        'persons': Person.objects.all().order_by("ID")
+        'persons': Person.objects.all().order_by("ID"),
+        'id': id,
+        'user': request.session.get('user', 'none'),
+        'name': request.session.get('name', ''),
+        'company': request.session.get('company', -1)
     }
     if form.is_valid():
         form.save()
@@ -81,41 +89,45 @@ def person_update_view(request, upid):
 
 
 def login(request):
-    if request.method == "POST":
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            userFilter = Person.objects.filter(
-                login=data['login'], password=data['password'])
-            user = userFilter.first()
-            if user is None:
-                request.session['id'] = -1
-                request.session['user'] = 'none'
-                request.session['name'] = 'FleetManager'
-                return redirect('login')
-            else:
-                request.session['id'] = user.ID
-                request.session['user'] = 'person'
-                request.session['name'] = user.name + ' ' + user.surname
-                return redirect('fleetManager')
-        else:
-            form = VehiclesForm()
-
-    context = {
-        'id': -1,
-        'user': 'none',
-        'name': ''
-    }
-    return render(request, 'manager/login.html', context)
-
-
-def logout(request):
     request.session['id'] = -1
     request.session['user'] = 'none'
     request.session['name'] = ''
     request.session['company'] = -1
 
-    return redirect('login')
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            user = Person.objects.filter(
+                login=data['login'], password=data['password']).first()
+            if user is None:
+                company = Company.objects.filter(
+                    login=data['login'], password=data['password']).first()
+                if company is None:
+                    request.session['id'] = -1
+                    request.session['user'] = 'none'
+                    request.session['name'] = ''
+                    request.session['company'] = -1
+                    return redirect('login')
+                else:
+                    request.session['id'] = company.id
+                    request.session['user'] = 'admin'
+                    request.session['name'] = company.name
+                    request.session['company'] = -1
+                    return redirect('adminPanel')
+            else:
+                request.session['id'] = user.ID
+                if Manager.objects.filter(personal_ID=user.ID).first() is not None:
+                    request.session['user'] = 'manager'
+                else:
+                    request.session['user'] = 'person'
+                request.session['name'] = user.name + ' ' + user.surname
+                request.session['company'] = user.companyID.id
+                return redirect('fleetManager')
+        else:
+            form = VehiclesForm()
+    else:
+        return render(request, 'manager/login.html')
 
 
 def addVehicle(request):
@@ -157,7 +169,7 @@ def selectedVehicle_view(request):
         'vehicle': vehicle,
         'id': id,
         'user': request.session.get('user', 'none'),
-        'name': request.session.get('name', 'FleetManager')
+        'name': request.session.get('name', '')
     }
 
     return render(request, "manager/selectedVehicle.html", context)

@@ -18,7 +18,9 @@
         <p class="card-text">Purpose: {{vehicle.purpose}}</p>
         <p class="card-text">Distinctive marks: {{vehicle.distinctive_marks}}</p>
         <p class="card-text">Status: {{vehicle.status}}</p>
+        {%if user != 'admin'%}
         <a href="{% url 'rentVehicle' %}" class="btn btn-primary">Rent</a>
+        {%endif%}
       </div>
     </div>
   </center>

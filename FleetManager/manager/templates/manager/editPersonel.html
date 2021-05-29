@@ -51,40 +51,49 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          {%if id != -1%}
+          {%if user == 'person'%}
           <li class="nav-item active">
             <a class="nav-link" href="{% url 'fleetManager' %}">Home <span class="sr-only">(current)</span></a>
           </li>
+          {%endif%}
+          {%if user == 'person' or user == 'admin'%}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'allVehicles' %}">All vehicles</a>
           </li>
+          {%endif%}
+          {%if user == 'person'%}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">Your vehicles</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="#">Action</a>
               <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
           </li>
+          {%endif%}
+          {%if user == 'admin'%}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'adminPanel' %}">Admin panel</a>
           </li>
+          {%endif%}
+          {%if user == 'person' or user == 'manager' or user == 'admin'%}
           <li class="nav-item">
-            {%if id == -1 %} <a class="nav-link" href="{% url 'login' %}">Login/Register</a>
-            {%else%} <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-            {%endif%}
+            <a class="nav-link" href="{% url 'login' %}">Logout</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">user: {{name}}</a>
+            <a class="nav-link" href="#">
+            {%if user == 'person'%}user: 
+            {%elif user == 'manager'%}manager:
+            {%elif user == 'admin'%}admin:
+            {%endif%}
+            {{name}}</a>
           </li>
           {%endif%}
         </ul>
       </div>
     </div>
   </nav>
-  <div>
     <form enctype="multipart/form-data" method="post">{% csrf_token %}
       {{ form.as_ps }}
       <div style="padding:10px;"></div>
