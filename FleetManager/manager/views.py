@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from .forms import *
 from django.utils import timezone
-
+from django.db.models import Q
 
 def fleetManager(request):
     id = request.session.get('id', -1)
@@ -46,8 +46,8 @@ def allVehicles(request):
     if search is None:
         context['vehicles'] = Vehicle.objects.all()
     else:
-        context['vehicles'] = Vehicle.objects.filter(model__icontains=search)
-
+        context['vehicles'] = Vehicle.objects.filter(Q(model__icontains=search) | Q(brand__icontains=search))
+        
     return render(request, 'manager/allVehicles.html', context)
 
 
