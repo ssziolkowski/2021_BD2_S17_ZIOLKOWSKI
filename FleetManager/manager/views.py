@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from .forms import *
 from django.utils import timezone
 from django.db.models import Q
+import pdfkit
 
 def fleetManager(request):
     id = request.session.get('id', -1)
@@ -83,7 +84,8 @@ def person_update_view(request, upid):
         'company': request.session.get('company', -1)
     }
     if form.is_valid():
-        form.save()
+        post=form.save()
+        saveLog(id=id,post=post,name="changed")
         return render(request, "manager/editPersonel.html", context)
     return render(request, "manager/editPerson.html", context)
 
@@ -141,6 +143,7 @@ def addVehicle(request):
             form.save()
             post = form.save(commit=False)
             post.save()
+            saveLog(id=id,post=post,name="added")
             return redirect('fleetManager')
         else:
             form = VehiclesForm()
@@ -236,6 +239,7 @@ def addPerson(request):
             person = form.save(commit=False)
             person.companyID = Company.objects.get(id=1)
             person.save()
+            saveLog(id=id,post=person,name="added")
             return redirect('addPerson')
         else:
             form = PersonForm()
@@ -259,6 +263,7 @@ def addService(request):
             form.save()
             service = form.save(commit=False)
             service.save()
+            saveLog(id=id,post=service,name="added")
             return redirect('addService')
         else:
             form = ServiceForm()
@@ -282,6 +287,7 @@ def addServiceplan(request):
             form.save()
             serviceplan = form.save(commit=False)
             serviceplan.save()
+            saveLog(id=id,post=serviceplan,name="added")
             return redirect('addServiceplan')
         else:
             form = ServiceplanForm()
@@ -377,3 +383,8 @@ def editServiceplan(request):
         'name': request.session.get('name', 'FleetManager')
     }
     return render(request, 'manager/editServiceplan.html', context)
+
+def saveLog(name,id,post):
+    f = open("logFile.txt", "a")
+    f.write("{} was {} by company id = {}\n".format(post,name,id))
+    f.close()
