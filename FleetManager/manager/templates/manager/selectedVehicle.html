@@ -19,7 +19,11 @@
         <p class="card-text">Distinctive marks: {{vehicle.distinctive_marks}}</p>
         <p class="card-text">Status: {{vehicle.status}}</p>
         {%if user != 'admin'%}
-        <a href="{% url 'rentVehicle' %}" class="btn btn-primary">Rent</a>
+        <form action="{% url 'rentVehicle' %}" method="post">
+          <input type="hidden" name="VIN" value={{vehicle.VIN}}>
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">Rent</button>
+        </form>
         {%endif%}
       </div>
     </div>

@@ -1,95 +1,44 @@
 {%extends "manager/base.html"%}
   {%block content%}
   {% load static %}
+
+<!-- Datepicker -->
+<link href='bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' rel='stylesheet' type='text/css'>
+<script src='bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' type='text/javascript'></script>
   <div>
     <form action="action_page.php" method="post">
       <div style="padding:10px;"></div>
       <div class="container" style="background-color: #f1f1f1;padding:10px;">
         <center>
-          <h5><b>Vehicle addition</b></h5>
+          <h5><b>Rent {{vehicle.model}} {{vehicle.brand}}</b></h5>
         </center>
         <hr>
         <table id="form" align="left" width="70%">
           <tr>
             <td>
-              <label for="vin"><b>VIN</b></label>
+              <label for="status"><b>Rent type</b></label>
             </td>
             <td>
-              <input type="text" placeholder="Enter VIN" name="vin" required>
+              <select placeholder="Enter rent type" name="status" required>
+                <option value="private">Private</option>
+                <option value="buisness">Buisness</option>
+              </select>
             </td>
           </tr>
           <tr>
             <td>
-              <label for="VIN"><b>Brand</b></label>
+              <label for="startDate"><b>Start Date</b></label>
             </td>
             <td>
-              <input type="text" placeholder="Enter Brand" name="brand" required>
+              <input type='date'  id='fromDate' placeholder='Enter Start Date' name='rent_start'  required>
             </td>
           </tr>
           <tr>
             <td>
-              <label for="model"><b>Model</b></label>
+              <label for="endDate"><b>End Date</b></label>
             </td>
             <td>
-              <input type="text" placeholder="Enter Model" name="model" required>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="version"><b>Version</b></label>
-            </td>
-            <td>
-              <input type="text" placeholder="Enter Version" name="version" required>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="acc"><b>accessories</b></label>
-            </td>
-            <td>
-              <input type="text" placeholder="Enter Accessories" name="accessories" required>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding-right:20px">
-              <label for="plate"><b>Registration plate</b></label>
-            </td>
-            <td>
-              <input type="text" placeholder="Enter Number plates" name="plate" required>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="current_mileage"><b>Current mileage</b></label>
-            </td>
-            <td>
-              <input type="number" placeholder="Enter current mileage" name="current_mileage" required>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="purpose"><b>Purpose</b></label>
-            </td>
-            <td>
-              <input type="text" placeholder="Enter car purpose" name="purpose" required>
-              </p>//to bedzie lista wyboru
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="manager_id"><b>Manager ID</b></label>
-            </td>
-            <td>
-              <input type="number" placeholder="Enter Manager ID" name="manager_id" required>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="status"><b>Status</b></label>
-            </td>
-            <td>
-              <input type="text" placeholder="Enter current status" name="status" required>
-              </p>//to tez
+              <input type='date'  id='toDate' placeholder='Enter End Date' name='rent_end' required>
             </td>
           </tr>
           <tr>
@@ -108,4 +57,5 @@
       </div>
     </form>
   </div>
+
   {%endblock content%}

@@ -1,0 +1,3 @@
+Person object (7) was added by company id = 1
+Person object (8) was added by company id = 1
+Vehicle object (JSSVZDDD) was added by company id = 1
