@@ -180,7 +180,14 @@ def rentVehicle(request):
     if id == -1:
         return redirect('login')
 
+    if request.method == "POST":
+        form = VehiclesForm(request.POST)
+        vin = request.POST.get("VIN", "NOVIN")
+
+    vehicle = Vehicle.objects.filter(VIN=vin).first()
+
     context = {
+        'vehicle': vehicle,
         'id': id,
         'user': request.session.get('user', 'none'),
         'name': request.session.get('name', 'FleetManager')

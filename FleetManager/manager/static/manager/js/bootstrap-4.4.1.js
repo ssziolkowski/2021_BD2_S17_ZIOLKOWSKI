@@ -551,6 +551,31 @@
    * Data Api implementation
    * ------------------------------------------------------------------------
    */
+// set default dates
+var start = new Date();
+// set end date to max one year period:
+var end = new Date(new Date().setYear(start.getFullYear()+1));
+
+$('#fromDate').datepicker({
+    startDate : start,
+    endDate   : end
+// update "toDate" defaults whenever "fromDate" changes
+}).on('changeDate', function(){
+    // set the "toDate" start to not be later than "fromDate" ends:
+    $('#toDate').datepicker('setStartDate', new Date($(this).val()));
+}); 
+
+$('#toDate').datepicker({
+    startDate : start,
+    endDate   : end
+// update "fromDate" defaults whenever "toDate" changes
+}).on('changeDate', function(){
+    // set the "fromDate" end to not be later than "toDate" starts:
+    $('#fromDate').datepicker('setEndDate', new Date($(this).val()));
+});
+
+
+
 
 
   $(document).on(Event$1.CLICK_DATA_API, Selector$1.DATA_TOGGLE_CARROT, function (event) {
