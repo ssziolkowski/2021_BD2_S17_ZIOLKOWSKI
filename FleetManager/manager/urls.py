@@ -28,5 +28,6 @@ urlpatterns = [
     path('editPersonel', views.editPersonel, name='editPersonel'),
     path('editVehicle', views.editVehicle, name='editVehicle'),
     path('editService', views.editService, name='editService'),
-    path('editServiceplan', views.editServiceplan, name='editServiceplan')
+    path('editServiceplan', views.editServiceplan, name='editServiceplan'),
+    path('managerPanel', views.managerPanel, name='managerPanel')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
