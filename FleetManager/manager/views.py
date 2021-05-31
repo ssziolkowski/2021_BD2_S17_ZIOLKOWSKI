@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.db.models import Q
 import pdfkit
 
+
 def fleetManager(request):
     id = request.session.get('id', -1)
     if id == -1:
@@ -15,7 +16,7 @@ def fleetManager(request):
     context = {
         'vehicles': Vehicle.objects.all(),
         'id': id,
-        'user': request.session.get('user', 'none')
+        'user': request.session.get('currentUser', 'none')
     }
     user = Person.objects.filter(ID=id).first()
     if user is not None:
@@ -34,7 +35,7 @@ def allVehicles(request):
 
     context = {
         'id': id,
-        'user': request.session.get('user', 'none')
+        'user': request.session.get('currentUser', 'none')
     }
     user = Person.objects.filter(ID=id).first()
     if user is not None:
@@ -47,8 +48,9 @@ def allVehicles(request):
     if search is None:
         context['vehicles'] = Vehicle.objects.all()
     else:
-        context['vehicles'] = Vehicle.objects.filter(Q(model__icontains=search) | Q(brand__icontains=search))
-        
+        context['vehicles'] = Vehicle.objects.filter(
+            Q(model__icontains=search) | Q(brand__icontains=search))
+
     return render(request, 'manager/allVehicles.html', context)
 
 
@@ -61,7 +63,7 @@ def filterVehicle_view(request, otype):
     context = {
         'vehicles': vehicle,
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', ''),
         'company': request.session.get('company', -1)
     }
@@ -79,22 +81,29 @@ def person_update_view(request, upid):
         'person': obj,
         'persons': Person.objects.all().order_by("ID"),
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', ''),
         'company': request.session.get('company', -1)
     }
     if form.is_valid():
-        post=form.save()
-        saveLog(id=id,post=post,name="changed")
+        post = form.save()
+        saveLog(id=id, post=post, name="changed")
         return render(request, "manager/editPersonel.html", context)
     return render(request, "manager/editPerson.html", context)
 
 
 def login(request):
     request.session['id'] = -1
-    request.session['user'] = 'none'
+    request.session['currentUser'] = 'none'
     request.session['name'] = ''
     request.session['company'] = -1
+
+    context = {
+        'id': -1,
+        'user': 'none',
+        'name': '',
+        'company': -1
+    }
 
     if request.method == "POST":
         form = LoginForm(request.POST)
@@ -107,29 +116,29 @@ def login(request):
                     login=data['login'], password=data['password']).first()
                 if company is None:
                     request.session['id'] = -1
-                    request.session['user'] = 'none'
+                    request.session['currentUser'] = 'none'
                     request.session['name'] = ''
                     request.session['company'] = -1
                     return redirect('login')
                 else:
                     request.session['id'] = company.id
-                    request.session['user'] = 'admin'
+                    request.session['currentUser'] = 'admin'
                     request.session['name'] = company.name
                     request.session['company'] = -1
                     return redirect('adminPanel')
             else:
                 request.session['id'] = user.ID
                 if Manager.objects.filter(personal_ID=user.ID).first() is not None:
-                    request.session['user'] = 'manager'
+                    request.session['currentUser'] = 'manager'
                 else:
-                    request.session['user'] = 'person'
+                    request.session['currentUser'] = 'person'
                 request.session['name'] = user.name + ' ' + user.surname
                 request.session['company'] = user.companyID.id
                 return redirect('fleetManager')
         else:
             form = VehiclesForm()
     else:
-        return render(request, 'manager/login.html')
+        return render(request, 'manager/login.html', context)
 
 
 def addVehicle(request):
@@ -143,14 +152,14 @@ def addVehicle(request):
             form.save()
             post = form.save(commit=False)
             post.save()
-            saveLog(id=id,post=post,name="added")
+            saveLog(id=id, post=post, name="added")
             return redirect('fleetManager')
         else:
             form = VehiclesForm()
 
     context = {
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
 
@@ -171,7 +180,7 @@ def selectedVehicle_view(request):
     context = {
         'vehicle': vehicle,
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', '')
     }
 
@@ -192,7 +201,7 @@ def rentVehicle(request):
     context = {
         'vehicle': vehicle,
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
 
@@ -206,7 +215,7 @@ def selectedVehicle(request):
 
     context = {
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
 
@@ -220,7 +229,7 @@ def adminPanel(request):
 
     context = {
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
 
@@ -239,14 +248,14 @@ def addPerson(request):
             person = form.save(commit=False)
             person.companyID = Company.objects.get(id=1)
             person.save()
-            saveLog(id=id,post=person,name="added")
+            saveLog(id=id, post=person, name="added")
             return redirect('addPerson')
         else:
             form = PersonForm()
 
     context = {
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
     return render(request, 'manager/addPerson.html', context)
@@ -263,14 +272,14 @@ def addService(request):
             form.save()
             service = form.save(commit=False)
             service.save()
-            saveLog(id=id,post=service,name="added")
+            saveLog(id=id, post=service, name="added")
             return redirect('addService')
         else:
             form = ServiceForm()
 
     context = {
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
     return render(request, 'manager/addService.html', context)
@@ -287,14 +296,14 @@ def addServiceplan(request):
             form.save()
             serviceplan = form.save(commit=False)
             serviceplan.save()
-            saveLog(id=id,post=serviceplan,name="added")
+            saveLog(id=id, post=serviceplan, name="added")
             return redirect('addServiceplan')
         else:
             form = ServiceplanForm()
 
     context = {
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
     return render(request, 'manager/addServiceplan.html', context)
@@ -310,7 +319,7 @@ def editPerson(request, pid):
     context = {
         'person': person,
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
     if request.method == "POST":
@@ -326,7 +335,7 @@ def updatePerson(request, pid):
 
     context = {
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
     return render(request, 'manager/editPersonel.html', context)
@@ -339,7 +348,7 @@ def editPersonel(request):
 
     context = {
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager'),
         'persons': Person.objects.all().order_by("ID")
     }
@@ -353,7 +362,7 @@ def editVehicle(request):
 
     context = {
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
     return render(request, 'manager/editVehicle.html', context)
@@ -366,7 +375,7 @@ def editService(request):
 
     context = {
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
     return render(request, 'manager/editService.html', context)
@@ -379,12 +388,13 @@ def editServiceplan(request):
 
     context = {
         'id': id,
-        'user': request.session.get('user', 'none'),
+        'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
     return render(request, 'manager/editServiceplan.html', context)
 
-def saveLog(name,id,post):
+
+def saveLog(name, id, post):
     f = open("logFile.txt", "a")
-    f.write("{} was {} by company id = {}\n".format(post,name,id))
+    f.write("{} was {} by company id = {}\n".format(post, name, id))
     f.close()
