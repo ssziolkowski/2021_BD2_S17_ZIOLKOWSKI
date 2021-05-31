@@ -30,5 +30,6 @@ urlpatterns = [
     path('editService', views.editService, name='editService'),
     path('editServiceplan', views.editServiceplan, name='editServiceplan'),
     path('managerPanel', views.managerPanel, name='managerPanel'),
-    path('generateReport', views.generateReport, name='generateReport')
+    path('generateReport', views.generateReport, name='generateReport'),
+    path('reserveVehicle', views.reserveVehicle, name='reserveVehicle')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

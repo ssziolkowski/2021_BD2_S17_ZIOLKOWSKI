@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django import forms
 from django.utils import timezone
 from django.utils.translation import templatize
-from .models import Person, Service, Serviceplan, Vehicle, models
+from .models import Person, Rental, Service, Serviceplan, Vehicle, models
 from django.utils.safestring import mark_safe
 
 
@@ -29,6 +29,14 @@ class PersonForm(forms.ModelForm):
         model = Person
         fields = ('login', 'password', 'name', 'surname', 'phone_number',
                   'position', 'address', 'salary', 'status')
+
+
+class ReserveForm(forms.ModelForm):
+
+    class Meta:
+        model = Rental
+        fields = ('rent_type', 'rent_start', 'rent_end','vehicle_id')
+
 
 
 # TODO: validate vin with db

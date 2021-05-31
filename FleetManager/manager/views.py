@@ -229,6 +229,31 @@ def rentVehicle(request):
 
     return render(request, 'manager/rentVehicle.html', context)
 
+def reserveVehicle(request):
+    id = request.session.get('id', -1)
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    if request.method == "POST":
+        form = ReserveForm(request.POST)
+        if form.is_valid():
+            form.save()
+            rental = form.save(commit=False)
+            rental.renter_id=Person.objects.filter(ID=id).first()
+            rental.save()
+            return redirect('fleetManager')
+        else:
+            form = ReserveForm()
+
+    context = {
+        'id': id,
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', 'FleetManager')
+    }
+
+    return(request, 'fleetManager')
+
+
 
 def selectedVehicle(request):
     id = request.session.get('id', -1)
@@ -373,7 +398,7 @@ def editPersonel(request):
         'id': id,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager'),
-        'persons': Person.objects.all().order_by("ID")
+        'persons': Person.objects.filter(companyID = request.session.get('id',-1)).order_by("ID")
     }
     return render(request, 'manager/editPersonel.html', context)
 
@@ -434,30 +459,32 @@ def generateReport(request):
     text = f.readlines()
 
     textobject = p.beginText()
-    textobject.setTextOrigin(10, 800)
+    textobject.setTextOrigin(10, 830)
     textobject.setFont('Times-Roman', 12)
 
     for line in text:
         companyID = re.search("company id = \d+", line)
         if request.session.get('id', -1) == int(companyID[0][13:]):
             if re.search("Person object", line) is not None:
+
                 personID = re.search("\(\d+\)", line)
+
                 person = Person.objects.filter(
                     ID=int(personID[0][1:-1])).first()
+
                 textobject.textLine("{} {} {} {}".format(
                     line[:personID.start()], person.name, person.surname, line[personID.start():]))
+
             else:
                 vehicleVIN = re.search("\(\w+\)", line)
                 vehicle = Vehicle.objects.filter(
                     VIN=vehicleVIN[0][1:-1]).first()
                 textobject.textLine("{} {} {} {}".format(
-                    line[:personID.start()], person.name, person.surname, line[personID.start():]))
+                    line[:personID.start()], vehicle.brand, vehicle.model, line[personID.start():]))
 
     p.drawText(textobject)
     p.showPage()
     p.save()
 
-    # FileResponse sets the Content-Disposition header so that browsers
-    # present the option to save the file.
     buffer.seek(0)
-    return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+    return FileResponse(buffer, as_attachment=True, filename="Report {}.pdf".format(datetime.datetime.now().strftime("%x %X")))
