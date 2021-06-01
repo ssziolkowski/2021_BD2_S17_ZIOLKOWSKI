@@ -13,100 +13,81 @@ import re
 
 
 def managerPanel(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
     context = {
-        'id': request.session.get('id', -1),
         'user': request.session.get('currentUser', 'none'),
-        'name': request.session.get('name', ''),
-        'company': request.session.get('company', -1)
+        'name': request.session.get('name', '')
     }
     return render(request, 'manager/managerPanel.html', context)
 
 
 def fleetManager(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
     context = {
-        'vehicles': Vehicle.objects.all(),
-        'id': id,
-        'user': request.session.get('currentUser', 'none')
+        'vehicles': Vehicle.objects.filter(companyID=request.session.get('company', -1)),
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', '')
     }
-    user = Person.objects.filter(ID=id).first()
-    if user is not None:
-        context['name'] = user.name + ' ' + user.surname
-        context['company'] = user.companyID
-    else:
-        context['name'] = 'FleetManager'
-
     return render(request, 'manager/fleetManager.html', context)
 
 
 def allVehicles(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
     context = {
-        'id': id,
-        'user': request.session.get('currentUser', 'none')
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', '')
     }
-    user = Person.objects.filter(ID=id).first()
-    if user is not None:
-        context['name'] = user.name + ' ' + user.surname
-        context['company'] = user.companyID
-    else:
-        context['name'] = 'FleetManager'
 
     search = request.GET.get("search", None)
     if search is None:
-        context['vehicles'] = Vehicle.objects.all()
+        context['vehicles'] = Vehicle.objects.filter(
+            companyID=request.session.get('company', -1))
     else:
         context['vehicles'] = Vehicle.objects.filter(
-            Q(model__icontains=search) | Q(brand__icontains=search))
+            Q(model__icontains=search) | Q(brand__icontains=search),
+            companyID=request.session.get('company', -1))
 
     return render(request, 'manager/allVehicles.html', context)
 
 
 def filterVehicle_view(request, otype):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
-    vehicle = Vehicle.objects.filter(category=otype)
     context = {
-        'vehicles': vehicle,
-        'id': id,
+        'vehicles': Vehicle.objects.filter(category=otype, companyID=request.session.get('company', -1)),
         'user': request.session.get('currentUser', 'none'),
-        'name': request.session.get('name', ''),
-        'company': request.session.get('company', -1)
+        'name': request.session.get('name', '')
     }
     return render(request, 'manager/allVehicles.html', context)
 
 
 def person_update_view(request, upid):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
-    obj = Person.objects.filter(ID=upid).first()
-    form = PersonForm(request.POST or None, instance=obj)
+    person = Person.objects.filter(ID=upid).first()
+    form = PersonForm(request.POST or None, instance=person)
+
     context = {
-        'person': obj,
-        'persons': Person.objects.all().order_by("ID"),
-        'id': id,
+        'person': person,
+        'persons': Person.objects.filter(companyID=request.session.get('company', -1)).order_by("ID"),
         'user': request.session.get('currentUser', 'none'),
-        'name': request.session.get('name', ''),
-        'company': request.session.get('company', -1)
+        'name': request.session.get('name', '')
     }
+
     if form.is_valid():
         post = form.save()
-        saveLog(id=id, post=post, name="changed")
+        saveLog(id=request.session.get('company', -1),
+                post=post, name="changed")
         return render(request, "manager/editPersonel.html", context)
+
     return render(request, "manager/editPerson.html", context)
 
 
@@ -122,7 +103,6 @@ def login(request):
         'name': '',
         'company': -1
     }
-
 
     if request.method == "POST":
         form = LoginForm(request.POST)
@@ -143,7 +123,7 @@ def login(request):
                     request.session['id'] = company.id
                     request.session['currentUser'] = 'admin'
                     request.session['name'] = company.name
-                    request.session['company'] = -1
+                    request.session['company'] = company.id
                     return redirect('adminPanel')
             else:
                 request.session['id'] = user.ID
@@ -164,7 +144,6 @@ def login(request):
 
 
 def addVehicle(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
@@ -173,14 +152,16 @@ def addVehicle(request):
         if form.is_valid():
             form.save()
             post = form.save(commit=False)
+            post.companyID = Company.objects.get(
+                id=request.session.get('company', -1))
             post.save()
-            saveLog(id=id, post=post, name="added")
-            return redirect('fleetManager')
+            saveLog(id=request.session.get(
+                'company', -1), post=post, name="added")
+            return redirect('allVehicles')
         else:
             form = VehiclesForm()
 
     context = {
-        'id': id,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
@@ -189,7 +170,6 @@ def addVehicle(request):
 
 
 def selectedVehicle_view(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
@@ -198,10 +178,8 @@ def selectedVehicle_view(request):
         vin = request.POST.get("VIN", "NOVIN")
 
     vehicle = Vehicle.objects.filter(VIN=vin).first()
-    id = request.session.get('id', -1)
     context = {
         'vehicle': vehicle,
-        'id': id,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', '')
     }
@@ -210,7 +188,6 @@ def selectedVehicle_view(request):
 
 
 def rentVehicle(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
@@ -222,15 +199,14 @@ def rentVehicle(request):
 
     context = {
         'vehicle': vehicle,
-        'id': id,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
 
     return render(request, 'manager/rentVehicle.html', context)
 
+
 def reserveVehicle(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
@@ -239,29 +215,28 @@ def reserveVehicle(request):
         if form.is_valid():
             form.save()
             rental = form.save(commit=False)
-            rental.renter_id=Person.objects.filter(ID=id).first()
+            rental.renter_id = Person.objects.filter(
+                ID=request.session.get('id', -1)).first()
             rental.save()
             return redirect('fleetManager')
         else:
             form = ReserveForm()
 
     context = {
-        'id': id,
+        'vehicles': Vehicle.objects.filter(
+            companyID=request.session.get('company', -1)),
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
 
-    return(request, 'fleetManager')
-
+    return(request, 'fleetManager', context)
 
 
 def selectedVehicle(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
     context = {
-        'id': id,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
@@ -270,12 +245,10 @@ def selectedVehicle(request):
 
 
 def adminPanel(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
     context = {
-        'id': id,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
@@ -284,7 +257,6 @@ def adminPanel(request):
 
 
 def addPerson(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
@@ -294,15 +266,15 @@ def addPerson(request):
             form.save()
             person = form.save(commit=False)
             person.companyID = Company.objects.get(
-                id=request.session['id'])
+                id=request.session.get('company', -1))
             person.save()
-            saveLog(id=id, post=person, name="added")
+            saveLog(id=request.session.get('company', -1),
+                    post=person, name="added")
             return redirect('addPerson')
         else:
             form = PersonForm()
 
     context = {
-        'id': id,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
@@ -310,7 +282,6 @@ def addPerson(request):
 
 
 def addService(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
@@ -320,13 +291,13 @@ def addService(request):
             form.save()
             service = form.save(commit=False)
             service.save()
-            saveLog(id=id, post=service, name="added")
+            saveLog(id=request.session.get('company', -1),
+                    post=service, name="added")
             return redirect('addService')
         else:
             form = ServiceForm()
 
     context = {
-        'id': id,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
@@ -334,7 +305,6 @@ def addService(request):
 
 
 def addServiceplan(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
@@ -344,13 +314,13 @@ def addServiceplan(request):
             form.save()
             serviceplan = form.save(commit=False)
             serviceplan.save()
-            saveLog(id=id, post=serviceplan, name="added")
+            saveLog(id=request.session.get('company', -1),
+                    post=serviceplan, name="added")
             return redirect('addServiceplan')
         else:
             form = ServiceplanForm()
 
     context = {
-        'id': id,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
@@ -358,7 +328,6 @@ def addServiceplan(request):
 
 
 def editPerson(request, pid):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
@@ -366,7 +335,6 @@ def editPerson(request, pid):
     person = obj
     context = {
         'person': person,
-        'id': id,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
@@ -377,12 +345,10 @@ def editPerson(request, pid):
 
 
 def updatePerson(request, pid):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
     context = {
-        'id': id,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
@@ -390,26 +356,22 @@ def updatePerson(request, pid):
 
 
 def editPersonel(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
     context = {
-        'id': id,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager'),
-        'persons': Person.objects.filter(companyID = request.session.get('id',-1)).order_by("ID")
+        'persons': Person.objects.filter(companyID=request.session.get('company', -1)).order_by("ID")
     }
     return render(request, 'manager/editPersonel.html', context)
 
 
 def editVehicle(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
     context = {
-        'id': id,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
@@ -417,12 +379,10 @@ def editVehicle(request):
 
 
 def editService(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
     context = {
-        'id': id,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
@@ -430,12 +390,10 @@ def editService(request):
 
 
 def editServiceplan(request):
-    id = request.session.get('id', -1)
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
     context = {
-        'id': id,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
@@ -476,6 +434,8 @@ def generateReport(request):
                     line[:personID.start()], person.name, person.surname, line[personID.start():]))
 
             else:
+                personID = re.search("\(\d+\)", line)
+
                 vehicleVIN = re.search("\(\w+\)", line)
                 vehicle = Vehicle.objects.filter(
                     VIN=vehicleVIN[0][1:-1]).first()

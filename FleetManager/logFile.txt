@@ -1,5 +1,1 @@
-Person object (8) was added by company id = 1
-Vehicle object (JSSVZDDD) was added by company id = 1
-Person object (9) was added by company id = 1 date = 05/31/21 21:06:42
-Person object (9) was added by company id = 2 date = 05/31/21 21:06:42
-Person object (9) was added by company id = 10 date = 05/31/21 21:06:42
+Vehicle object (345) was added by company id = 1 date = 06/01/21 11:22:30
