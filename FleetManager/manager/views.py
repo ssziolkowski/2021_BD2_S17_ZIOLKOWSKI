@@ -252,6 +252,7 @@ def reserveVehicle(request):
                 }
                 return render(request, 'manager/rentVehicle.html', context)
 
+            rental.rent_status = 'reserved'
             rental.save()
 
             if rental.rent_start == datetime.date.today():
@@ -293,7 +294,7 @@ def startRent(request):
 
     if rental is not None:
         rental.starting_mileage = starting_mileage
-        rental.rent_status = True
+        rental.rent_status = 'rented'
         rental.save()
 
     context = {
@@ -323,6 +324,7 @@ def endRent(request):
         rental.final_mileage = final_mileage
         rental.exploitation_cost = cost
         rental.costs_description = description
+        rental.rent_status = 'given'
         rental.save()
 
     context = {
@@ -364,6 +366,39 @@ def yourVehiclesView(request):
     }
 
     return render(request, 'manager/yourVehicles.html', context)
+
+def rentalDetails(request):
+    pass
+
+def toStartRent(request):
+     if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+     context = {
+                'vehicle': Vehicle.objects.filter(VIN=request.POST.get("VIN", "NOVIN")).first(),
+                'user': request.session.get('currentUser', 'none'),
+                'name': request.session.get('name', 'FleetManager'),
+                'error': "This vehicle is not available on your selected dates"
+                }
+     return render(request, 'manager/startRent.html', context)
+
+
+####
+###
+####
+
+def toEndRent(request):
+     if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+     context = {
+                'vehicle': Vehicle.objects.filter(VIN=request.POST.get("VIN", "NOVIN")).first(),
+                'user': request.session.get('currentUser', 'none'),
+                'name': request.session.get('name', 'FleetManager'),
+                'error': "This vehicle is not available on your selected dates"
+                }
+     return render(request, 'manager/endRent.html', context)
+
 
 
 
