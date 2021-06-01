@@ -546,7 +546,7 @@ def editPersonel(request):
     return render(request, 'manager/editPersonel.html', context)
 
 
-def editVehicle(request):
+def editVehicles(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
