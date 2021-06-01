@@ -1,0 +1,41 @@
+{%extends "manager/base.html"%}
+  {%block content%}
+  {% load static %}
+
+  <div>
+    <form action="{% url 'startRent' %}" method="post">
+      {% csrf_token %}
+      <div style="padding:10px;"></div>
+      <div class="container" style="background-color: #f1f1f1;padding:10px;">
+        <center>
+          <h5><b>Rent {{vehicle.model}} {{vehicle.brand}}</b></h5>
+        </center>
+        <hr>
+        <table id="form" align="left" width="70%">
+          <tr>
+            <td>
+              <label for="starting_mileage"><b>Starting mileage</b></label>
+            </td>
+            <td>
+                <input type="number" placeholder="Enter mileage" name="starting_mileage" required>
+                <input type="hidden" name="VIN" value={{vehicle.VIN}}>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button type="submit">Submit</button>
+            </td>
+          </tr>
+        </table>
+        <label>
+          <input type="checkbox" checked="checked" name="cirograph" required> I agree to suffer the consequences for any
+          error
+        </label>
+      </div>
+      <div class="container" style="background-color:#f1f1f1">
+        <input type='reset' value='Cancel' name='reset'>
+      </div>
+    </form>
+  </div>
+
+  {%endblock content%}

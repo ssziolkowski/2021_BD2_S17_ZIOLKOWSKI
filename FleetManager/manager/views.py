@@ -215,25 +215,36 @@ def reserveVehicle(request):
             rental = form.save(commit=False)
             rental.renter_id = Person.objects.filter(
                 ID=request.session.get('id', -1)).first()
-            case_1 = Rental.objects.filter(vehicle_id=rental.vehicle_id, rent_start__lte=rental.rent_start, rent_end__gte=rental.rent_start).exists()
-            case_2 = Rental.objects.filter(vehicle_id=rental.vehicle_id, rent_start__lte=rental.rent_end, rent_end__gte=rental.rent_end).exists()
-            case_3 = Rental.objects.filter(vehicle_id=rental.vehicle_id, rent_start__gte=rental.rent_start, rent_end__lte=rental.rent_end).exists()
-
+            case_1 = Rental.objects.filter(
+                vehicle_id=rental.vehicle_id, rent_start__lte=rental.rent_start, rent_end__gte=rental.rent_start).exists()
+            case_2 = Rental.objects.filter(
+                vehicle_id=rental.vehicle_id, rent_start__lte=rental.rent_end, rent_end__gte=rental.rent_end).exists()
+            case_3 = Rental.objects.filter(
+                vehicle_id=rental.vehicle_id, rent_start__gte=rental.rent_start, rent_end__lte=rental.rent_end).exists()
 
             if case_1 or case_2 or case_3 or (rental.rent_start > rental.rent_end):
-
 
                 context = {
                     'vehicle': Vehicle.objects.filter(VIN=rental.vehicle_id.VIN).first(),
                     'user': request.session.get('currentUser', 'none'),
                     'name': request.session.get('name', 'FleetManager'),
                     'error': "This vehicle is not available on your selected dates"
-                }  
-                return render(request, 'manager/rentVehicle.html', context)                  
-             
+                }
+                return render(request, 'manager/rentVehicle.html', context)
 
             rental.save()
-            return redirect('fleetManager')
+
+            if rental.rent_start == datetime.date.today():
+                context = {
+                    'vehicle': Vehicle.objects.filter(VIN=rental.vehicle_id.VIN).first(),
+                    'user': request.session.get('currentUser', 'none'),
+                    'name': request.session.get('name', 'FleetManager'),
+                    'error': "This vehicle is not available on your selected dates"
+                }
+                return render(request, 'manager/startRent.html', context)
+
+            else:
+                return redirect('fleetManager')
         else:
             form = ReserveForm()
 
@@ -245,6 +256,33 @@ def reserveVehicle(request):
     }
 
     return(request, 'fleetManager', context)
+
+
+def startRent(request):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    if request.method == "POST":
+        starting_mileage = request.POST.get("starting_mileage", -1)
+        vin = request.POST.get("VIN", "NOVIN")
+
+    vehicle = Vehicle.objects.filter(VIN=vin).first()
+
+    rental = Rental.objects.filter(
+        vehicle_id=vehicle, rent_start=datetime.date.today()).first()
+
+    if rental is not None:
+        rental.starting_mileage = starting_mileage
+        rental.rent_status = True
+        rental.save()
+
+    context = {
+        'vehicles': Vehicle.objects.filter(companyID=request.session.get('company', -1)),
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', 'FleetManager')
+    }
+
+    return render(request, 'manager/fleetManager.html', context)
 
 
 def selectedVehicle(request):
@@ -385,8 +423,8 @@ def editPersonel(request):
         context['persons'] = Person.objects.filter(
             companyID=request.session.get('company', -1))
     else:
-            context['persons'] = Person.objects.filter(**{ filterPhrase: search },
-            companyID=request.session.get('company', -1))
+        context['persons'] = Person.objects.filter(**{filterPhrase: search},
+                                                   companyID=request.session.get('company', -1))
     return render(request, 'manager/editPersonel.html', context)
 
 

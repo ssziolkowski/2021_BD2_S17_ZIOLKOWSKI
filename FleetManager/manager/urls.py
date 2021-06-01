@@ -31,5 +31,6 @@ urlpatterns = [
     path('editServiceplan', views.editServiceplan, name='editServiceplan'),
     path('managerPanel', views.managerPanel, name='managerPanel'),
     path('generateReport', views.generateReport, name='generateReport'),
-    path('reserveVehicle', views.reserveVehicle, name='reserveVehicle')
+    path('reserveVehicle', views.reserveVehicle, name='reserveVehicle'),
+    path('startRent', views.startRent, name='startRent')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
