@@ -74,7 +74,6 @@ def person_update_view(request, upid):
 
     person = Person.objects.filter(ID=upid).first()
     form = PersonForm(request.POST or None, instance=person)
-
     context = {
         'person': person,
         'persons': Person.objects.filter(companyID=request.session.get('company', -1)).order_by("ID"),
@@ -213,10 +212,26 @@ def reserveVehicle(request):
     if request.method == "POST":
         form = ReserveForm(request.POST)
         if form.is_valid():
-            form.save()
             rental = form.save(commit=False)
             rental.renter_id = Person.objects.filter(
                 ID=request.session.get('id', -1)).first()
+            case_1 = Rental.objects.filter(vehicle_id=rental.vehicle_id, rent_start__lte=rental.rent_start, rent_end__gte=rental.rent_start).exists()
+            case_2 = Rental.objects.filter(vehicle_id=rental.vehicle_id, rent_start__lte=rental.rent_end, rent_end__gte=rental.rent_end).exists()
+            case_3 = Rental.objects.filter(vehicle_id=rental.vehicle_id, rent_start__gte=rental.rent_start, rent_end__lte=rental.rent_end).exists()
+
+
+            if case_1 or case_2 or case_3 or (rental.rent_start > rental.rent_end):
+
+
+                context = {
+                    'vehicle': Vehicle.objects.filter(VIN=rental.vehicle_id.VIN).first(),
+                    'user': request.session.get('currentUser', 'none'),
+                    'name': request.session.get('name', 'FleetManager'),
+                    'error': "This vehicle is not available on your selected dates"
+                }  
+                return render(request, 'manager/rentVehicle.html', context)                  
+             
+
             rental.save()
             return redirect('fleetManager')
         else:
