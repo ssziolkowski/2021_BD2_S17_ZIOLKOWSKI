@@ -1,0 +1,145 @@
+{%extends "manager/base.html"%}
+{%block content%}
+{% load static %}
+
+<style>
+  html body div div.container table#t {
+    align-content: center;
+    margin: auto;
+    column-span: 50px;
+    width: 100%;
+    text-align: center;
+  }
+
+  ;
+
+  th {
+    margin: 7px;
+  }
+
+  td {
+    text-align: center;
+    vertical-align: center;
+    width: 100%/10;
+    text-align: center;
+  }
+
+  ;
+</style>
+
+
+<div style="padding:10px;"></div>
+<div class="container" style="background-color: #f1f1f1;padding:10px;">
+  <center>
+    <h5><b>Search Person</b></h5>
+  </center>
+  <hr>
+  <table id="forms" align="left" width="70%">
+    <!-- 
+    <tr>
+      <td>
+        <label for="id"><b>Person ID:</b></label>
+      </td>
+      <td>
+        <form enctype="multipart/form-data" method="post" action="{% url 'editPerson' %}">{% csrf_token %}
+          {{ form.as_ps }}
+          <input type="number" placeholder="Enter Id" name="ID" id="id" required>
+          <input type="submit" name="searchbyid" value="Search">
+        </form>
+      </td>
+    </tr>
+  -->
+    <tr>
+      <td>
+        <form enctype="multipart/form-data" method="get" action="{% url 'editPersonel' %}">{% csrf_token %}
+          {{ form.as_ps }}
+          <label for="phrase"><b>Filter by:</b></label>
+          <select placeholder="Select filter" name="filter" required>
+            <option value="ID">Id</option>
+            <option value="login">Login</option>
+            <option value="name">Name</option>
+            <option value="surname" default>Surname</option>
+            <option value="phone_number">Phone</option>
+            <option value="position">Position</option>
+            <option value="address">Address</option>
+            <option value="salary">Salary</option>
+            <option value="status">Status</option>
+          </select>
+          <input type="text" placeholder="Enter phrase" name="phrase" id="phrase">
+          <input type="submit" name="search" value="Search">
+        </form>
+      </td>
+    </tr>
+  </table>
+  </form>
+</div>
+<div class="container" style="background-color: #f1f1f1;padding:10px;"></div>
+<div class="container" style="background-color: #f1f1f1;padding:10px;">
+  <hr>
+  <div class="container">
+    <table margin="0" id="t">
+      <tr>
+        <th>Person ID</th>
+        <th>Login</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Start date</th>
+        <th>Position</th>
+        <th>Address</th>
+        <th>Salary</th>
+        <th>Status</th>
+        <th>Edit?</th>
+      </tr>
+      {% for manager in managers %}
+      <tr>
+        <form enctype="multipart/form-data" method="post" action="{% url 'editPerson' pid=manager.ID %}">{% csrf_token %}
+          <td>
+            {{manager.ID }}
+            <input type="number" placeholder="xD" value="{{ manager.ID }}" name="ID" disabled hidden required>
+          </td>
+          <td>
+            {{manager.login }}
+            <input type="text" placeholder="Login" value="{{ manager.login }}" name="login" disabled hidden required>
+          </td>
+          <td>
+            {{manager.name }}
+            <input type="text" placeholder="N/A" value="{{ manager.name }}" name="name" disabled hidden required>
+          </td>
+          <td>
+            {{manager.data_start }}
+            <input type="text" placeholder="N/A" value="{{ manager.surname }}" name="surname" disabled hidden required>
+          </td>
+          <td>
+            {{manager.phone_number }}
+            <input type="text" placeholder="N/A" value="{{ manager.phone_number }}" name="phone_number" disabled hidden
+              required>
+          </td>
+          <td>
+            {{manager.position }}
+            <input type="text" placeholder="N/A" value="{{ manager.position }}" name="position" disabled hidden required>
+          </td>
+          <td>
+            {{manager.address }}
+            <input type="text" placeholder="N/A" value="{{ manager.address }}" name="address" disabled hidden required>
+          </td>
+          <td>
+            {{manager.salary }}
+            <input type="number" placeholder="N/A" value="{{ manager.salary }}" name="salary" disabled hidden required>
+          </td>
+          <td>
+            {{manager.status }}
+            <input type="text" placeholder="Enter current status" value="{{ manager.status }}" name="status" disabled
+              hidden required>
+          </td>
+          <td><input type="submit" class="btn btn-primary" value="Edit"></td>
+        </form>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div class="container">
+    <div class="row"></div>
+  </div>
+
+</div>
+{%endblock content%}
