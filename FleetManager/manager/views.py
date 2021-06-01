@@ -560,12 +560,21 @@ def editPersonel(request):
 def editVehicles(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
-
     context = {
         'user': request.session.get('currentUser', 'none'),
-        'name': request.session.get('name', 'FleetManager')
+        'name': request.session.get('name', 'FleetManager'),
+        'vehicles': Vehicle.objects.filter(companyID=request.session.get('company', -1)).order_by("VIN")
     }
-    return render(request, 'manager/editVehicle.html', context)
+    search = request.GET.get("phrase", None)
+    if search is None:
+        context['vehicles'] = Vehicle.objects.filter(
+            companyID=request.session.get('company', -1))
+    else:
+            filter = request.GET.get("filter", None)
+            filterPhrase = filter + '__icontains'
+            context['vehicles'] = Vehicle.objects.filter(**{ filterPhrase: search },
+            companyID=request.session.get('company', -1))
+    return render(request, 'manager/editVehicles.html', context)
 
 
 def editService(request):

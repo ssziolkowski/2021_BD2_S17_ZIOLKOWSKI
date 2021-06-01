@@ -1,116 +1,149 @@
 {%extends "manager/base.html"%}
-  {%block content%}
-  {% load static %}
-  <div>
-    <form enctype="multipart/form-data" method="post">{% csrf_token %}
-      {{ form.as_p }}
-      <div style="padding:10px;"></div>
-      <div class="container" style="background-color: #f1f1f1;padding:10px;">
-        <center>
-          <h5><b>Vehicle addition</b></h5>
-        </center>
-        <hr>
-        <table id="form" align="left" width="70%">
-          <tr>
-            <td>
-              <label for="vin"><b>VIN</b></label>
-            </td>
-            <td>
-              <input type="text" placeholder="Enter VIN" name="vin" required>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="brand"><b>Brand</b></label>
-            </td>
-            <td>
-              <input type="text" placeholder="Enter Brand" name="brand" required>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="model"><b>Model</b></label>
-            </td>
-            <td>
-              <input type="text" placeholder="Enter Model" name="model" required>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="version"><b>Version</b></label>
-            </td>
-            <td>
-              <input type="text" placeholder="Enter Version" name="version" required>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="acc"><b>accessories</b></label>
-            </td>
-            <td>
-              <input type="text" placeholder="Enter Accessories" name="accessories" required>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding-right:20px">
-              <label for="plate"><b>Registration plate</b></label>
-            </td>
-            <td>
-              <input type="text" placeholder="Enter Number plates" name="plate" required>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="current_mileage"><b>Current mileage</b></label>
-            </td>
-            <td>
-              <input type="number" placeholder="Enter current mileage" name="current_mileage" required>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="purpose"><b>Purpose</b></label>
-            </td>
-            <td>
-              <select placeholder="Enter car purpose" name="purpose" required>
-                <option value="civilian">Civilian</option>
-                <option value="special purpose">Special purpose</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="manager_id"><b>Manager ID</b></label>
-            </td>
-            <td>
-              <input type="number" placeholder="Enter Manager ID" name="manager_id" required>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label for="status"><b>Status</b></label>
-            </td>
-            <td>
-              <select placeholder="Enter current status" name="status" required>
-                <option value="operational">Operational</option>
-                <option value="decommisioned">Decommisioned</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <button type="submit">Submit</button>
-            </td>
-          </tr>
-        </table>
-        <label>
-          <input type="checkbox" checked="checked" name="cirograph" required> I agree to suffer the consequences for any
-          error
-        </label>
-      </div>
-      <div class="container" style="background-color:#f1f1f1">
-        <input type='reset' value='Cancel' name='reset'>
-      </div>
-    </form>
+{%block content%}
+{% load static %}
+
+<style>
+  html body div div.container table#t {
+    align-content: center;
+    margin: auto;
+    column-span: 50px;
+    width: 100%;
+    text-align: center;
+  }
+
+  ;
+
+  th {
+    margin: 7px;
+  }
+
+  td {
+    text-align: center;
+    vertical-align: center;
+    width: 100%/10;
+    text-align: center;
+  }
+
+  ;
+</style>
+
+
+<div style="padding:10px;"></div>
+<div class="container" style="background-color: #f1f1f1;padding:10px;">
+  <center>
+    <h5><b>Search vehicle</b></h5>
+  </center>
+  <hr>
+  <table id="forms" align="left" width="70%">
+    <!-- 
+    <tr>
+      <td>
+        <label for="id"><b>vehicle ID:</b></label>
+      </td>
+      <td>
+        <form enctype="multipart/form-data" method="post" action="{% url 'editvehicle' %}">{% csrf_token %}
+          {{ form.as_ps }}
+          <input type="number" placeholder="Enter Id" name="ID" id="id" required>
+          <input type="submit" name="searchbyid" value="Search">
+        </form>
+      </td>
+    </tr>
+  -->
+    <tr>
+      <td>
+        <form enctype="multipart/form-data" method="get" action="{% url 'editVehicles' %}">{% csrf_token %}
+          {{ form.as_ps }}
+          <label for="phrase"><b>Filter by:</b></label>
+          <select placeholder="Select filter" name="filter" required>
+            <option value="ID">Id</option>
+            <option value="login">Login</option>
+            <option value="name">Name</option>
+            <option value="surname" default>Surname</option>
+            <option value="phone_number">Phone</option>
+            <option value="position">Position</option>
+            <option value="address">Address</option>
+            <option value="salary">Salary</option>
+            <option value="status">Status</option>
+          </select>
+          <input type="text" placeholder="Enter phrase" name="phrase" id="phrase">
+          <input type="submit" name="search" value="Search">
+        </form>
+      </td>
+    </tr>
+  </table>
+  </form>
+</div>
+<div class="container" style="background-color: #f1f1f1;padding:10px;"></div>
+<div class="container" style="background-color: #f1f1f1;padding:10px;">
+  <hr>
+  <div class="container">
+    <table margin="0" id="t">
+      <tr>
+        <th>vehicle ID</th>
+        <th>Login</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Phone</th>
+        <th>Position</th>
+        <th>Address</th>
+        <th>Salary</th>
+        <th>Status</th>
+        <th>Edit?</th>
+      </tr>
+      {% for vehicle in vehicles %}
+      <tr>
+        <form enctype="multipart/form-data" method="post" action="{% url 'editVehicles' %}">{% csrf_token %}
+          <td>
+            {{vehicle.VIN }}
+            <input type="text" placeholder="xD" value="{{ vehicle.VIN }}" name="VIN" disabled hidden required>
+          </td>
+          <td>
+            {{vehicle.brand }}
+            <input type="text" placeholder="Login" value="{{ vehicle.brand }}" name="brand" disabled hidden required>
+          </td>
+          <td>
+            {{vehicle.version }}
+            <input type="text" placeholder="N/A" value="{{ vehicle.version }}" name="version" disabled hidden required>
+          </td>
+          <td>
+            {{vehicle.model }}
+            <input type="text" placeholder="N/A" value="{{ vehicle.model }}" name="model" disabled hidden required>
+          </td>
+          <td>
+            {{vehicle.category }}
+            <input type="text" placeholder="N/A" value="{{ vehicle.category }}" name="category" disabled hidden
+              required>
+          </td>
+          <td>
+            <img class="card-img-top" src="{{vehicle.picture.url}} " alt="Card image cap">
+            <input type="file" placeholder="Upload picture" name="picture" disabled hidden required>
+          </td>
+          <td>
+            {{vehicle.plate_number }}
+            <input type="number" placeholder="N/A" value="{{ vehicle.plate_number }}" name="plate_number" disabled hidden required>
+          </td>
+          <td>
+            {{vehicle.purpose }}
+            <input type="text" placeholder="N/A" value="{{ vehicle.purpose }}" name="purpose" disabled hidden required>
+          </td>
+          <td>
+            {{vehicle.distinctive_marks }}
+            <input type="text" placeholder="N/A" value="{{ vehicle.distinctive_marks }}" name="distinctive_marks" disabled hidden required>
+          </td>
+          <td>
+            {{vehicle.status }}
+            <input type="text" placeholder="Enter current status" value="{{ vehicle.status }}" name="status" disabled
+              hidden required>
+          </td>
+          <td><input type="submit" class="btn btn-primary" value="Edit"></td>
+        </form>
+      </tr>
+      {% endfor %}
+    </table>
   </div>
-  {%endblock content%}
+  <div class="container">
+    <div class="row"></div>
+  </div>
+
+</div>
+{%endblock content%}
