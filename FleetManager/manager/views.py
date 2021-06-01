@@ -44,7 +44,15 @@ def fleetManager(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
+    myVehicles = []
+    rentals = Rental.objects.filter(
+        renter_id=Person.objects.filter(ID=request.session['id']).first())
+
+    for rental in rentals:
+        myVehicles.append(rental.vehicle_id)
+
     context = {
+        'rentals': myVehicles,
         'vehicles': Vehicle.objects.filter(companyID=request.session.get('company', -1)),
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', '')

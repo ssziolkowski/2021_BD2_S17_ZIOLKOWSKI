@@ -35,9 +35,9 @@
             <a class="nav-link dropdown-toggle" href="{% url 'yourVehicles' %}" id="navbarDropdown" role="button" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">Your vehicles</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
+            {%for vehicle in rentals%}
+              <a class="dropdown-item" href="#">{{vehicle.brand}}</a>
+            {%endfor%}
             </div>
           </li>
           {%endif%}
