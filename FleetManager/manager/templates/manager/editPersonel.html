@@ -1,133 +1,82 @@
+{%extends "manager/base.html"%}
+{%block content%}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    html body div div.container table#t {
-      align-content: center;
-      margin: auto;
-      column-span: 50px;
-      width:100%;
-      text-align: center;
-    };
-    th{
-      margin:7px;
-    }
-    td{
-      text-align: center;
-      vertical-align: center;
-      width: 100%/10;
-      text-align: center;
-    };
-    </style>
-  <title>FleetManager</title>
-  <!-- Bootstrap -->
-  <link href="{% static 'manager/css/bootstrap-4.4.1.css' %}" rel="stylesheet">
-  <script>
-    dec()
-    {
-      if(document.getElementById('id').value > 0){
-        document.getElementById('id').value--;
-      }
-    }
-    inc()
-    {
-      document.getElementById('id').value++;
-    }
-  </script>
-</head>
+<style>
+  html body div div.container table#t {
+    align-content: center;
+    margin: auto;
+    column-span: 50px;
+    width: 100%;
+    text-align: center;
+  }
 
-<body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand" href="#">FleetManager</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          {%if user == 'person'%}
-          <li class="nav-item active">
-            <a class="nav-link" href="{% url 'fleetManager' %}">Home <span class="sr-only">(current)</span></a>
-          </li>
-          {%endif%}
-          {%if user == 'person' or user == 'admin'%}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'allVehicles' %}">All vehicles</a>
-          </li>
-          {%endif%}
-          {%if user == 'person'%}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">Your vehicles</a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li>
-          {%endif%}
-          {%if user == 'admin'%}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'adminPanel' %}">Admin panel</a>
-          </li>
-          {%endif%}
-          {%if user == 'person' or user == 'manager' or user == 'admin'%}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Logout</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-            {%if user == 'person'%}user: 
-            {%elif user == 'manager'%}manager:
-            {%elif user == 'admin'%}admin:
-            {%endif%}
-            {{name}}</a>
-          </li>
-          {%endif%}
-        </ul>
-      </div>
-    </div>
-  </nav>
-    <form enctype="multipart/form-data" method="post">{% csrf_token %}
-      {{ form.as_ps }}
-      <div style="padding:10px;"></div>
-      <div class="container" style="background-color: #f1f1f1;padding:10px;">
-        <center>
-          <h5><b>Search Person by id</b></h5>
-        </center>
-        <hr>
-        <table id="form" align="left" width="70%">
-          <tr>
-            <td>
-              <label for="id"><b>Person ID:</b></label>
-            </td>
-            <td>
-              <input type="button" value ="<" name="prevoius" onclick="dec" >
-              <input type="number" placeholder="Enter Id" name="ID" id="id" required>
-              <input type="button" value = ">" name="next" onclick="inc">
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <center>
-              <button type="submit" name="search">Search</button>
-              </center>
-            </td>
-          </tr>
-        </table>
-      </form>
-      <br>
-    </div>
-    <div class="container" style="background-color: #f1f1f1;padding:10px;"></div>
-    <div class="container" style="background-color: #f1f1f1;padding:10px;">
-      <hr>
-    <div class="container">
+  ;
+
+  th {
+    margin: 7px;
+  }
+
+  td {
+    text-align: center;
+    vertical-align: center;
+    width: 100%/10;
+    text-align: center;
+  }
+
+  ;
+</style>
+
+
+<div style="padding:10px;"></div>
+<div class="container" style="background-color: #f1f1f1;padding:10px;">
+  <center>
+    <h5><b>Search Person</b></h5>
+  </center>
+  <hr>
+  <table id="forms" align="left" width="70%">
+    <tr>
+      <td>
+        <label for="id"><b>Person ID:</b></label>
+      </td>
+      <td>
+        <form enctype="multipart/form-data" method="post" action="{% url 'editPerson' %}">{% csrf_token %}
+          {{ form.as_ps }}
+          <input type="number" placeholder="Enter Id" name="ID" id="id" required>
+          <input type="submit" name="searchbyid" value="Search">
+        </form>
+      </td>
+    </tr>
+    <tr>
+      <td>
+
+        <form enctype="multipart/form-data" method="post" action="{% url 'editPersonel' %}">{% csrf_token %}
+          {{ form.as_ps }}
+          <label for="phrase"><b>Filter by:</b></label>
+          <select placeholder="Select filter" name="filter" required>
+            <option value="login">Login</option>
+            <option value="name">Name</option>
+            <option value="surname">Surname</option>
+            <option value="phone_number">Phone</option>
+            <option value="position">Position</option>
+            <option value="address">Address</option>
+            <option value="salary">Salary</option>
+            <option value="status">Status</option>
+          </select>
+          <input type="text" placeholder="Enter phrase" name="phrase" id="phrase">
+          <input type="submit" name="search" value="Search">
+        </form>
+
+      </td>
+    </tr>
+  </table>
+  </form>
+  <br>
+</div>
+<div class="container" style="background-color: #f1f1f1;padding:10px;"></div>
+<div class="container" style="background-color: #f1f1f1;padding:10px;">
+  <hr>
+  <div class="container">
     <table margin="0" id="t">
       <tr>
         <th>Person ID</th>
@@ -141,84 +90,56 @@
         <th>Status</th>
         <th>Edit?</th>
       </tr>
-    {% for person in persons %}
-    <tr>
-      <form enctype="multipart/form-data" method="post" action="{% url 'editPerson' pid=person.ID %}">{% csrf_token %}
-      <td>
-        {{person.ID }}
-        <input type="number" placeholder="xD" value="{{ person.ID }}" name="ID" disabled hidden required>
-      </td>
-      <td>
-        {{person.login }}
-        <input type="text" placeholder="Login" value="{{ person.login }}" name="login" disabled hidden required>
-      </td>
-      <td>
-        {{person.name }}
-        <input type="text" placeholder="N/A" value="{{ person.name }}" name="name" disabled hidden required>
-      </td>
-      <td>
-        {{person.surname }}
-        <input type="text" placeholder="N/A" value="{{ person.surname }}" name="surname" disabled hidden required>
-      </td>
-      <td>
-        {{person.phone_number }}
-        <input type="text" placeholder="N/A" value="{{ person.phone_number }}" name="phone_number" disabled hidden required>
-      </td>
-      <td>
-        {{person.position }}
-        <input type="text" placeholder="N/A" value="{{ person.position }}" name="position" disabled hidden required>
-      </td>
-      <td>
-        {{person.address }}
-        <input type="text" placeholder="N/A" value="{{ person.address }}" name="address" disabled hidden required>
-      </td>
-      <td>
-        {{person.salary }}
-        <input type="number" placeholder="N/A" value="{{ person.salary }}" name="salary" disabled hidden required>
-      </td>
-      <td>
-        {{person.status }}
-        <input type="text" placeholder="Enter current status" value="{{ person.status }}" name="status" disabled hidden required>
-      </td>
-      <td><input type="submit" class="btn btn-primary" value="Edit"></td>
-      </form>
-    </tr>
-    {% endfor %}
+      {% for person in persons %}
+      <tr>
+        <form enctype="multipart/form-data" method="post" action="{% url 'editPerson' pid=person.ID %}">{% csrf_token %}
+          <td>
+            {{person.ID }}
+            <input type="number" placeholder="xD" value="{{ person.ID }}" name="ID" disabled hidden required>
+          </td>
+          <td>
+            {{person.login }}
+            <input type="text" placeholder="Login" value="{{ person.login }}" name="login" disabled hidden required>
+          </td>
+          <td>
+            {{person.name }}
+            <input type="text" placeholder="N/A" value="{{ person.name }}" name="name" disabled hidden required>
+          </td>
+          <td>
+            {{person.surname }}
+            <input type="text" placeholder="N/A" value="{{ person.surname }}" name="surname" disabled hidden required>
+          </td>
+          <td>
+            {{person.phone_number }}
+            <input type="text" placeholder="N/A" value="{{ person.phone_number }}" name="phone_number" disabled hidden
+              required>
+          </td>
+          <td>
+            {{person.position }}
+            <input type="text" placeholder="N/A" value="{{ person.position }}" name="position" disabled hidden required>
+          </td>
+          <td>
+            {{person.address }}
+            <input type="text" placeholder="N/A" value="{{ person.address }}" name="address" disabled hidden required>
+          </td>
+          <td>
+            {{person.salary }}
+            <input type="number" placeholder="N/A" value="{{ person.salary }}" name="salary" disabled hidden required>
+          </td>
+          <td>
+            {{person.status }}
+            <input type="text" placeholder="Enter current status" value="{{ person.status }}" name="status" disabled
+              hidden required>
+          </td>
+          <td><input type="submit" class="btn btn-primary" value="Edit"></td>
+        </form>
+      </tr>
+      {% endfor %}
     </table>
-    </div>
+  </div>
   <div class="container">
     <div class="row"></div>
   </div>
-  <hr>
-  <div class="container text-white bg-dark p-4">
-    <div class="row">
-      <div class="col-md-4 col-lg-5 col-6">
-        <address>
-          <strong>FleetManager, Inc.</strong><br>
-          Akademicka 1<br>
-          Gliwice, 44-100<br>
-          Phone: +48 123 456 789<br>
-        </address>
-        <address>
-          <strong>FleetManager</strong>
-          <br>
-          <a href="mailto:#">FleetManager@example.com</a>
-        </address>
-      </div>
-    </div>
-  </div>
-  <footer class="text-center">
-    <div class="container">
-      <div class="row">
 
-      </div>
-    </div>
-  </footer>
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="{% static 'manager/js/jquery-3.4.1.min.js' %}"></script>
-  <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="{% static 'manager/js/popper.min.js' %}"></script>
-  <script src="{% static 'manager/js/bootstrap-4.4.1.js' %}"></script>
-</body>
-
-</html>
+</div>
+{%endblock content%}
