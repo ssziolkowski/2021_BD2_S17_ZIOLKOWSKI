@@ -38,4 +38,5 @@ urlpatterns = [
     path('yourVehicles', views.yourVehiclesView, name='yourVehicles'),
     path('toStartRent', views.toStartRent, name='toStartRent'),
     path('toEndRent', views.toEndRent, name='toEndRent'),
+    path('rentalDetails', views.rentalDetailsView, name='rentalDetails'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

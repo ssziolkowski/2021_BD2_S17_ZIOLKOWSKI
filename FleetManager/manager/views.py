@@ -367,8 +367,19 @@ def yourVehiclesView(request):
 
     return render(request, 'manager/yourVehicles.html', context)
 
-def rentalDetails(request):
-    pass
+def rentalDetailsView(request):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    context = {
+                'vehicle': Vehicle.objects.filter(VIN=request.POST.get("VIN", "NOVIN")).first(),
+                'rental': Rental.objects.filter(rent_id=request.POST.get("rentID", -1)).first(),
+                'user': request.session.get('currentUser', 'none'),
+                'name': request.session.get('name', 'FleetManager'),
+                'error': "This vehicle is not available on your selected dates"
+                }
+    return render(request, 'manager/rentalDetails.html', context)
+
 
 def toStartRent(request):
      if request.session.get('currentUser', 'none') == 'none':
