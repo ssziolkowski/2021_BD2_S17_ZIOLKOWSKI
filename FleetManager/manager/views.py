@@ -19,9 +19,22 @@ def managerPanel(request):
 
     context = {
         'user': request.session.get('currentUser', 'none'),
-        'name': request.session.get('name', '')
+        'name': request.session.get('name', ''),
     }
     return render(request, 'manager/managerPanel.html', context)
+
+
+def managerManager(request):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    context = {
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', ''),
+        'managers': Manager.objects.select_related('personal_ID'),
+        'persons': Person.objects.filter(companyID=request.session.get('company', -1)).select_related() .order_by("ID"),
+    }
+    return render(request, 'manager/managerManager.html', context)
 
 
 def fleetManager(request):

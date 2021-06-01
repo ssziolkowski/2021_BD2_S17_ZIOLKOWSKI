@@ -28,6 +28,7 @@ urlpatterns = [
     path('editPersonel', views.editPersonel, name='editPersonel'),
     path('editVehicle', views.editVehicle, name='editVehicle'),
     path('editService', views.editService, name='editService'),
+    path('managerManager', views.managerManager, name='managerManager'),
     path('editServiceplan', views.editServiceplan, name='editServiceplan'),
     path('managerPanel', views.managerPanel, name='managerPanel'),
     path('generateReport', views.generateReport, name='generateReport'),
