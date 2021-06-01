@@ -13,12 +13,20 @@
       <hr>
       <input type ="hidden" value="{{person.ID}}">
         <table id="form" width="70%">
+          <tr>
+            <td>
+              <label for="login"><b>Login</b></label>
+            </td>
+            <td>
+              <input type="text" placeholder="login" value="{{ person.login }}" name="login" required>
+            </td>
+        </tr>
         <tr>
           <td>
             <label for="name"><b>Name</b></label>
           </td>
           <td>
-            <input type="text" placeholder="N/A" value="{{ person.name }}" name="name" required>
+            <input type="text" placeholder="Name" value="{{ person.name }}" name="name" required>
           </td>
         </tr>
         <tr>
@@ -26,7 +34,7 @@
             <label for="surname"><b>Surname</b></label>
           </td>
           <td>
-            <input type="text" placeholder="N/A" value="{{ person.surname }}" name="surname" required>
+            <input type="text" placeholder="Surname" value="{{ person.surname }}" name="surname" required>
           </td>
         </tr>
         <tr>
@@ -34,7 +42,7 @@
             <label for="phone"><b>Phone number</b></label>
           </td>
           <td>
-            <input type="text" placeholder="N/A" value="{{ person.phone_number }}" name="phone" required>
+            <input type="text" placeholder="Phone number" value="{{ person.phone_number }}" name="phone" required>
           </td>
         </tr>
         <tr>
@@ -42,7 +50,7 @@
             <label for="position"><b>Position</b></label>
           </td>
           <td>
-            <input type="text" placeholder="N/A" value="{{ person.position }}" name="position" required>
+            <input type="text" placeholder="Position" value="{{ person.position }}" name="position" required>
           </td>
         </tr>
         <tr>
@@ -50,7 +58,7 @@
             <label for="address"><b>Address</b></label>
           </td>
           <td>
-            <input type="text" placeholder="N/A" value="{{ person.address }}" name="address" required>
+            <input type="text" placeholder="Address" value="{{ person.address }}" name="address" required>
           </td>
         </tr>
         <tr>
@@ -58,7 +66,7 @@
             <label for="salary"><b>Salary</b></label>
           </td>
           <td>
-            <input type="number" placeholder="N/A" value="{{ person.salary }}" name="salary" required>
+            <input type="number" placeholder="Salary" value="{{ person.salary }}" name="salary" required>
           </td>
         </tr>
         <tr>
