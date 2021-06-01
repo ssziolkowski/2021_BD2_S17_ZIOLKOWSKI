@@ -20,14 +20,31 @@
   td {
     text-align: center;
     vertical-align: center;
-    width: 100%/10;
+    width: 100%/8;
     text-align: center;
   }
 
   ;
 </style>
 
-
+<script type="text/javascript">
+  function managerToggle() {
+  var x = document.getElementById("data");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+} 
+function recordToggle() {
+  var x = document.getElementById("records");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+} 
+</script>
 <div style="padding:10px;"></div>
 <div class="container" style="background-color: #f1f1f1;padding:10px;">
   <center>
@@ -51,7 +68,7 @@
   -->
     <tr>
       <td>
-        <form enctype="multipart/form-data" method="get" action="{% url 'editPersonel' %}">{% csrf_token %}
+        <form enctype="multipart/form-data" method="get" action="">{% csrf_token %}
           {{ form.as_ps }}
           <label for="phrase"><b>Filter by:</b></label>
           <select placeholder="Select filter" name="filter" required>
@@ -72,53 +89,57 @@
     </tr>
   </table>
   </form>
+<button onclick="managerToggle()">Show/hide current managers</button>
+<button onclick="recordToggle()">Show/hide manager records</button>
 </div>
 <div class="container" style="background-color: #f1f1f1;padding:10px;"></div>
-<div class="container" style="background-color: #f1f1f1;padding:10px;">
+<div class="container" style="background-color: #f1f1f1;padding:10px;" >
   <hr>
-  <div class="container">
+  <div class="container" id="data">
     <table margin="0" id="t">
       <tr>
-        <th>Person ID</th>
-        <th>Login</th>
+        <th>ID</th>
+        <th>Personal ID</th>
         <th>Name</th>
         <th>Surname</th>
         <th>Start date</th>
-        <th>Position</th>
-        <th>Address</th>
-        <th>Salary</th>
-        <th>Status</th>
+        <th>Date untill</th>
+        <th>VIN</th>
         <th>Edit?</th>
       </tr>
       {% for manager in managers %}
       <tr>
-        <form enctype="multipart/form-data" method="post" action="{% url 'editPerson' pid=manager.ID %}">{% csrf_token %}
+        <form enctype="multipart/form-data" method="post" action="">{% csrf_token %}
           <td>
-            {{manager.ID }}
-            <input type="number" placeholder="xD" value="{{ manager.ID }}" name="ID" disabled hidden required>
+            {{manager.id }}
+            <input type="number" placeholder="xD" value="{{ manager.id }}" name="ID" disabled hidden required>
           </td>
           <td>
-            {{manager.login }}
-            <input type="text" placeholder="Login" value="{{ manager.login }}" name="login" disabled hidden required>
+            {{manager.personal_ID_id }}
+            <input type="number" placeholder="xD" value="{{ manager.personal_ID }}" name="ID" disabled hidden required>
           </td>
           <td>
             {{manager.name }}
             <input type="text" placeholder="N/A" value="{{ manager.name }}" name="name" disabled hidden required>
           </td>
           <td>
-            {{manager.data_start }}
+            {{manager.surname }}
             <input type="text" placeholder="N/A" value="{{ manager.surname }}" name="surname" disabled hidden required>
           </td>
           <td>
-            {{manager.phone_number }}
-            <input type="text" placeholder="N/A" value="{{ manager.phone_number }}" name="phone_number" disabled hidden
+            {{manager.date_start }}
+            <input type="text" placeholder="N/A" value="{{ manager.date_start }}" name="date_start" disabled hidden required>
+          </td>
+          <td>
+            {{manager.date_end }}
+            <input type="text" placeholder="N/A" value="{{ manager.date_end }}" name="date_end" disabled hidden
               required>
           </td>
           <td>
-            {{manager.position }}
-            <input type="text" placeholder="N/A" value="{{ manager.position }}" name="position" disabled hidden required>
+            {{manager.VIN }}
+            <input type="text" placeholder="N/A" value="{{ manager.VIN }}" name="VIN" disabled hidden required>
           </td>
-          <td>
+         <!--<td>
             {{manager.address }}
             <input type="text" placeholder="N/A" value="{{ manager.address }}" name="address" disabled hidden required>
           </td>
@@ -131,12 +152,55 @@
             <input type="text" placeholder="Enter current status" value="{{ manager.status }}" name="status" disabled
               hidden required>
           </td>
+          --> 
           <td><input type="submit" class="btn btn-primary" value="Edit"></td>
         </form>
       </tr>
       {% endfor %}
     </table>
   </div>
+  <hr>
+  <div class="container" style="background-color: #f1f1f1;padding:10px;">
+    <hr>
+    <div class="container" id="records">
+      <table margin="0" id="t">
+        <tr>
+          <th>ID</th>
+          <th>Personal ID</th>
+          <th>Start date</th>
+          <th>Date untill</th>
+          <th>VIN</th> 
+        </tr>
+        {% for manager in managers %}
+        <tr>
+          <form enctype="multipart/form-data" method="post" action="">{% csrf_token %}
+            <td>
+              {{manager.id }}
+              <input type="number" placeholder="xD" value="{{ manager.id }}" name="ID" disabled hidden required>
+            </td>
+            <td>
+              {{manager.personal_ID_id }}
+              <input type="number" placeholder="xD" value="{{ manager.personal_ID }}" name="ID" disabled hidden required>
+            </td>
+            <td>
+              {{manager.date_start }}
+              <input type="text" placeholder="N/A" value="{{ manager.date_start }}" name="date_start" disabled hidden required>
+            </td>
+            <td>
+              {{manager.date_end }}
+              <input type="text" placeholder="N/A" value="{{ manager.date_end }}" name="date_end" disabled hidden
+                required>
+            </td>
+            <td>
+              {{manager.VIN_id }}
+              <input type="text" placeholder="N/A" value="{{ manager.VIN_id }}" name="VIN" disabled hidden required>
+            </td>
+            <td><input type="submit" class="btn btn-primary" value="Edit"></td>
+          </form>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
   <div class="container">
     <div class="row"></div>
   </div>
