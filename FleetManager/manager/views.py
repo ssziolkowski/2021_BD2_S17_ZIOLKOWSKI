@@ -1,5 +1,6 @@
 import io
 from django.db.models.query import QuerySet
+from django.db.models import Count
 from django.http.response import FileResponse, HttpResponseRedirect
 from .models import *
 from django.shortcuts import get_object_or_404, redirect, render
@@ -31,7 +32,9 @@ def managerManager(request):
     context = {
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', ''),
-        'managers': Manager.objects.select_related('personal_ID')
+        'managers': Manager.objects.select_related('personal_ID').annotate(num_cars=Count('VIN')),
+        'records': Manager.objects.select_related('personal_ID')
+
         #'persons': Person.objects.filter(companyID=request.session.get('company', -1)).select_related() .order_by("ID"),
     }
     return render(request, 'manager/managerManager.html', context)

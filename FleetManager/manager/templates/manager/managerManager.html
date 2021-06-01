@@ -11,8 +11,6 @@
     text-align: center;
   }
 
-  ;
-
   th {
     margin: 7px;
   }
@@ -24,7 +22,6 @@
     text-align: center;
   }
 
-  ;
 </style>
 
 <script type="text/javascript">
@@ -91,6 +88,7 @@ function recordToggle() {
   </form>
 <button onclick="managerToggle()">Show/hide current managers</button>
 <button onclick="recordToggle()">Show/hide manager records</button>
+<button>New Manager</button>
 </div>
 <div class="container" style="background-color: #f1f1f1;padding:10px;"></div>
 <div class="container" style="background-color: #f1f1f1;padding:10px;" >
@@ -102,10 +100,8 @@ function recordToggle() {
         <th>Personal ID</th>
         <th>Name</th>
         <th>Surname</th>
-        <th>Start date</th>
-        <th>Date untill</th>
-        <th>VIN</th>
-        <th>Edit?</th>
+        <th>Managed cars</th>
+        <th>Details/Edit</th>
       </tr>
       {% for manager in managers %}
       <tr>
@@ -119,41 +115,18 @@ function recordToggle() {
             <input type="number" placeholder="xD" value="{{ manager.personal_ID }}" name="ID" disabled hidden required>
           </td>
           <td>
-            {{manager.name }}
+            {{manager.personal_ID.name }}
             <input type="text" placeholder="N/A" value="{{ manager.name }}" name="name" disabled hidden required>
           </td>
           <td>
-            {{manager.surname }}
+            {{manager.personal_ID.surname }}
             <input type="text" placeholder="N/A" value="{{ manager.surname }}" name="surname" disabled hidden required>
           </td>
           <td>
-            {{manager.date_start }}
-            <input type="text" placeholder="N/A" value="{{ manager.date_start }}" name="date_start" disabled hidden required>
+            {{manager.num_cars }}
+            <input type="text" placeholder="N/A" value="{{ manager.num_cars }}" name="num_cars" disabled hidden required>
           </td>
-          <td>
-            {{manager.date_end }}
-            <input type="text" placeholder="N/A" value="{{ manager.date_end }}" name="date_end" disabled hidden
-              required>
-          </td>
-          <td>
-            {{manager.VIN }}
-            <input type="text" placeholder="N/A" value="{{ manager.VIN }}" name="VIN" disabled hidden required>
-          </td>
-         <!--<td>
-            {{manager.address }}
-            <input type="text" placeholder="N/A" value="{{ manager.address }}" name="address" disabled hidden required>
-          </td>
-          <td>
-            {{manager.salary }}
-            <input type="number" placeholder="N/A" value="{{ manager.salary }}" name="salary" disabled hidden required>
-          </td>
-          <td>
-            {{manager.status }}
-            <input type="text" placeholder="Enter current status" value="{{ manager.status }}" name="status" disabled
-              hidden required>
-          </td>
-          --> 
-          <td><input type="submit" class="btn btn-primary" value="Edit"></td>
+          <td><input type="submit" class="btn btn-primary" value="View"></td>
         </form>
       </tr>
       {% endfor %}
@@ -161,7 +134,6 @@ function recordToggle() {
   </div>
   <hr>
   <div class="container" style="background-color: #f1f1f1;padding:10px;">
-    <hr>
     <div class="container" id="records">
       <table margin="0" id="t">
         <tr>
@@ -171,29 +143,29 @@ function recordToggle() {
           <th>Date untill</th>
           <th>VIN</th> 
         </tr>
-        {% for manager in managers %}
+        {% for record in records %}
         <tr>
           <form enctype="multipart/form-data" method="post" action="">{% csrf_token %}
             <td>
-              {{manager.id }}
-              <input type="number" placeholder="xD" value="{{ manager.id }}" name="ID" disabled hidden required>
+              {{record.id }}
+              <input type="number" placeholder="xD" value="{{ record.id }}" name="ID" disabled hidden required>
             </td>
             <td>
-              {{manager.personal_ID_id }}
-              <input type="number" placeholder="xD" value="{{ manager.personal_ID }}" name="ID" disabled hidden required>
+              {{record.personal_ID_id }}
+              <input type="number" placeholder="xD" value="{{ record.personal_ID }}" name="ID" disabled hidden required>
             </td>
             <td>
-              {{manager.date_start }}
-              <input type="text" placeholder="N/A" value="{{ manager.date_start }}" name="date_start" disabled hidden required>
+              {{record.date_start }}
+              <input type="text" placeholder="N/A" value="{{ record.date_start }}" name="date_start" disabled hidden required>
             </td>
             <td>
-              {{manager.date_end }}
-              <input type="text" placeholder="N/A" value="{{ manager.date_end }}" name="date_end" disabled hidden
+              {{record.date_end }}
+              <input type="text" placeholder="N/A" value="{{ record.date_end }}" name="date_end" disabled hidden
                 required>
             </td>
             <td>
-              {{manager.VIN_id }}
-              <input type="text" placeholder="N/A" value="{{ manager.VIN_id }}" name="VIN" disabled hidden required>
+              {{record.VIN_id }}
+              <input type="text" placeholder="N/A" value="{{ record.VIN_id }}" name="VIN" disabled hidden required>
             </td>
             <td><input type="submit" class="btn btn-primary" value="Edit"></td>
           </form>
