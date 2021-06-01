@@ -1,0 +1,54 @@
+{%extends "manager/base.html"%}
+  {%block content%}
+  {% load static %}
+
+  <div>
+    <form action="{% url 'endRent' %}" method="post">
+      {% csrf_token %}
+      <div style="padding:10px;"></div>
+      <div class="container" style="background-color: #f1f1f1;padding:10px;">
+        <center>
+          <h5><b>Return {{vehicle.model}} {{vehicle.brand}}</b></h5>
+        </center>
+        <hr>
+        <table id="form" align="left" width="70%">
+            <tr>
+                <td style="padding-right:20px">
+                  <label for="cost"><b>Exploitation cost</b></label>
+                </td>
+                <td>
+                  <input type="number" placeholder="Enter cost" name="cost" required>
+                </td>
+              </tr>
+          <tr>
+            <tr><td>
+                <label for="description"><b>Cost description</b></label></td><td>
+                <textarea placeholder="Enter cost description" name="description" required></textarea>
+                </td></tr>
+              <tr>
+            <td>
+              <label for="final_mileage"><b>Final mileage</b></label>
+            </td>
+            <td>
+                <input type="number" placeholder="Enter mileage" name="final_mileage" required>
+                <input type="hidden" name="VIN" value={{vehicle.VIN}}>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button type="submit">Submit</button>
+            </td>
+          </tr>
+        </table>
+        <label>
+          <input type="checkbox" checked="checked" name="cirograph" required> I agree to suffer the consequences for any
+          error
+        </label>
+      </div>
+      <div class="container" style="background-color:#f1f1f1">
+        <input type='reset' value='Cancel' name='reset'>
+      </div>
+    </form>
+  </div>
+
+  {%endblock content%}

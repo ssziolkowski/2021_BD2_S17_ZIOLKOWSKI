@@ -1,4 +1,5 @@
 import io
+from django.db.models.query import QuerySet
 from django.http.response import FileResponse, HttpResponseRedirect
 from .models import *
 from django.shortcuts import get_object_or_404, redirect, render
@@ -186,6 +187,9 @@ def selectedVehicle_view(request):
     return render(request, "manager/selectedVehicle.html", context)
 
 
+#Renting Vehicle
+
+
 def rentVehicle(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
@@ -283,6 +287,69 @@ def startRent(request):
     }
 
     return render(request, 'manager/fleetManager.html', context)
+
+def endRent(request):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    if request.method == "POST":
+        final_mileage = request.POST.get("final_mileage", -1)
+        cost = request.POST.get("cost", 0)
+        vin = request.POST.get("VIN", "NOVIN")
+        description = request.POST.get("description", "NO description")
+
+    vehicle = Vehicle.objects.filter(VIN=vin).first()
+
+    rental = Rental.objects.filter(
+        vehicle_id=vehicle, rent_end=datetime.date.today()).first()
+
+    if rental is not None:
+        rental.final_mileage = final_mileage
+        rental.exploitation_cost = cost
+        rental.costs_description = description
+        rental.save()
+
+    context = {
+        'vehicles': Vehicle.objects.filter(companyID=request.session.get('company', -1)),
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', 'FleetManager')
+    }
+
+    return render(request, 'manager/fleetManager.html', context)
+
+
+#
+#
+#Your Vehicles
+
+def yourVehiclesView(request):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    rental = Rental.objects.filter(renter_id = request.session.get('id', -1))
+
+    rentalList = []
+
+    for rent in rental:
+      tempList = []
+      tempList.append(rent.vehicle_id.model)
+      tempList.append(rent.vehicle_id.picture.url)
+      tempList.append(rent.vehicle_id.VIN)
+      tempList.append(rent.rent_id)
+      tempList.append(rent.rent_start)
+      tempList.append(rent.rent_end)
+      tempList.append(rent.rent_status)
+      rentalList.append(tempList)
+
+    context = {
+        'rental': rentalList,
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', 'FleetManager')
+    }
+
+    return render(request, 'manager/yourVehicles.html', context)
+
+
 
 
 def selectedVehicle(request):

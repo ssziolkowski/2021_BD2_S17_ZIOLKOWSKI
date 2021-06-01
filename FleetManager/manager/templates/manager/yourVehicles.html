@@ -1,0 +1,50 @@
+{%extends "manager/base.html"%}
+  {%block content%}
+  {% load static %}
+  <hr>
+  <h2 class="text-center">YOUR VEHICLES</h2>
+  <hr>
+  <div class="container">
+    <div class="row text-center mt-4">
+      {% for rent in rental %}
+      <div class="col-md-4 pb-1 pb-md-0">
+        <div class="card">
+          <img class="card-img-top" src={{rent.1}} alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">{{rent.0}}</h5>
+            <h5 class="card-title">{{rent.4}} - {{rent.5}}</h5>
+            <p class="card-text">&nbsp;</p>
+            <center>
+            <table>
+             <tr>
+             <td>
+             <form action="{% url 'selectedVehicleView' %}" method="post">
+              <input type="hidden" name="VIN" value={{rent.2}}>
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Details</button>
+            </form>
+            </td>
+            <td>
+            {% if rent.6 == False %}
+            <p class="card-text">&nbsp;</p>
+            <form action="{% url 'selectedVehicleView' %}" method="post">
+                <input type="hidden" name="VIN" value={{rent.2}}>
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Rent</button>
+              </form>
+             </td>
+            {% endif %}
+        </tr>
+        </table>
+    </center>
+          </div>
+        </div>
+      </div>
+      {% if forloop.counter|divisibleby:3 %}
+    </div>
+    <div class="row text-center mt-4">
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {%endblock content%}
