@@ -35,6 +35,7 @@
   </center>
   <hr>
   <table id="forms" align="left" width="70%">
+    <!-- 
     <tr>
       <td>
         <label for="id"><b>Person ID:</b></label>
@@ -47,16 +48,17 @@
         </form>
       </td>
     </tr>
+  -->
     <tr>
       <td>
-
-        <form enctype="multipart/form-data" method="post" action="{% url 'editPersonel' %}">{% csrf_token %}
+        <form enctype="multipart/form-data" method="get" action="{% url 'editPersonel' %}">{% csrf_token %}
           {{ form.as_ps }}
           <label for="phrase"><b>Filter by:</b></label>
           <select placeholder="Select filter" name="filter" required>
+            <option value="ID">Id</option>
             <option value="login">Login</option>
             <option value="name">Name</option>
-            <option value="surname">Surname</option>
+            <option value="surname" default>Surname</option>
             <option value="phone_number">Phone</option>
             <option value="position">Position</option>
             <option value="address">Address</option>
@@ -66,12 +68,10 @@
           <input type="text" placeholder="Enter phrase" name="phrase" id="phrase">
           <input type="submit" name="search" value="Search">
         </form>
-
       </td>
     </tr>
   </table>
   </form>
-  <br>
 </div>
 <div class="container" style="background-color: #f1f1f1;padding:10px;"></div>
 <div class="container" style="background-color: #f1f1f1;padding:10px;">

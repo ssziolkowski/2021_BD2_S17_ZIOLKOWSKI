@@ -416,15 +416,15 @@ def editPersonel(request):
         'name': request.session.get('name', 'FleetManager'),
         'persons': Person.objects.filter(companyID=request.session.get('company', -1)).order_by("ID")
     }
-    search = request.POST.get("phrase", None)
-    filter = request.POST.get("filter", None)
-    filterPhrase = filter + '__icontains'
+    search = request.GET.get("phrase", None)
     if search is None:
         context['persons'] = Person.objects.filter(
             companyID=request.session.get('company', -1))
     else:
-        context['persons'] = Person.objects.filter(**{filterPhrase: search},
-                                                   companyID=request.session.get('company', -1))
+            filter = request.GET.get("filter", None)
+            filterPhrase = filter + '__icontains'
+            context['persons'] = Person.objects.filter(**{ filterPhrase: search },
+            companyID=request.session.get('company', -1))
     return render(request, 'manager/editPersonel.html', context)
 
 
