@@ -73,6 +73,14 @@ class Rental(models.Model):
         (PRIVATE, ('Borrowed for private purposes')),
         (BUISNESS, ('Borrowed for buisness purposes'))
     ]
+    RESERVED = 'reserved'
+    RENTED = 'rented'
+    GIVEN = 'given'
+    RENTSTATUS = [
+        (RESERVED, ('Reserved for user')),
+        (RENTED, ('Rented by user')),
+        (GIVEN, ('Given by user'))
+    ]
     rent_id = models.AutoField(primary_key=True)
     rent_type = models.TextField(choices=STATUS)
     renter_id = models.ForeignKey(Person, on_delete=models.RESTRICT)
@@ -83,7 +91,7 @@ class Rental(models.Model):
     costs_description = models.TextField()
     rent_start = models.DateField()
     rent_end = models.DateField()
-    rent_status = models.BooleanField(default=False)
+    rent_status = models.TextField(choices = RENTSTATUS)
 
 
 class Service(models.Model):
