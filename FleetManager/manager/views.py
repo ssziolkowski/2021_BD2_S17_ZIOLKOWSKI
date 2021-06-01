@@ -358,12 +358,20 @@ def updatePerson(request, pid):
 def editPersonel(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
-
     context = {
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager'),
         'persons': Person.objects.filter(companyID=request.session.get('company', -1)).order_by("ID")
     }
+    search = request.POST.get("phrase", None)
+    filter = request.POST.get("filter", None)
+    filterPhrase = filter + '__icontains'
+    if search is None:
+        context['persons'] = Person.objects.filter(
+            companyID=request.session.get('company', -1))
+    else:
+            context['persons'] = Person.objects.filter(**{ filterPhrase: search },
+            companyID=request.session.get('company', -1))
     return render(request, 'manager/editPersonel.html', context)
 
 
