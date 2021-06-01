@@ -18,8 +18,9 @@
             <table>
              <tr>
              <td>
-             <form action="{% url 'selectedVehicleView' %}" method="post">
+             <form action="{% url 'rentalDetails' %}" method="post">
               <input type="hidden" name="VIN" value={{rent.2}}>
+              <input type="hidden" name="rentID" value={{rent.3}}>
               {% csrf_token %}
               <button type="submit" class="btn btn-primary">Details</button>
             </form>
