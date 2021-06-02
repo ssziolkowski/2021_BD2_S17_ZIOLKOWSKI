@@ -67,13 +67,16 @@
     <table margin="0" id="t">
       <tr>
         <th>vehicle ID</th>
-        <th>Login</th>
-        <th>Name</th>
-        <th>Surname</th>
-        <th>Phone</th>
-        <th>Position</th>
-        <th>Address</th>
-        <th>Salary</th>
+        <th>Picture</th>
+        <th>Brand</th>
+        <th>Version</th>
+        <th>Model</th>
+        <th>Category</th>
+        <th>Accessories</th>
+        <th>Number plate</th>
+        <th>Mileage</th>
+        <th>Purpose</th>
+        <th>Marks</th>
         <th>Status</th>
         <th>Edit?</th>
       </tr>
@@ -83,6 +86,10 @@
           <td>
             {{vehicle.VIN }}
             <input type="text" placeholder="xD" value="{{ vehicle.VIN }}" name="VIN" disabled hidden required>
+          </td>
+          <td>
+            <img src="{{vehicle.picture.url}} " alt="Card image cap" width="100%" height="100px">
+            <input type="file" placeholder="Upload picture" name="picture" disabled hidden required>
           </td>
           <td>
             {{vehicle.brand }}
@@ -102,12 +109,16 @@
               required>
           </td>
           <td>
-            <img class="card-img-top" src="{{vehicle.picture.url}} " alt="Card image cap">
-            <input type="file" placeholder="Upload picture" name="picture" disabled hidden required>
+            {{vehicle.accessories }}
+            <input type="text" placeholder="N/A" value="{{ vehicle.accessories }}" name="accessories" disabled hidden required>
           </td>
           <td>
             {{vehicle.plate_number }}
-            <input type="number" placeholder="N/A" value="{{ vehicle.plate_number }}" name="plate_number" disabled hidden required>
+            <input type="text" placeholder="N/A" value="{{ vehicle.plate_number }}" name="plate_number" disabled hidden required>
+          </td>
+          <td>
+            {{vehicle.current_mileage }}
+            <input type="number" placeholder="N/A" value="{{ vehicle.current_mileage }}" name="current_mileage" disabled hidden required>
           </td>
           <td>
             {{vehicle.purpose }}
