@@ -35,20 +35,7 @@
   </center>
   <hr>
   <table id="forms" align="left" width="70%">
-    <!-- 
-    <tr>
-      <td>
-        <label for="id"><b>vehicle ID:</b></label>
-      </td>
-      <td>
-        <form enctype="multipart/form-data" method="post" action="{% url 'editvehicle' %}">{% csrf_token %}
-          {{ form.as_ps }}
-          <input type="number" placeholder="Enter Id" name="ID" id="id" required>
-          <input type="submit" name="searchbyid" value="Search">
-        </form>
-      </td>
-    </tr>
-  -->
+
     <tr>
       <td>
         <form enctype="multipart/form-data" method="get" action="{% url 'editVehicles' %}">{% csrf_token %}
