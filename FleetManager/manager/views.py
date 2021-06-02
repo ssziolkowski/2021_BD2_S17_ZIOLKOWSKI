@@ -109,8 +109,6 @@ def person_update_view(request, upid):
         saveLog(id=request.session.get('company', -1),
                 post=post, name="changed")
         return render(request, "manager/editPersonel.html", context)
-    print(form.is_valid)
-    print(form.errors)
     return render(request, "manager/editPerson.html", context)
 
 
@@ -551,16 +549,6 @@ def editPerson(request, pid):
     return render(request, 'manager/editPersonel.html', context)
 
 
-def updatePerson(request, pid):
-    if request.session.get('currentUser', 'none') == 'none':
-        return redirect('login')
-
-    context = {
-        'user': request.session.get('currentUser', 'none'),
-        'name': request.session.get('name', 'FleetManager')
-    }
-    return render(request, 'manager/editPersonel.html', context)
-
 
 def editPersonel(request):
     if request.session.get('currentUser', 'none') == 'none':
@@ -615,6 +603,29 @@ def editVehicle(request, vid):
     }
 
     return render(request, 'manager/editVehicle.html', context)
+
+
+def vehicle_update_view(request, uvid):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    vehicle = Vehicle.objects.filter(VIN=uvid).first()
+    form = VehiclesForm(request.POST or None, instance=vehicle)
+    context = {
+        'vehicle': vehicle,
+        'vehicles': Vehicle.objects.filter(companyID=request.session.get('company', -1)).order_by("VIN"),
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', '')
+    }
+
+    if form.is_valid():
+        post = form.save()
+        saveLog(id=request.session.get('company', -1),
+                post=post, name="changed")
+        return render(request, "manager/editVehicles.html", context)
+    print(form.is_valid)
+    print(form.errors)
+    return render(request, "manager/editVehicle.html", context)
 
 
 def editService(request):

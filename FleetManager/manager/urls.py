@@ -13,6 +13,8 @@ urlpatterns = [
     url(r'^editVehicle/(?P<vid>[\w]+)/$', views.editVehicle, name='editVehicle'),
     url(r'^updatePerson/(?P<upid>[\w]+)/$',
         views.person_update_view, name='person_update_view'),
+    url(r'^updateVehicle/(?P<uvid>[\w]+)/$',
+        views.vehicle_update_view, name='vehicle_update_view'),
     path('', views.fleetManager, name='fleetManager'),
     path('allVehicles', views.allVehicles, name='allVehicles'),
     path('addVehicle', views.addVehicle, name='addVehicle'),
