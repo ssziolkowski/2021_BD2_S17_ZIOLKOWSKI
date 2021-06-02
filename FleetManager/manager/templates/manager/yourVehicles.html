@@ -28,7 +28,6 @@
             <td>
             {% now "m-d-Y" as todays_date %}
             {% if todays_date <= rent.5|date:"m-d-Y" %}
-            <p class="card-text">&nbsp;</p>
             {% if rent.6 == 'reserved' %}
             <form action="{% url 'toStartRent' %}" method="post">
                 <input type="hidden" name="VIN" value={{rent.2}}>
