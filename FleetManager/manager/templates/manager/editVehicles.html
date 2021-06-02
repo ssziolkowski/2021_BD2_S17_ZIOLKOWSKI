@@ -82,7 +82,7 @@
       </tr>
       {% for vehicle in vehicles %}
       <tr>
-        <form enctype="multipart/form-data" method="post" action="{% url 'editVehicles' %}">{% csrf_token %}
+        <form enctype="multipart/form-data" method="post" action="{% url 'editVehicle' %}">{% csrf_token %}
           <td>
             {{vehicle.VIN }}
             <input type="text" placeholder="xD" value="{{ vehicle.VIN }}" name="VIN" disabled hidden required>

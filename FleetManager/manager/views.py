@@ -601,6 +601,39 @@ def editVehicles(request):
     return render(request, 'manager/editVehicles.html', context)
 
 
+def editVehicle(request):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    context = {
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', 'FleetManager')
+    }
+    return render(request, 'manager/editVehicle.html')
+
+
+def editService(request):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    context = {
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', 'FleetManager')
+    }
+    return render(request, 'manager/editService.html', context)
+
+
+def editService(request):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    context = {
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', 'FleetManager')
+    }
+    return render(request, 'manager/editService.html', context)
+
+
 def editService(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
