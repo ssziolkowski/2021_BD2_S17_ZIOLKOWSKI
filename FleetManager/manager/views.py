@@ -45,6 +45,10 @@ def managerManager(request):
 def fleetManager(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
+    if request.session.get('currentUser', 'none') == 'admin':
+        return redirect('adminPanel')
+    if request.session.get('currentUser', 'none') == 'manager':
+        return redirect('managerPanel')
 
     context = {
         'vehicles': Vehicle.objects.filter(companyID=request.session.get('company', -1)),
@@ -209,14 +213,18 @@ def managedVehicle(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
-    if request.method == "POST":
-        vin = request.POST.get("VIN", "NOVIN")
-
     context = {
-        'vehicle': Vehicle.objects.filter(VIN=vin).first(),
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
+
+    if request.method == "POST":
+        vin = request.POST.get("VIN", "NOVIN")
+        vehicle = Vehicle.objects.filter(VIN=vin).first()
+        context['vehicle'] = vehicle
+        serviceplan = Serviceplan.objects.filter(
+            brand=vehicle.brand, model=vehicle.model, version=vehicle.version, accessories=vehicle.accessories)
+        context['serviceplan'] = serviceplan
 
     return render(request, 'manager/managedVehicle.html', context)
 

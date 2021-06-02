@@ -8,9 +8,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <div class="card" style="padding-right: 20%; padding-left: 20%">
-                    &nbsp;
-                    <img class="card-img" src="{{vehicle.picture.url}} " alt="Card image cap">
+                <div class="card">
+                    <img class="card-img-top" src={{vehicle.picture.url}} alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{vehicle.model}}</h5>
                         <p class="card-text">Brand: {{vehicle.brand}}</p>
@@ -21,18 +20,11 @@
                         <p class="card-text">Purpose: {{vehicle.purpose}}</p>
                         <p class="card-text">Distinctive marks: {{vehicle.distinctive_marks}}</p>
                         <p class="card-text">Status: {{vehicle.status}}</p>
-                        {%if user == 'person'%}
-                        <form action="{% url 'rentVehicle' %}" method="post">
-                        <input type="hidden" name="VIN" value={{vehicle.VIN}}>
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-primary">Rent</button>
-                        </form>
-                        {%endif%}
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card" style="padding-right: 20%; padding-left: 20%">
+                <div class="card">
                     &nbsp;
                     <form method="post" enctype="multipart/form-data">{% csrf_token %}
                     {{ form.as_p }}
@@ -42,14 +34,6 @@
                             </center>
                             <hr>
                             <table id="form" align="left" width="70%">
-                            <tr>
-                                <td>
-                                <label for="vin"><b>VIN</b></label>
-                                </td>
-                                <td>
-                                <input type="text" placeholder="Enter VIN" name="vehicle_id" required>
-                                </td>
-                            </tr>
                             <tr>
                                 <td>
                                 <label for="cost"><b>Cost</b></label>
@@ -78,18 +62,6 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="padding-right:20px">
-                                <label for="status"><b>Status</b></label>
-                                </td>
-                                <td>
-                                <select placeholder="Enter Status" name="status" disabled>
-                                    <option value="performed">Performed</option>
-                                    <option value="booked">Booked</option>
-                                    <option value="requested">Requested</option>
-                                </select>
-                                </td>
-                            </tr>
-                            <tr>
                                 <td>
                                 <label for="service_performed"><b>Service performed</b></label>
                                 </td>
@@ -103,31 +75,23 @@
                                 </td>
                             </tr>
                             </table>
+                            <input type="hidden" name="status" value="performed">
+                            <input type="hidden" name="VIN" value={{vehicle.VIN}}>
                         </div>
                     </form>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card" style="padding-right: 20%; padding-left: 20%">
-                    &nbsp;
-                    <img class="card-img" src="{{vehicle.picture.url}} " alt="Card image cap">
+                <div class="card">
+                    <img class="card-img-top" src={{vehicle.picture.url}} alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{vehicle.model}}</h5>
-                        <p class="card-text">Brand: {{vehicle.brand}}</p>
-                        <p class="card-text">VIN: {{vehicle.VIN}}</p>
-                        <p class="card-text">Version: {{vehicle.version}}</p>
-                        <p class="card-text">Accessories: {{vehicle.accessories}}</p>
-                        <p class="card-text">Plate number: {{vehicle.plate_number}}</p>
-                        <p class="card-text">Purpose: {{vehicle.purpose}}</p>
-                        <p class="card-text">Distinctive marks: {{vehicle.distinctive_marks}}</p>
-                        <p class="card-text">Status: {{vehicle.status}}</p>
-                        {%if user == 'person'%}
-                        <form action="{% url 'rentVehicle' %}" method="post">
-                        <input type="hidden" name="VIN" value={{vehicle.VIN}}>
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-primary">Rent</button>
-                        </form>
-                        {%endif%}
+                        {%for service in serviceplan%}
+                        <p class="card-text">Service: {{service.service_performed}}</p>
+                        <p class="card-text">Mileage: {{service.mileage}}</p>
+                        <p class="card-text">Date: {{service.date}}</p>
+                        <p class="card-text">Performed: {{service.status}}</p>
+                        {%endfor%}
                     </div>
                 </div>
             </div>
