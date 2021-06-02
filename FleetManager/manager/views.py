@@ -516,12 +516,13 @@ def addServiceplan(request):
     if request.method == "POST":
         form = ServiceplanForm(request.POST)
         if form.is_valid():
-            form.save()
             serviceplan = form.save(commit=False)
+            serviceplan.status = False
             serviceplan.save()
             saveLog(id=request.session.get('company', -1),
                     post=serviceplan, name="added")
             return redirect('addServiceplan')
+
         else:
             form = ServiceplanForm()
 
@@ -547,7 +548,6 @@ def editPerson(request, pid):
         return render(request, 'manager/editPerson.html', context)
 
     return render(request, 'manager/editPersonel.html', context)
-
 
 
 def editPersonel(request):

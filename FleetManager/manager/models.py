@@ -91,7 +91,7 @@ class Rental(models.Model):
     costs_description = models.TextField(null=True)
     rent_start = models.DateField()
     rent_end = models.DateField()
-    rent_status = models.TextField(choices = RENTSTATUS)
+    rent_status = models.TextField(choices=RENTSTATUS)
 
 
 class Service(models.Model):
@@ -106,14 +106,10 @@ class Service(models.Model):
 class Serviceplan(models.Model):
     UniqueConstraint(fields=['brand', 'model', 'version',
                      'accessories'], name='serviceplan_id')
-    brand = models.ForeignKey(
-        Vehicle, related_name='%(class)s_brand', on_delete=models.RESTRICT)
-    model = models.ForeignKey(
-        Vehicle, related_name='%(class)s_model', on_delete=models.RESTRICT)
-    version = models.ForeignKey(
-        Vehicle, related_name='%(class)s_version', on_delete=models.RESTRICT)
-    accessories = models.ForeignKey(
-        Vehicle, related_name='%(class)s_accessories', on_delete=models.RESTRICT)
+    brand = models.TextField()
+    model = models.TextField()
+    version = models.TextField()
+    accessories = models.TextField()
     service_performed = models.TextField()
     mileage = models.IntegerField()
     date = models.DateField(default=date.today)
