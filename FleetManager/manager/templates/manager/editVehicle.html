@@ -8,78 +8,128 @@
     <div style="padding:10px;"></div>
     <div class="container" style="background-color: #f1f1f1;padding:10px;"></div>
     <center>
-      <h5><b>Person edition</b></h5>
+      <h5><b>Vehicle {{vehicle.brand}} {{vehicle.model}} {{vehicle.version}} edition</b></h5>
     </center>
     <hr>
-    <input type="hidden" value="{{person.ID}}">
-    <table id="form" width="70%">
+    <input type="hidden" value="{{vehicle.ID}}">
+    <table id="form" align="left" width="70%">
       <tr>
         <td>
-          <label for="login"><b>Login</b></label>
+          <label for="picture"><b>Picture</b></label>
         </td>
         <td>
-          <input type="text" placeholder="login" value="{{ person.login }}" name="login" required>
+          <img class="card-img-top" src="{{vehicle.picture.url}} " alt="Card image cap">
         </td>
       </tr>
       <tr>
         <td>
-          <label for="name"><b>Name</b></label>
+          <label for="vin"><b>VIN</b></label>
         </td>
         <td>
-          <input type="text" placeholder="Name" value="{{ person.name }}" name="name" required>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="surname"><b>Surname</b></label>
-        </td>
-        <td>
-          <input type="text" placeholder="Surname" value="{{ person.surname }}" name="surname" required>
+          <input type="text" placeholder="Enter VIN" value="{{ vehicle.VIN }}" name="VIN" required>
         </td>
       </tr>
       <tr>
         <td>
-          <label for="phone"><b>Phone number</b></label>
+          <label for="brand"><b>Brand</b></label>
         </td>
         <td>
-          <input type="text" placeholder="Phone number" value="{{ person.phone_number }}" name="phone" required>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="position"><b>Position</b></label>
-        </td>
-        <td>
-          <input type="text" placeholder="Position" value="{{ person.position }}" name="position" required>
+          <input type="text" placeholder="Enter Brand" value="{{ vehicle.brand }}" name="brand" required>
         </td>
       </tr>
       <tr>
         <td>
-          <label for="address"><b>Address</b></label>
+          <label for="model"><b>Model</b></label>
         </td>
         <td>
-          <input type="text" placeholder="Address" value="{{ person.address }}" name="address" required>
+          <input type="text" placeholder="Enter Model" value="{{ vehicle.model }}" name="model" required>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="version"><b>Version</b></label>
+        </td>
+        <td>
+          <input type="text" placeholder="Enter Version" value="{{ vehicle.version }}" name="version" required>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="acc"><b>accessories</b></label>
+        </td>
+        <td>
+          <input type="text" placeholder="Enter Accessories" value="{{ vehicle.accessories }}" name="accessories" required>
         </td>
       </tr>
       <tr>
         <td style="padding-right:20px">
-          <label for="salary"><b>Salary</b></label>
+          <label for="plate"><b>Registration plate</b></label>
         </td>
         <td>
-          <input type="number" placeholder="Salary" value="{{ person.salary }}" name="salary" required>
+          <input type="text" placeholder="Enter Number plates" value="{{ vehicle.plate_number }}" name="plate_number" required>
         </td>
       </tr>
       <tr>
         <td>
-          <label for="status"><b>Current Status</b></label>
+          <label for="current_mileage"><b>Current mileage</b></label>
         </td>
         <td>
-          <select placeholder="Enter current status" value="{{ person.status }}" name="status" required>
-            <option value="employed">employed</option>
-            <option value="discharged">discharged</option>
+          <input type="number" placeholder="Enter current mileage" value="{{ vehicle.current_mileage }}" name="current_mileage" required>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="pic"><b>Upload new picture</b></label>
+        </td>
+        <td>
+          <input type="file" placeholder="Upload picture" name="picture">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="purpose"><b>Purpose</b></label>
+        </td>
+        <td>
+          <select placeholder="Enter car purpose" value="{{ vehicle.purpose }}" name="purpose" required>
+            <option value="civilian">Civilian</option>
+            <option value="special purpose">Special purpose</option>
           </select>
         </td>
       </tr>
+      <tr>
+        <td>
+          <label for="category"><b>Category</b></label>
+        </td>
+        <td>
+          <select placeholder="Enter category" value="{{ vehicle.category }}" name="category" required>
+            <option value="sedan">Sedan</option>
+            <option value="wagon">Wagon</option>
+            <option value="hatchback">Hatchback</option>
+            <option value="van">Van</option>
+            <option value="pickup">Pickup</option>
+            <option value="truck">Truck</option>
+            <option value="construction">Construction</option>
+            <option value="agriculture">Agriculture</option>
+            <option value="storage">Storage</option>
+            <option value="other">Other</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="status"><b>Status</b></label>
+        </td>
+        <td>
+          <select placeholder="Enter current status" value="{{ vehicle.status }}" name="status" required>
+            <option value="operational">Operational</option>
+            <option value="decommisioned">Decommisioned</option>
+          </select>
+        </td>
+      </tr>
+      <tr><td>
+        <label for="marks"><b>Distinctive marks</b></label></td><td>
+        <textarea placeholder="Enter Distinctive marks" value="{{ vehicle.distinctive_marks }}" name="distinctive_marks" required></textarea>
+        </td></tr>
       <tr>
         <td>
           <input type="submit" name="update" value="Update">

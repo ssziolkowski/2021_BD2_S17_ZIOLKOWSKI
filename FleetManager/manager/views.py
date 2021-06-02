@@ -109,7 +109,8 @@ def person_update_view(request, upid):
         saveLog(id=request.session.get('company', -1),
                 post=post, name="changed")
         return render(request, "manager/editPersonel.html", context)
-
+    print(form.is_valid)
+    print(form.errors)
     return render(request, "manager/editPerson.html", context)
 
 
@@ -601,15 +602,19 @@ def editVehicles(request):
     return render(request, 'manager/editVehicles.html', context)
 
 
-def editVehicle(request):
+def editVehicle(request, vid):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
+    obj = get_object_or_404(Vehicle, VIN=vid)
+    vehicle = obj
     context = {
+        'vehicle': vehicle,
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
     }
-    return render(request, 'manager/editVehicle.html')
+
+    return render(request, 'manager/editVehicle.html', context)
 
 
 def editService(request):

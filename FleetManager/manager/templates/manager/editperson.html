@@ -3,12 +3,12 @@
 {% load static %}
 <div class="container" style="background-color: #f1f1f1;padding:10px;"></div>
 <div class="container" style="background-color: #f1f1f1;padding:10px;">
-  <form enctype="multipart/form-data" method="post" action="{% url 'editPerson' pid=person.ID %}">{% csrf_token %}
+  <form enctype="multipart/form-data" method="post" action="{% url 'person_update_view' upid=person.ID %}">{% csrf_token %}
     {{ form.as_pe }}
     <div style="padding:10px;"></div>
     <div class="container" style="background-color: #f1f1f1;padding:10px;"></div>
     <center>
-      <h5><b>Person edition</b></h5>
+      <h5><b>Person {{ person.name }} {{ person.surname }} edition</b></h5>
     </center>
     <hr>
     <input type="hidden" value="{{person.ID}}">
@@ -19,6 +19,14 @@
         </td>
         <td>
           <input type="text" placeholder="login" value="{{ person.login }}" name="login" required>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="password"><b>Password</b></label>
+        </td>
+        <td>
+          <input type="password" placeholder="password" value="{{ person.password }}" name="password" required>
         </td>
       </tr>
       <tr>
@@ -42,7 +50,7 @@
           <label for="phone"><b>Phone number</b></label>
         </td>
         <td>
-          <input type="text" placeholder="Phone number" value="{{ person.phone_number }}" name="phone" required>
+          <input type="text" placeholder="Phone number" value="{{ person.phone_number }}" name="phone_number" required>
         </td>
       </tr>
       <tr>

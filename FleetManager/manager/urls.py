@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^allVehicles/(?P<otype>[\w]+)/$',
         views.filterVehicle_view, name='VehicleFilter'),
     url(r'^editPerson/(?P<pid>[\w]+)/$', views.editPerson, name='editPerson'),
+    url(r'^editVehicle/(?P<vid>[\w]+)/$', views.editVehicle, name='editVehicle'),
     url(r'^updatePerson/(?P<upid>[\w]+)/$',
         views.person_update_view, name='person_update_view'),
     path('', views.fleetManager, name='fleetManager'),
