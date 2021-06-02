@@ -18,7 +18,9 @@ def managerPanel(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
+    id = request.session.get('id', -1)
     context = {
+        'vehicles': Manager.objects.select_related('personal_ID').filter(personal_ID=id),
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', ''),
     }
@@ -35,7 +37,7 @@ def managerManager(request):
         'managers': Manager.objects.select_related('personal_ID').annotate(num_cars=Count('VIN')),
         'records': Manager.objects.select_related('personal_ID')
 
-        #'persons': Person.objects.filter(companyID=request.session.get('company', -1)).select_related() .order_by("ID"),
+        # 'persons': Person.objects.filter(companyID=request.session.get('company', -1)).select_related() .order_by("ID"),
     }
     return render(request, 'manager/managerManager.html', context)
 
@@ -44,15 +46,7 @@ def fleetManager(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
-    myVehicles = []
-    rentals = Rental.objects.filter(
-        renter_id=Person.objects.filter(ID=request.session['id']).first())
-
-    for rental in rentals:
-        myVehicles.append(rental.vehicle_id)
-
     context = {
-        'rentals': myVehicles,
         'vehicles': Vehicle.objects.filter(companyID=request.session.get('company', -1)),
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', '')
@@ -211,7 +205,22 @@ def selectedVehicle_view(request):
     return render(request, "manager/selectedVehicle.html", context)
 
 
-#Renting Vehicle
+def managedVehicle(request):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    if request.method == "POST":
+        vin = request.POST.get("VIN", "NOVIN")
+
+    context = {
+        'vehicle': Vehicle.objects.filter(VIN=vin).first(),
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', 'FleetManager')
+    }
+
+    return render(request, 'manager/managedVehicle.html', context)
+
+# Renting Vehicle
 
 
 def rentVehicle(request):
@@ -313,6 +322,7 @@ def startRent(request):
 
     return render(request, 'manager/fleetManager.html', context)
 
+
 def endRent(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
@@ -346,26 +356,26 @@ def endRent(request):
 
 #
 #
-#Your Vehicles
+# Your Vehicles
 
 def yourVehiclesView(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
-    rental = Rental.objects.filter(renter_id = request.session.get('id', -1))
+    rental = Rental.objects.filter(renter_id=request.session.get('id', -1))
 
     rentalList = []
 
     for rent in rental:
-      tempList = []
-      tempList.append(rent.vehicle_id.model)
-      tempList.append(rent.vehicle_id.picture.url)
-      tempList.append(rent.vehicle_id.VIN)
-      tempList.append(rent.rent_id)
-      tempList.append(rent.rent_start)
-      tempList.append(rent.rent_end)
-      tempList.append(rent.rent_status)
-      rentalList.append(tempList)
+        tempList = []
+        tempList.append(rent.vehicle_id.model)
+        tempList.append(rent.vehicle_id.picture.url)
+        tempList.append(rent.vehicle_id.VIN)
+        tempList.append(rent.rent_id)
+        tempList.append(rent.rent_start)
+        tempList.append(rent.rent_end)
+        tempList.append(rent.rent_status)
+        rentalList.append(tempList)
 
     context = {
         'rental': rentalList,
@@ -375,31 +385,32 @@ def yourVehiclesView(request):
 
     return render(request, 'manager/yourVehicles.html', context)
 
+
 def rentalDetailsView(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
     context = {
-                'vehicle': Vehicle.objects.filter(VIN=request.POST.get("VIN", "NOVIN")).first(),
-                'rental': Rental.objects.filter(rent_id=request.POST.get("rentID", -1)).first(),
-                'user': request.session.get('currentUser', 'none'),
-                'name': request.session.get('name', 'FleetManager'),
-                'error': "This vehicle is not available on your selected dates"
-                }
+        'vehicle': Vehicle.objects.filter(VIN=request.POST.get("VIN", "NOVIN")).first(),
+        'rental': Rental.objects.filter(rent_id=request.POST.get("rentID", -1)).first(),
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', 'FleetManager'),
+        'error': "This vehicle is not available on your selected dates"
+    }
     return render(request, 'manager/rentalDetails.html', context)
 
 
 def toStartRent(request):
-     if request.session.get('currentUser', 'none') == 'none':
+    if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
-     context = {
-                'vehicle': Vehicle.objects.filter(VIN=request.POST.get("VIN", "NOVIN")).first(),
-                'user': request.session.get('currentUser', 'none'),
-                'name': request.session.get('name', 'FleetManager'),
-                'error': "This vehicle is not available on your selected dates"
-                }
-     return render(request, 'manager/startRent.html', context)
+    context = {
+        'vehicle': Vehicle.objects.filter(VIN=request.POST.get("VIN", "NOVIN")).first(),
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', 'FleetManager'),
+        'error': "This vehicle is not available on your selected dates"
+    }
+    return render(request, 'manager/startRent.html', context)
 
 
 ####
@@ -407,19 +418,16 @@ def toStartRent(request):
 ####
 
 def toEndRent(request):
-     if request.session.get('currentUser', 'none') == 'none':
+    if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
-     context = {
-                'vehicle': Vehicle.objects.filter(VIN=request.POST.get("VIN", "NOVIN")).first(),
-                'user': request.session.get('currentUser', 'none'),
-                'name': request.session.get('name', 'FleetManager'),
-                'error': "This vehicle is not available on your selected dates"
-                }
-     return render(request, 'manager/endRent.html', context)
-
-
-
+    context = {
+        'vehicle': Vehicle.objects.filter(VIN=request.POST.get("VIN", "NOVIN")).first(),
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', 'FleetManager'),
+        'error': "This vehicle is not available on your selected dates"
+    }
+    return render(request, 'manager/endRent.html', context)
 
 
 def selectedVehicle(request):
@@ -558,10 +566,10 @@ def editPersonel(request):
         context['persons'] = Person.objects.filter(
             companyID=request.session.get('company', -1))
     else:
-            filter = request.GET.get("filter", None)
-            filterPhrase = filter + '__icontains'
-            context['persons'] = Person.objects.filter(**{ filterPhrase: search },
-            companyID=request.session.get('company', -1))
+        filter = request.GET.get("filter", None)
+        filterPhrase = filter + '__icontains'
+        context['persons'] = Person.objects.filter(**{filterPhrase: search},
+                                                   companyID=request.session.get('company', -1))
     return render(request, 'manager/editPersonel.html', context)
 
 
@@ -578,10 +586,10 @@ def editVehicles(request):
         context['vehicles'] = Vehicle.objects.filter(
             companyID=request.session.get('company', -1))
     else:
-            filter = request.GET.get("filter", None)
-            filterPhrase = filter + '__icontains'
-            context['vehicles'] = Vehicle.objects.filter(**{ filterPhrase: search },
-            companyID=request.session.get('company', -1))
+        filter = request.GET.get("filter", None)
+        filterPhrase = filter + '__icontains'
+        context['vehicles'] = Vehicle.objects.filter(**{filterPhrase: search},
+                                                     companyID=request.session.get('company', -1))
     return render(request, 'manager/editVehicles.html', context)
 
 

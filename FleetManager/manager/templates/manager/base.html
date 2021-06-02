@@ -30,16 +30,14 @@
             <a class="nav-link" href="{% url 'allVehicles' %}">All vehicles</a>
           </li>
           {%endif%}
-          {%if user == 'person' or user == 'manager'%}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">Your vehicles</a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            {%for vehicle in rentals%}
-              <a class="dropdown-item" href="#">{{vehicle.brand}}</a>
-            {%endfor%}
-              <a class="dropdown-item" href="{% url 'yourVehicles' %}">All</a>
-            </div>
+          {%if user == 'person'%}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'yourVehicles' %}">Your vehicles</a>
+          </li>
+          {%endif%}
+          {%if user == 'manager'%}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'managerPanel' %}">Manager Panel</a>
           </li>
           {%endif%}
           {%if user == 'admin'%}

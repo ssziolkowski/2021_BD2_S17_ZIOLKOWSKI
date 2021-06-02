@@ -6,8 +6,7 @@
   <hr>
   <center>
     <div class="card" style="padding-right: 20%; padding-left: 20%">
-      <img class="card-img" width="500" height="500"
-        src="{{vehicle.picture.url}} " alt="Card image cap">
+      <img class="card-img" src="{{vehicle.picture.url}} " alt="Card image cap">
       <div class="card-body">
         <h5 class="card-title">{{vehicle.model}}</h5>
         <p class="card-text">Brand: {{vehicle.brand}}</p>
@@ -18,7 +17,7 @@
         <p class="card-text">Purpose: {{vehicle.purpose}}</p>
         <p class="card-text">Distinctive marks: {{vehicle.distinctive_marks}}</p>
         <p class="card-text">Status: {{vehicle.status}}</p>
-        {%if user != 'admin'%}
+        {%if user == 'person'%}
         <form action="{% url 'rentVehicle' %}" method="post">
           <input type="hidden" name="VIN" value={{vehicle.VIN}}>
           {% csrf_token %}

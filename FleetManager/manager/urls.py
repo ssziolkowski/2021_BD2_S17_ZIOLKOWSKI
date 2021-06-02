@@ -19,7 +19,7 @@ urlpatterns = [
     path('rentVehicle', views.rentVehicle, name='rentVehicle'),
     path('selectedVehicle', views.selectedVehicle_view,
          name='selectedVehicleView'),
-    path('selectedVehicle', views.selectedVehicle, name='selectedVehicle'),
+    path('managedVehicle', views.managedVehicle, name='managedVehicle'),
     path('adminPanel', views.adminPanel, name='adminPanel'),
     path('addPerson', views.addPerson, name='addPerson'),
     path('addService', views.addService, name='addService'),
