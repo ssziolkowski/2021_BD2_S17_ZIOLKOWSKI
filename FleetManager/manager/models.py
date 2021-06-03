@@ -37,10 +37,10 @@ class Person(models.Model):
 
 class Vehicle(models.Model):
     OPERATIONAL = 'operational'
-    DISCHARGED = 'discharged'
+    DECOMMISSIONED = 'decommissioned'
     STATUS = [
         (OPERATIONAL, ('Currently operational')),
-        (DISCHARGED, ('This vehicle is no longer operational'))
+        (DECOMMISSIONED, ('This vehicle is no longer operational'))
     ]
     VIN = models.TextField(primary_key=True)
     brand = models.TextField()

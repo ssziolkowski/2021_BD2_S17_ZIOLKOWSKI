@@ -26,7 +26,7 @@
           <label for="vin"><b>VIN</b></label>
         </td>
         <td>
-          <input type="text" placeholder="Enter VIN" value="{{ vehicle.VIN }}" name="VIN" required>
+          <input type="text" placeholder="Enter VIN" value="{{ vehicle.VIN }}" name="VIN" readonly="readonly" required>
         </td>
       </tr>
       <tr>
@@ -101,7 +101,9 @@
           <label for="category"><b>Category</b></label>
         </td>
         <td>
-          <select placeholder="Enter category" value="{{ vehicle.category }}" name="category" required>
+          <input type="text" placeholder="Enter category" value="{{ vehicle.category }}" name="category" required>
+
+        <!--  <select placeholder="Enter category" value="{{ vehicle.category }}" name="category" required>
             <option value="sedan">Sedan</option>
             <option value="wagon">Wagon</option>
             <option value="hatchback">Hatchback</option>
@@ -112,7 +114,8 @@
             <option value="agriculture">Agriculture</option>
             <option value="storage">Storage</option>
             <option value="other">Other</option>
-          </select>
+          </select>-->
+
         </td>
       </tr>
       <tr>
@@ -122,13 +125,13 @@
         <td>
           <select placeholder="Enter current status" value="{{ vehicle.status }}" name="status" required>
             <option value="operational">Operational</option>
-            <option value="decommisioned">Decommisioned</option>
+            <option value="decommissioned">Decommissioned</option>
           </select>
         </td>
       </tr>
       <tr><td>
         <label for="marks"><b>Distinctive marks</b></label></td><td>
-        <textarea placeholder="Enter Distinctive marks" value="{{ vehicle.distinctive_marks }}" name="distinctive_marks" required></textarea>
+        <textarea placeholder="Enter Distinctive marks" name="distinctive_marks" required>{{ vehicle.distinctive_marks }}</textarea>
         </td></tr>
       <tr>
         <td>
@@ -143,8 +146,8 @@
 </div>
 <div class="container" style="background-color:#f1f1f1">
   <input type='reset' value='Reset' name='reset'>
-  <form>
-    <input type='button' onclick="history.back()" value='Back' name='back'>
+  <form enctype="multipart/form-data" method="post" action="{% url 'editVehicles' %}">{% csrf_token %}
+    <input type='submit'  value='Back' name='back'>
   </form>
 </div>
 </form>
