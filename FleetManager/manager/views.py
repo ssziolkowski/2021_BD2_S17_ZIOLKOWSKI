@@ -610,7 +610,7 @@ def vehicle_update_view(request, uvid):
         return redirect('login')
 
     vehicle = Vehicle.objects.filter(VIN=uvid).first()
-    form = VehiclesForm(request.POST or None, instance=vehicle)
+    form = VehiclesForm(request.POST or None, request.FILES, instance=vehicle)
     context = {
         'vehicle': vehicle,
         'vehicles': Vehicle.objects.filter(companyID=request.session.get('company', -1)).order_by("VIN"),
