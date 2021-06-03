@@ -525,7 +525,6 @@ def addServiceplan(request):
 
         else:
             form = ServiceplanForm()
-
     context = {
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
@@ -623,20 +622,7 @@ def vehicle_update_view(request, uvid):
         saveLog(id=request.session.get('company', -1),
                 post=post, name="changed")
         return render(request, "manager/editVehicles.html", context)
-    print(form.is_valid)
-    print(form.errors)
     return render(request, "manager/editVehicle.html", context)
-
-
-def editService(request):
-    if request.session.get('currentUser', 'none') == 'none':
-        return redirect('login')
-
-    context = {
-        'user': request.session.get('currentUser', 'none'),
-        'name': request.session.get('name', 'FleetManager')
-    }
-    return render(request, 'manager/editService.html', context)
 
 
 def editService(request):
