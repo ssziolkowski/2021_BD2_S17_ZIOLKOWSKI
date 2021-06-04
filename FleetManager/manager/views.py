@@ -120,18 +120,17 @@ def manager_update_view(request, umid):
     #form = ManagerForm(request.POST or None, instance=manager)
     context = {
         'manager': manager,
-    #    'persons': Person.objects.filter(companyID=request.session.get('company', -1)).order_by("ID"),
+        #    'persons': Person.objects.filter(companyID=request.session.get('company', -1)).order_by("ID"),
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', '')
     }
 
-    #if form.is_valid():
+    # if form.is_valid():
     #    post = form.save()
     #    saveLog(id=request.session.get('company', -1),
     #            post=post, name="changed")
     #    return render(request, "manager/manager.html", context)
     return render(request, "manager/manager.html", context)
-
 
 
 def login(request):
@@ -242,7 +241,6 @@ def managedVehicle(request):
     if request.method == "POST":
         vin = request.POST.get("vehicle_id", "NOVIN")
         id = request.POST.get("id", -1)
-        print(vin)
         form = ServiceForm(request.POST)
         if form.is_valid():
             form.save()
@@ -252,8 +250,10 @@ def managedVehicle(request):
             service.save()
             serviceplan = Serviceplan.objects.filter(
                 id=id).first()
-            serviceplan.status = True
-            serviceplan.save()
+
+            if serviceplan:
+                serviceplan.status = True
+                serviceplan.save()
 
             vehicle = service.vehicle_id
             context['vehicle'] = vehicle
@@ -699,6 +699,50 @@ def editServiceplan(request):
         'name': request.session.get('name', 'FleetManager')
     }
     return render(request, 'manager/editServiceplan.html', context)
+
+
+def editPlans(request):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    context = {
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', 'FleetManager'),
+    }
+    search = request.GET.get("phrase", None)
+    if search is None:
+        context['serviceplans'] = Serviceplan.objects.all().order_by(
+            'brand', 'model', 'version', 'accessories')
+    else:
+        filter = request.GET.get("filter", None)
+        filterPhrase = filter + '__icontains'
+        context['serviceplans'] = Serviceplan.objects.filter(
+            **{filterPhrase: search}).order_by('brand', 'model', 'version', 'accessories')
+
+    return render(request, 'manager/editPlans.html', context)
+
+
+def updatePlan(request):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    id = request.POST.get('id')
+    print(id)
+    serviceplan = Serviceplan.objects.filter(id=id).first()
+    print(serviceplan)
+    form = ServiceplanForm(request.POST or None, instance=serviceplan)
+    context = {
+        'plan': serviceplan,
+        'serviceplans': Serviceplan.objects.all().order_by('brand', 'model', 'version', 'accessories'),
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', '')
+    }
+    if form.is_valid():
+        post = form.save()
+        saveLog(id=request.session.get('company', -1),
+                post=post, name="changed")
+        return render(request, "manager/editServiceplan.html", context)
+    return render(request, "manager/editPlans.html", context)
 
 
 def saveLog(name, id, post):

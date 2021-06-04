@@ -1,0 +1,113 @@
+{%extends "manager/base.html"%}
+{%block content%}
+{% load static %}
+
+<style>
+  html body div div.container table#t {
+    align-content: center;
+    margin: auto;
+    column-span: 50px;
+    width: 100%;
+    text-align: center;
+  }
+
+  ;
+
+  th {
+    margin: 7px;
+  }
+
+  td {
+    text-align: center;
+    vertical-align: center;
+    width: 100%/10;
+    text-align: center;
+  }
+
+  ;
+</style>
+
+<div style="padding:10px;"></div>
+<div class="container" style="background-color: #f1f1f1;padding:10px;">
+  <center>
+    <h5><b>Search Serviceplan</b></h5>
+  </center>
+  <hr>
+  <table id="forms" align="left" width="70%">
+    <tr>
+      <td>
+        <form enctype="multipart/form-data" method="get" action="{% url 'editPlans' %}">{% csrf_token %}
+          {{ form.as_ps }}
+          <label for="phrase"><b>Filter by:</b></label>
+          <select placeholder="Select filter" name="filter" required>
+            <option value="brand">brand</option>
+            <option value="model">model</option>
+            <option value="version">version</option>
+            <option value="accessories" default>accessories</option>>
+          </select>
+          <input type="text" placeholder="Enter phrase" name="phrase" id="phrase">
+          <input type="submit" name="search" value="Search">
+        </form>
+      </td>
+    </tr>
+  </table>
+</div>
+<div class="container" style="background-color: #f1f1f1;padding:10px;"></div>
+<div class="container" style="background-color: #f1f1f1;padding:10px;">
+  <hr>
+  <div class="container">
+    <table margin="0" id="t">
+      <tr>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Version</th>
+        <th>Accessories</th>
+        <th>Service</th>
+        <th>Mileage</th>
+        <th>Date</th>
+        <th>Edit?</th>
+      </tr>
+      {% for serviceplan in serviceplans %}
+      <tr>
+        <form enctype="multipart/form-data" method="post" action="{% url 'updatePlan' %}">{% csrf_token %}
+          <td>
+            {{serviceplan.brand }}
+            <input type="text" placeholder="Login" value="{{ serviceplan.brand }}" name="brand" disabled hidden required>
+          </td>
+          <td>
+            {{serviceplan.model }}
+            <input type="text" placeholder="N/A" value="{{ serviceplan.model }}" name="model" disabled hidden required>
+          </td>
+          <td>
+            {{serviceplan.version }}
+            <input type="text" placeholder="N/A" value="{{ serviceplan.version }}" name="version" disabled hidden required>
+          </td>
+          <td>
+            {{serviceplan.accessories }}
+            <input type="text" placeholder="N/A" value="{{ serviceplan.accessories }}" name="accessories" disabled hidden
+              required>
+          </td>
+          <td>
+            {{serviceplan.service_performed }}
+            <input type="text" placeholder="N/A" value="{{ serviceplan.service_performed }}" name="service_performed" disabled hidden required>
+          </td>
+          <td>
+            {{serviceplan.mileage }}
+            <input type="number" placeholder="N/A" value="{{ serviceplan.mileage }}" name="mileage" disabled hidden required>
+          </td>
+          <td>
+            {{serviceplan.date }}
+            <input type="date" placeholder="N/A" value="{{ serviceplan.date }}" name="date" disabled hidden required>
+          </td>
+          <td><input type="submit" class="btn btn-primary" value="Edit"></td>
+          <input type="hidden" name="id" value={{serviceplan.id}}>
+        </form>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div class="container">
+    <div class="row"></div>
+  </div>
+</div>
+{%endblock content%}
