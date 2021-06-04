@@ -1,0 +1,86 @@
+{%extends "manager/base.html"%}
+{%block content%}
+{% load static %}
+
+<style>
+  html body div div.container table#t {
+    align-content: center;
+    margin: auto;
+    column-span: 50px;
+    width: 100%;
+    text-align: center;
+  }
+
+  th {
+    margin: 7px;
+  }
+
+  td {
+    text-align: center;
+    vertical-align: center;
+    width: 100%/8;
+    text-align: center;
+  }
+
+</style>
+<div class="container" style="background-color: #f1f1f1;padding:10px;" >
+  <hr>
+  <div class="container" id="data">
+    <center>
+      <h5><b>Manager {{manager.personal_ID.name }} {{manager.personal_ID.surname }} details</b></h5>
+    </center>
+    <hr>
+    <table margin="0" id="t">
+      <tr>
+        <form enctype="multipart/form-data" method="post" action="">{% csrf_token %}
+            <td>
+                <label for="id"><b>Manger Id</b></label>
+            </td>
+        <td>
+            <input type="number" placeholder="xD" value="{{ manager.id }}" name="id" readonly="readonly" required>
+          </td>
+        </tr><tr>
+            <td>
+                <label for="personal_ID_id"><b>Personal Id</b></label>
+            </td>
+          <td>
+            <input type="number" placeholder="xD" value="{{ manager.personal_ID_id }}" name="personal_ID_id" readonly="readonly" required>
+          </td>
+        </tr><tr>
+            <td>
+                <label for="name"><b>Name</b></label>
+            </td>
+          <td>
+            <input type="text" placeholder="N/A" value="{{ manager.personal_ID.name }}" name="name" required>
+          </td>
+        </tr><tr>
+            <td>
+                <label for="surname"><b>Surname</b></label>
+            </td>
+          <td>
+            <input type="text" placeholder="N/A" value="{{ manager.personal_ID.surname }}" name="surname" required>
+          </td>
+        </tr><tr>
+            <td>
+                <label for="num_cars"><b>Cars under managment:</b></label>
+            </td>
+          <td>
+            <input type="text" placeholder="N/A" value="{{ manager.personal_ID.num_cars }}" name="num_cars" required>
+          </td>
+        </tr><tr>
+          <td><input type="submit" name="update" value="Update"></td>
+        </form>
+      </tr>
+    </table>
+  </div>
+  <hr>
+  <center>
+    <h5><b>Managed vehicles</b></h5>
+  </center>
+  <div class="container" style="background-color: #f1f1f1;padding:10px;">
+  <div class="container">
+    <div class="row"></div>
+  </div>
+
+</div>
+{%endblock content%}

@@ -53,16 +53,16 @@ class Vehicle(models.Model):
     STORAGE = 'storage'
     OTHER = 'other'
     VEHICLECATEGORY = [
-        (SEDAN, ('sedan')),
-        (WAGON, ('wagon')),
-        (HATCHBACK, ('hatchback')),
-        (VAN, ('van')),
-        (PICKUP, ('pickup')),
-        (TRUCK, ('truck')),
-        (CONSTRUCTION, ('construction')),
-        (AGRICULTURE, ('agriculture')),
-        (STORAGE, ('storage')),
-        (OTHER, ('other'))
+        (SEDAN, ('Sedan')),
+        (WAGON, ('Wagon')),
+        (HATCHBACK, ('Hatchback')),
+        (VAN, ('Van')),
+        (PICKUP, ('Pickup')),
+        (TRUCK, ('Truck')),
+        (CONSTRUCTION, ('Construction')),
+        (AGRICULTURE, ('Agriculture')),
+        (STORAGE, ('Storage')),
+        (OTHER, ('Other'))
     ]
     VIN = models.TextField(primary_key=True)
     brand = models.TextField()

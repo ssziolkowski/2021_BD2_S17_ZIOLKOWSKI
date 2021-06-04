@@ -112,6 +112,28 @@ def person_update_view(request, upid):
     return render(request, "manager/editPerson.html", context)
 
 
+def manager_update_view(request, umid):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    manager = Manager.objects.filter(personal_ID_id=umid).first()
+    #form = ManagerForm(request.POST or None, instance=manager)
+    context = {
+        'manager': manager,
+    #    'persons': Person.objects.filter(companyID=request.session.get('company', -1)).order_by("ID"),
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', '')
+    }
+
+    #if form.is_valid():
+    #    post = form.save()
+    #    saveLog(id=request.session.get('company', -1),
+    #            post=post, name="changed")
+    #    return render(request, "manager/manager.html", context)
+    return render(request, "manager/manager.html", context)
+
+
+
 def login(request):
     request.session['id'] = -1
     request.session['currentUser'] = 'none'
