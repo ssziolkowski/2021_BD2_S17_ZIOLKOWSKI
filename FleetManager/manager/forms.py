@@ -18,7 +18,7 @@ class VehiclesForm(forms.ModelForm):
 
     class Meta:
         model = Vehicle
-        fields = ('VIN', 'brand', 'version', 'model', 'accessories', 'plate_number',
+        fields = ('VIN', 'brand', 'version', 'model', 'category', 'accessories', 'plate_number',
                   'current_mileage', 'purpose', 'status', 'distinctive_marks', 'picture')
         pic_field = ('picture')
 
