@@ -218,12 +218,33 @@ def managedVehicle(request):
     }
 
     if request.method == "POST":
-        vin = request.POST.get("VIN", "NOVIN")
-        vehicle = Vehicle.objects.filter(VIN=vin).first()
-        context['vehicle'] = vehicle
-        serviceplan = Serviceplan.objects.filter(
-            brand=vehicle.brand, model=vehicle.model, version=vehicle.version, accessories=vehicle.accessories)
-        context['serviceplan'] = serviceplan
+        vin = request.POST.get("vehicle_id", "NOVIN")
+        id = request.POST.get("id", -1)
+        print(vin)
+        form = ServiceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            service = form.save(commit=False)
+            service.companyID = Company.objects.get(
+                id=request.session.get('company', -1))
+            service.save()
+            serviceplan = Serviceplan.objects.filter(
+                id=id).first()
+            serviceplan.status = True
+            serviceplan.save()
+
+            vehicle = service.vehicle_id
+            context['vehicle'] = vehicle
+            serviceplan = Serviceplan.objects.filter(
+                brand=vehicle.brand, model=vehicle.model, version=vehicle.version, accessories=vehicle.accessories, status=False)
+            context['serviceplan'] = serviceplan
+
+        else:
+            vehicle = Vehicle.objects.filter(VIN=vin).first()
+            context['vehicle'] = vehicle
+            serviceplan = Serviceplan.objects.filter(
+                brand=vehicle.brand, model=vehicle.model, version=vehicle.version, accessories=vehicle.accessories, status=False)
+            context['serviceplan'] = serviceplan
 
     return render(request, 'manager/managedVehicle.html', context)
 

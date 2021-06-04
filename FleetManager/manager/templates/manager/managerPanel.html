@@ -18,7 +18,7 @@
             <h5 class="card-title">{{vehicle.VIN.model}}</h5>
             <p class="card-text">&nbsp;</p>
             <form action="{% url 'managedVehicle' %}" method="post">
-              <input type="hidden" name="VIN" value={{vehicle.VIN.VIN}}>
+              <input type="hidden" name="vehicle_id" value={{vehicle.VIN.VIN}}>
               {% csrf_token %}
               <button type="submit" class="btn btn-primary">Inspect</button>
             </form>
