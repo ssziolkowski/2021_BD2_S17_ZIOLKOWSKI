@@ -42,11 +42,33 @@ class Vehicle(models.Model):
         (OPERATIONAL, ('Currently operational')),
         (DECOMMISSIONED, ('This vehicle is no longer operational'))
     ]
+    SEDAN = 'sedan'
+    WAGON = 'wagon'
+    HATCHBACK = 'hatchback'
+    VAN = 'van'
+    PICKUP = 'pickup'
+    TRUCK = 'truck'
+    CONSTRUCTION = 'construction'
+    AGRICULTURE = 'agriculture'
+    STORAGE = 'storage'
+    OTHER = 'other'
+    VEHICLECATEGORY = [
+        (SEDAN, ('sedan')),
+        (WAGON, ('wagon')),
+        (HATCHBACK, ('hatchback')),
+        (VAN, ('van')),
+        (PICKUP, ('pickup')),
+        (TRUCK, ('truck')),
+        (CONSTRUCTION, ('construction')),
+        (AGRICULTURE, ('agriculture')),
+        (STORAGE, ('storage')),
+        (OTHER, ('other'))
+    ]
     VIN = models.TextField(primary_key=True)
     brand = models.TextField()
     version = models.TextField()
     model = models.TextField()
-    category = models.TextField(default='other')
+    category = models.TextField(choices=VEHICLECATEGORY)
     accessories = models.TextField()
     picture = models.ImageField(upload_to='uploads/')
     companyID = models.ForeignKey(Company, on_delete=models.RESTRICT)
