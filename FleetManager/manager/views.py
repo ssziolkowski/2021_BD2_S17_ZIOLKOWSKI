@@ -430,18 +430,20 @@ def endRent(request):
         final_mileage = request.POST.get("final_mileage", -1)
         cost = request.POST.get("cost", 0)
         vin = request.POST.get("VIN", "NOVIN")
+        rental_id = request.POST.get("ID", -1)
         description = request.POST.get("description", "NO description")
 
     vehicle = Vehicle.objects.filter(VIN=vin).first()
 
     rental = Rental.objects.filter(
-        vehicle_id=vehicle, rent_end=datetime.date.today()).first()
+        rent_id = rental_id).first()
 
     if rental is not None:
         rental.final_mileage = final_mileage
         rental.exploitation_cost = cost
         rental.costs_description = description
         rental.rent_status = 'given'
+        rental.rent_end = datetime.date.today()
         rentalLog(name='returned', person=rental.renter_id,
                   companyId=request.session.get('company', -1), post=rental)
         rental.save()
@@ -524,6 +526,7 @@ def toEndRent(request):
 
     context = {
         'vehicle': Vehicle.objects.filter(VIN=request.POST.get("VIN", "NOVIN")).first(),
+        'rental': Rental.objects.filter(rent_id=request.POST.get("ID", -1)).first(),
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager'),
         'error': "This vehicle is not available on your selected dates"
@@ -777,9 +780,10 @@ def updatePlan(request):
         'name': request.session.get('name', '')
     }
     if form.is_valid():
-        post = form.save()
-        saveLog(id=request.session.get('company', -1),
-                post=post, name="changed")
+        post = form.save(commit = False)
+        saveChangeLog(id=request.session.get('company', -1),
+                post=post, name="changed", obj = Serviceplan.objects.filter(id = post.id).first(), obj2 = post)
+        post.save()
         return render(request, "manager/editServiceplan.html", context)
     print(form.is_valid)
     print(form.errors)
@@ -844,13 +848,26 @@ def generateReport(request):
                 textobject.textLine("{} {} {} {}".format(
                     text[i][:personID.start()], person.name, person.surname, text[i][personID.start():]))
 
-            else:
+            elif re.search("Vehicle object", text[i]) is not None:
                 vehicleVIN = re.search("\(\w+\)", text[i])
                 vehicle = Vehicle.objects.filter(
                     VIN=vehicleVIN[0][1:-1]).first()
                 textobject.textLine("{} {} {} {}".format(
                     text[i][:vehicleVIN.start()], vehicle.brand, vehicle.model, text[i][vehicleVIN.start():]))
+            else:
+                servicePlanID = re.search("\(\d+\)", text[i])
+
+                servicePlan = Serviceplan.objects.filter(
+                    id=int(servicePlanID[0][1:-1])).first()
+
+                textobject.textLine("{} {} {} {} {} {}".format(
+                    text[i][:servicePlanID.start()], servicePlan.model, servicePlan.brand, servicePlan.version, servicePlan.accessories, text[i][servicePlanID.start():]))
+
+
+
             operation = re.search("was \w+ by", text[i])
+
+
             if text[i][operation.start():operation.end()] == "was changed by":
                  i += 1
                  j = int(text[i])
@@ -927,7 +944,7 @@ def generateRentalReport(companyId):
 
 
 def findDiff(obj1, obj2):
-    fields = [field.name for field in obj1._meta.get_fields()]
+    fields = [field.name for field in obj2._meta.get_fields()]
 
     diff = []
     for field in fields:
