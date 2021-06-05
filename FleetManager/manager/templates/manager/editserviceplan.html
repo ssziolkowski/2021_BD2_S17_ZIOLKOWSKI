@@ -16,7 +16,7 @@
               <label for="brand"><b>Brand</b></label>
             </td>
             <td>
-              <input type="text" placeholder="Enter Brand" name="brand" required>
+              <input type="text" placeholder="Enter Brand" value="{{ plan.brand }}" name="brand" readonly="readonly" required>
             </td>
           </tr>
           <tr>
@@ -24,7 +24,7 @@
               <label for="model"><b>Model</b></label>
             </td>
             <td>
-              <input type="text" placeholder="Enter Model" name="model" required>
+              <input type="text" placeholder="Enter Model" value="{{ plan.model }}" name="model" readonly="readonly" required>
             </td>
           </tr>
           <tr>
@@ -32,7 +32,7 @@
               <label for="version"><b>Version</b></label>
             </td>
             <td>
-              <input type="text" placeholder="Enter Version" name="version" required>
+              <input type="text" placeholder="Enter Version" value="{{ plan.version }}" name="version" readonly="readonly" required>
             </td>
           </tr>
           <tr>
@@ -40,7 +40,7 @@
               <label for="accessories"><b>Accessories</b></label>
             </td>
             <td>
-              <input type="text" placeholder="EnterAccessories" name="accessories" required>
+              <input type="text" placeholder="EnterAccessories" value="{{ plan.accessories }}" name="accessories" readonly="readonly" required>
             </td>
           </tr>
           <tr>
@@ -48,7 +48,7 @@
               <label for="mileage"><b>Mileage</b></label>
             </td>
             <td>
-              <input type="number" placeholder="Enter mileage" name="mileage" required>
+              <input type="number" placeholder="Enter mileage" value="{{ plan.mileage }}" name="mileage" required>
             </td>
           </tr>
           <tr>
@@ -56,7 +56,7 @@
               <label for="model"><b>Date</b></label>
             </td>
             <td>
-              <input type="date" placeholder="Enter Date" name="date" required>
+              <input type="date" placeholder="Enter Date" value="{{ plan.date|date:"Y-m-d" }}" name="date" required>
             </td>
           </tr>
           <tr>
@@ -64,7 +64,7 @@
               <label for="service"><b>Service performed</b></label>
             </td>
             <td>
-              <textarea placeholder="Enter Performed service" name="service" required></textarea>
+              <textarea placeholder="Enter Performed service" name="service_performed" required>{{ plan.service_performed }}</textarea>
             </td>
           </tr>
           <tr>
@@ -77,10 +77,12 @@
           <input type="checkbox" checked="checked" name="cirograph" required> I agree to suffer the consequences for any
           error
         </label>
+      </form>
+      <form enctype="multipart/form-data" method="post" action="{% url 'editPlans' %}">{% csrf_token %}
+        <input type='submit' value='Back' name='back'>
+      </form>
       </div>
       <div class="container" style="background-color:#f1f1f1">
-        <input type='reset' value='Cancel' name='reset'>
       </div>
-    </form>
   </div>
   {%endblock content%}

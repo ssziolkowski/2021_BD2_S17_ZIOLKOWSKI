@@ -37,16 +37,38 @@ class Person(models.Model):
 
 class Vehicle(models.Model):
     OPERATIONAL = 'operational'
-    DISCHARGED = 'discharged'
+    DECOMMISSIONED = 'decommissioned'
     STATUS = [
         (OPERATIONAL, ('Currently operational')),
-        (DISCHARGED, ('This vehicle is no longer operational'))
+        (DECOMMISSIONED, ('This vehicle is no longer operational'))
+    ]
+    SEDAN = 'sedan'
+    WAGON = 'wagon'
+    HATCHBACK = 'hatchback'
+    VAN = 'van'
+    PICKUP = 'pickup'
+    TRUCK = 'truck'
+    CONSTRUCTION = 'construction'
+    AGRICULTURE = 'agriculture'
+    STORAGE = 'storage'
+    OTHER = 'other'
+    VEHICLECATEGORY = [
+        (SEDAN, ('Sedan')),
+        (WAGON, ('Wagon')),
+        (HATCHBACK, ('Hatchback')),
+        (VAN, ('Van')),
+        (PICKUP, ('Pickup')),
+        (TRUCK, ('Truck')),
+        (CONSTRUCTION, ('Construction')),
+        (AGRICULTURE, ('Agriculture')),
+        (STORAGE, ('Storage')),
+        (OTHER, ('Other'))
     ]
     VIN = models.TextField(primary_key=True)
     brand = models.TextField()
     version = models.TextField()
     model = models.TextField()
-    category = models.TextField(default='other')
+    category = models.TextField(choices=VEHICLECATEGORY)
     accessories = models.TextField()
     picture = models.ImageField(upload_to='uploads/')
     companyID = models.ForeignKey(Company, on_delete=models.RESTRICT)
@@ -91,7 +113,20 @@ class Rental(models.Model):
     costs_description = models.TextField(null=True)
     rent_start = models.DateField()
     rent_end = models.DateField()
-    rent_status = models.TextField(choices = RENTSTATUS)
+    rent_status = models.TextField(choices=RENTSTATUS)
+
+
+class Serviceplan(models.Model):
+    #id = models.AutoField(primary_key=True)
+    UniqueConstraint(fields=['brand', 'model', 'version',
+                     'accessories'], name='serviceplan_id')
+    brand = models.TextField()
+    model = models.TextField()
+    version = models.TextField()
+    accessories = models.TextField()
+    service_performed = models.TextField()
+    mileage = models.IntegerField()
+    date = models.DateField(default=date.today)
 
 
 class Service(models.Model):
@@ -101,20 +136,4 @@ class Service(models.Model):
     date = models.DateField(default=date.today)
     service_performed = models.TextField()
     provider = models.TextField()
-
-
-class Serviceplan(models.Model):
-    UniqueConstraint(fields=['brand', 'model', 'version',
-                     'accessories'], name='serviceplan_id')
-    brand = models.ForeignKey(
-        Vehicle, related_name='%(class)s_brand', on_delete=models.RESTRICT)
-    model = models.ForeignKey(
-        Vehicle, related_name='%(class)s_model', on_delete=models.RESTRICT)
-    version = models.ForeignKey(
-        Vehicle, related_name='%(class)s_version', on_delete=models.RESTRICT)
-    accessories = models.ForeignKey(
-        Vehicle, related_name='%(class)s_accessories', on_delete=models.RESTRICT)
-    service_performed = models.TextField()
-    mileage = models.IntegerField()
-    date = models.DateField(default=date.today)
-    status = models.BooleanField()
+    plan = models.ForeignKey(Serviceplan, on_delete=models.SET_NULL, null=True)

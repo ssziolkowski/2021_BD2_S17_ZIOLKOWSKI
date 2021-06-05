@@ -18,7 +18,7 @@ class VehiclesForm(forms.ModelForm):
 
     class Meta:
         model = Vehicle
-        fields = ('VIN', 'brand', 'version', 'model', 'accessories', 'plate_number',
+        fields = ('VIN', 'brand', 'version', 'model', 'category', 'accessories', 'plate_number',
                   'current_mileage', 'purpose', 'status', 'distinctive_marks', 'picture')
         pic_field = ('picture')
 
@@ -35,8 +35,7 @@ class ReserveForm(forms.ModelForm):
 
     class Meta:
         model = Rental
-        fields = ('rent_type', 'rent_start', 'rent_end','vehicle_id')
-
+        fields = ('rent_type', 'rent_start', 'rent_end', 'vehicle_id')
 
 
 # TODO: validate vin with db
@@ -53,5 +52,5 @@ class ServiceplanForm(forms.ModelForm):
 
     class Meta:
         model = Serviceplan
-        fields = ('brand', 'version', 'model', 'accessories',
-                  'date', 'service_performed', 'mileage', 'status')
+        fields = ('model', 'version', 'accessories', 'brand',
+                  'date', 'service_performed', 'mileage')

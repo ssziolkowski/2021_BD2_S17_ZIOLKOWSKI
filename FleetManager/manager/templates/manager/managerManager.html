@@ -109,7 +109,7 @@ function recordToggle() {
       </tr>
       {% for manager in managers %}
       <tr>
-        <form enctype="multipart/form-data" method="post" action="">{% csrf_token %}
+        <form enctype="multipart/form-data" method="post" action="{% url 'manager_update_view' umid=manager.personal_ID_id %}">{% csrf_token %}
           <td>
             {{manager.id }}
             <input type="number" placeholder="xD" value="{{ manager.id }}" name="ID" disabled hidden required>

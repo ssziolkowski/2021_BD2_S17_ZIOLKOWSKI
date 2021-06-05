@@ -101,8 +101,8 @@
 </div>
 <div class="container" style="background-color:#f1f1f1">
   <input type='reset' value='Reset' name='reset'>
-  <form>
-    <input type='button' onclick="history.back()" value='Back' name='back'>
+  <form enctype="multipart/form-data" method="post" action="{% url 'editPersonel' %}">{% csrf_token %}
+    <input type='submit' value='Back' name='back'>
   </form>
 </div>
 </form>
