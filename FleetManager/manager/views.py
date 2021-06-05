@@ -141,7 +141,8 @@ def add_manager_vehicle_view(request, mid):
     managed_vehicles = Manager.objects.select_related('VIN')
     manager = Manager.objects.filter(personal_ID_id=mid).first()
     print(managed_vehicles.values())
-    vehicles = Vehicle.objects.filter(companyID=request.session.get('company', -1))
+    vehicles = Vehicle.objects.filter(companyID=request.session.get('company', -1)).exclude(
+            VIN__in=[o.VIN_id for o in managed_vehicles])
     #form = ManagerForm(request.POST or None, instance=manager)
     context = {
         'manager': manager,
@@ -685,17 +686,6 @@ def vehicle_update_view(request, uvid):
                 post=post, name="changed")
         return render(request, "manager/editVehicles.html", context)
     return render(request, "manager/editVehicle.html", context)
-
-
-def editService(request):
-    if request.session.get('currentUser', 'none') == 'none':
-        return redirect('login')
-
-    context = {
-        'user': request.session.get('currentUser', 'none'),
-        'name': request.session.get('name', 'FleetManager')
-    }
-    return render(request, 'manager/editService.html', context)
 
 
 def editService(request):
