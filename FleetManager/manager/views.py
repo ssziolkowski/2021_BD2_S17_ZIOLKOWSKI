@@ -752,9 +752,10 @@ def updatePlan(request):
         'name': request.session.get('name', '')
     }
     if form.is_valid():
-        post = form.save()
-        saveLog(id=request.session.get('company', -1),
-                post=post, name="changed")
+        post = form.save(commit = False)
+        saveChangeLog(id=request.session.get('company', -1),
+                post=post, name="changed", obj = Serviceplan.objects.filter(id = post.id).first(), obj2 = post)
+        post.save()
         return render(request, "manager/editServiceplan.html", context)
     print(form.is_valid)
     print(form.errors)
@@ -819,13 +820,26 @@ def generateReport(request):
                 textobject.textLine("{} {} {} {}".format(
                     text[i][:personID.start()], person.name, person.surname, text[i][personID.start():]))
 
-            else:
+            elif re.search("Vehicle object", text[i]) is not None:
                 vehicleVIN = re.search("\(\w+\)", text[i])
                 vehicle = Vehicle.objects.filter(
                     VIN=vehicleVIN[0][1:-1]).first()
                 textobject.textLine("{} {} {} {}".format(
                     text[i][:vehicleVIN.start()], vehicle.brand, vehicle.model, text[i][vehicleVIN.start():]))
+            else:
+                servicePlanID = re.search("\(\d+\)", text[i])
+
+                servicePlan = Serviceplan.objects.filter(
+                    id=int(servicePlanID[0][1:-1])).first()
+
+                textobject.textLine("{} {} {} {} {} {}".format(
+                    text[i][:servicePlanID.start()], servicePlan.model, servicePlan.brand, servicePlan.version, servicePlan.accessories, text[i][servicePlanID.start():]))
+
+
+
             operation = re.search("was \w+ by", text[i])
+
+
             if text[i][operation.start():operation.end()] == "was changed by":
                  i += 1
                  j = int(text[i])
@@ -902,7 +916,7 @@ def generateRentalReport(companyId):
 
 
 def findDiff(obj1, obj2):
-    fields = [field.name for field in obj1._meta.get_fields()]
+    fields = [field.name for field in obj2._meta.get_fields()]
 
     diff = []
     for field in fields:
