@@ -34,8 +34,8 @@ def managerManager(request):
     context = {
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', ''),
-        'managers': Manager.objects.annotate(num_cars=Count('personal_ID_id')).order_by('id'),
-        #'mmanagers': Manager.objects.aggregate(num_cars=Count('personal_ID')),
+        'managers': Manager.objects.annotate(num_cars=Count("personal_ID_id")).order_by('id'),
+        #'mmanagers': Manager.objects.aggregate(num_cars=Count('personal_ID_id')),
 
         'records': Manager.objects.select_related('personal_ID')
 
