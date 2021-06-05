@@ -405,18 +405,20 @@ def endRent(request):
         final_mileage = request.POST.get("final_mileage", -1)
         cost = request.POST.get("cost", 0)
         vin = request.POST.get("VIN", "NOVIN")
+        rental_id = request.POST.get("ID", -1)
         description = request.POST.get("description", "NO description")
 
     vehicle = Vehicle.objects.filter(VIN=vin).first()
 
     rental = Rental.objects.filter(
-        vehicle_id=vehicle, rent_end=datetime.date.today()).first()
+        rent_id = rental_id).first()
 
     if rental is not None:
         rental.final_mileage = final_mileage
         rental.exploitation_cost = cost
         rental.costs_description = description
         rental.rent_status = 'given'
+        rental.rent_end = datetime.date.today()
         rentalLog(name='returned', person=rental.renter_id,
                   companyId=request.session.get('company', -1), post=rental)
         rental.save()
@@ -499,6 +501,7 @@ def toEndRent(request):
 
     context = {
         'vehicle': Vehicle.objects.filter(VIN=request.POST.get("VIN", "NOVIN")).first(),
+        'rental': Rental.objects.filter(rent_id=request.POST.get("ID", -1)).first(),
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager'),
         'error': "This vehicle is not available on your selected dates"
