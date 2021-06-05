@@ -226,15 +226,11 @@
                                                     <input type="text" placeholder="Enter provider" name="provider" required>
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td>
-                                                    <button type="submit" class="btn btn-primary">Perform</button>
-                                                    </td>
-                                                </tr>
                                             </table>
                                             <input type="hidden" name="service_performed" value="{{service.service_performed}}">
                                             <input type="hidden" name="id" value="{{service.id}}">
-                                            <input type="hidden" name="vehicle_id" value={{vehicle.VIN}}> 
+                                            <input type="hidden" name="vehicle_id" value={{vehicle.VIN}}>
+                                            <center><button type="submit", class="btn btn-primary">Perform</button></center>
                                         </form>
                                     </div>
                                     {%endfor%}
