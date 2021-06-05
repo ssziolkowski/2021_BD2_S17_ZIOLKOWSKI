@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django import forms
 from django.utils import timezone
 from django.utils.translation import templatize
-from .models import Person, Rental, Service, Serviceplan, Vehicle, models
+from .models import Manager, Person, Rental, Service, Serviceplan, Vehicle, models
 from django.utils.safestring import mark_safe
 
 
@@ -54,3 +54,10 @@ class ServiceplanForm(forms.ModelForm):
         model = Serviceplan
         fields = ('model', 'version', 'accessories', 'brand',
                   'date', 'service_performed', 'mileage')
+
+
+class ManagerForm(forms.ModelForm):
+
+    class Meta:
+        model = Manager
+        fields = ('personal_ID', 'date_start', 'date_end', 'VIN')

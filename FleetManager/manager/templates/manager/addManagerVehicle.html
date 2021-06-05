@@ -43,7 +43,8 @@
           <div class="col-md-4 pb-1 pb-md-0" >
             <div class="card">
                 <div id="{{vehicle.VIN}} div" style="display:none">
-                    <form enctype="multipart/form-data" method="post" action="">{% csrf_token %}
+                    <form enctype="multipart/form-data" method="post" action="{% url 'addManagerVehicle' %}">{% csrf_token %}
+                    {{ form.as_p }}
                     <table>
                         <tr>
                             <td>
@@ -63,21 +64,25 @@
                           </td>
                         </tr>
                         <tr><td><br></td></tr>
+                        <input type="text" name="VIN" readonly="readonly" value="{{vehicle.VIN}}" hidden>
+                        <input type="text" name="personal_ID" readonly="readonly" value="{{manager.personal_ID_id}}" hidden>
                         <tr>
                             <td></td>
                             <td>
                               <input type="submit" value="Confirm">
                             </td>
                           </tr>
-                    </table>
-                    </form>
+                        </table>
+                      </form>
+                    
                     </div>
               <img class="card-img-top" src="{{vehicle.picture.url}}" alt="Card image cap" id="{{vehicle.VIN}}">
               <div class="card-body">
                 <h5 class="card-title">{{vehicle.model}}</h5>
                 <p class="card-text"></p>
                     <script>
-                    function {{vehicle.VIN}}fun() {
+                    //to działa, ale debugger się nie zna i krzyczy
+                    function {{vehicle.VIN}}fun(){
                         var x = document.getElementById("{{vehicle.VIN}}");
                         var y = document.getElementById("{{vehicle.VIN}} div");
                         if (x.style.visibility === "hidden") {
@@ -92,12 +97,9 @@
                         }
                       } 
                     </script>
-                  <input type="hidden" name="VIN" readonly="readonly" value="{{vehicle.VIN}}">
-                  {% csrf_token %}
                   <button class="btn btn-primary" onclick="{{vehicle.VIN}}fun()">
                     Select
                   </button>
-                </form>
               </div>
             </div>
           </div>

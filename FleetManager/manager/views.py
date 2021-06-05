@@ -34,7 +34,9 @@ def managerManager(request):
     context = {
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', ''),
-        'managers': Manager.objects.select_related('personal_ID').annotate(num_cars=Count('VIN')),
+        'managers': Manager.objects.annotate(num_cars=Count('personal_ID_id')).order_by('id'),
+        #'mmanagers': Manager.objects.aggregate(num_cars=Count('personal_ID')),
+
         'records': Manager.objects.select_related('personal_ID')
 
         # 'persons': Person.objects.filter(companyID=request.session.get('company', -1)).select_related() .order_by("ID"),
@@ -141,7 +143,6 @@ def add_manager_vehicle_view(request, mid):
 
     managed_vehicles = Manager.objects.select_related('VIN')
     manager = Manager.objects.filter(personal_ID_id=mid).first()
-    print(managed_vehicles.values())
     vehicles = Vehicle.objects.filter(companyID=request.session.get('company', -1)).exclude(
             VIN__in=[o.VIN_id for o in managed_vehicles])
     #form = ManagerForm(request.POST or None, instance=manager)
@@ -159,6 +160,30 @@ def add_manager_vehicle_view(request, mid):
     #            post=post, name="changed")
     #    return render(request, "manager/manager.html", context)
     return render(request, "manager/addManagerVehicle.html", context)
+
+
+def addManagerVehicle(request):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    if request.method == "POST":
+        form = ManagerForm(request.POST)
+        if form.is_valid():
+            manager = form.save(commit=False)
+            manager.save()
+            saveLog(id=request.session.get('company', -1),
+                    post=manager, name="added")
+            return redirect('managerManager')
+        else:
+            form = ManagerForm()
+        print(form.is_valid)
+        print(form.errors)
+    context = {
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', 'FleetManager')
+    }
+    return redirect('managerManager')
+
 
 def login(request):
     request.session['id'] = -1

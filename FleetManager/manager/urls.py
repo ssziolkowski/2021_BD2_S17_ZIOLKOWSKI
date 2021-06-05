@@ -29,6 +29,7 @@ urlpatterns = [
          name='selectedVehicleView'),
     path('managedVehicle', views.managedVehicle, name='managedVehicle'),
     path('adminPanel', views.adminPanel, name='adminPanel'),
+    path('addManagerVehicle', views.addManagerVehicle, name='addManagerVehicle'),
     path('addPerson', views.addPerson, name='addPerson'),
     path('addService', views.addService, name='addService'),
     path('addServiceplan', views.addServiceplan, name='addServiceplan'),
