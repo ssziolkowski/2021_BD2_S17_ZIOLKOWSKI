@@ -116,15 +116,6 @@ class Rental(models.Model):
     rent_status = models.TextField(choices=RENTSTATUS)
 
 
-class Service(models.Model):
-    work_id = models.AutoField(primary_key=True)
-    vehicle_id = models.ForeignKey(Vehicle, on_delete=models.RESTRICT)
-    cost = models.FloatField()
-    date = models.DateField(default=date.today)
-    service_performed = models.TextField()
-    provider = models.TextField()
-
-
 class Serviceplan(models.Model):
     UniqueConstraint(fields=['brand', 'model', 'version',
                      'accessories'], name='serviceplan_id')
@@ -135,4 +126,13 @@ class Serviceplan(models.Model):
     service_performed = models.TextField()
     mileage = models.IntegerField()
     date = models.DateField(default=date.today)
-    status = models.BooleanField()
+
+
+class Service(models.Model):
+    work_id = models.AutoField(primary_key=True)
+    vehicle_id = models.ForeignKey(Vehicle, on_delete=models.RESTRICT)
+    cost = models.FloatField()
+    date = models.DateField(default=date.today)
+    service_performed = models.TextField()
+    provider = models.TextField()
+    plan = models.ForeignKey(Serviceplan, on_delete=models.SET_NULL, null=True)

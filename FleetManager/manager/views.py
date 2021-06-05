@@ -247,26 +247,18 @@ def managedVehicle(request):
             service = form.save(commit=False)
             service.companyID = Company.objects.get(
                 id=request.session.get('company', -1))
-            service.save()
-            serviceplan = Serviceplan.objects.filter(
+            service.plan = Serviceplan.objects.filter(
                 id=id).first()
+            service.save()
 
-            if serviceplan:
-                serviceplan.status = True
-                serviceplan.save()
+        vehicle = Vehicle.objects.filter(VIN=vin).first()
+        context['vehicle'] = vehicle
 
-            vehicle = service.vehicle_id
-            context['vehicle'] = vehicle
-            serviceplan = Serviceplan.objects.filter(
-                brand=vehicle.brand, model=vehicle.model, version=vehicle.version, accessories=vehicle.accessories, status=False)
-            context['serviceplan'] = serviceplan
-
-        else:
-            vehicle = Vehicle.objects.filter(VIN=vin).first()
-            context['vehicle'] = vehicle
-            serviceplan = Serviceplan.objects.filter(
-                brand=vehicle.brand, model=vehicle.model, version=vehicle.version, accessories=vehicle.accessories, status=False)
-            context['serviceplan'] = serviceplan
+        services = Service.objects.exclude(
+            plan=None).filter(vehicle_id=vehicle)
+        serviceplan = Serviceplan.objects.exclude(
+            id__in=[o.plan.id for o in services])
+        context['serviceplan'] = serviceplan
 
     return render(request, 'manager/managedVehicle.html', context)
 
