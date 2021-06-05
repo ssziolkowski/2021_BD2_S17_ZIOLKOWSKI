@@ -73,7 +73,7 @@
       <section class="sidebar">
         <!-- This adds a sidebar with 1 searchbox,2 menusets, each with 4 links -->
         <form method="GET" action="{% url 'allVehicles' %}">
-        <input type="text" id="search" value="search" name="search">
+        <input type="text" id="search" placeholder="search" name="search">
       </form>
         <div id="menubar">
           <nav class="menu">
@@ -114,7 +114,7 @@
                   <h5 class="card-title">{{vehicle.model}}</h5>
                   <p class="card-text">&nbsp;</p>
                   <form action="{% url 'selectedVehicleView' %}" method="post">
-                    <input type="hidden" name="VIN" value={{vehicle.VIN}}>
+                    <input type="hidden" name="VIN" readonly="readonly" value={{vehicle.VIN}}>
                     {% csrf_token %}
                     <button type="submit" class="btn btn-primary">
                     {%if user != 'admin'%}Rent

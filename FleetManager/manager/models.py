@@ -117,6 +117,7 @@ class Rental(models.Model):
 
 
 class Serviceplan(models.Model):
+    #id = models.AutoField(primary_key=True)
     UniqueConstraint(fields=['brand', 'model', 'version',
                      'accessories'], name='serviceplan_id')
     brand = models.TextField()

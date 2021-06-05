@@ -116,12 +116,14 @@ def manager_update_view(request, umid):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
-    manager = Manager.objects.filter(personal_ID_id=umid).first()
+    manager = Manager.objects.filter(personal_ID_id=umid).annotate(num_cars=Count('VIN')).first()
+    vehicles = Manager.objects.filter(personal_ID_id=umid).select_related('VIN')
     #form = ManagerForm(request.POST or None, instance=manager)
     context = {
         'manager': manager,
         #    'persons': Person.objects.filter(companyID=request.session.get('company', -1)).order_by("ID"),
         'user': request.session.get('currentUser', 'none'),
+        'vehicles': vehicles,
         'name': request.session.get('name', '')
     }
 
@@ -132,6 +134,29 @@ def manager_update_view(request, umid):
     #    return render(request, "manager/manager.html", context)
     return render(request, "manager/manager.html", context)
 
+def add_manager_vehicle_view(request, mid):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    managed_vehicles = Manager.objects.select_related('VIN')
+    manager = Manager.objects.filter(personal_ID_id=mid).first()
+    print(managed_vehicles.values())
+    vehicles = Vehicle.objects.filter(companyID=request.session.get('company', -1))
+    #form = ManagerForm(request.POST or None, instance=manager)
+    context = {
+        'manager': manager,
+        #    'persons': Person.objects.filter(companyID=request.session.get('company', -1)).order_by("ID"),
+        'user': request.session.get('currentUser', 'none'),
+        'vehicles': vehicles,
+        'name': request.session.get('name', '')
+    }
+
+    # if form.is_valid():
+    #    post = form.save()
+    #    saveLog(id=request.session.get('company', -1),
+    #            post=post, name="changed")
+    #    return render(request, "manager/manager.html", context)
+    return render(request, "manager/addManagerVehicle.html", context)
 
 def login(request):
     request.session['id'] = -1
@@ -257,7 +282,9 @@ def managedVehicle(request):
         services = Service.objects.exclude(
             plan=None).filter(vehicle_id=vehicle)
         serviceplan = Serviceplan.objects.exclude(
-            id__in=[o.plan.id for o in services])
+            id__in=[o.plan.id for o in services]).filter(
+                brand=vehicle.brand, model=vehicle.model, version=vehicle.version, accessories=vehicle.accessories)
+           
         context['serviceplan'] = serviceplan
 
     return render(request, 'manager/managedVehicle.html', context)
@@ -725,7 +752,7 @@ def updatePlan(request):
     form = ServiceplanForm(request.POST or None, instance=serviceplan)
     context = {
         'plan': serviceplan,
-        'serviceplans': Serviceplan.objects.all().order_by('brand', 'model', 'version', 'accessories'),
+        'serviceplans': Serviceplan.objects.all().order_by('brand', 'model', 'version', 'accessories', 'date'),
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', '')
     }
@@ -734,6 +761,8 @@ def updatePlan(request):
         saveLog(id=request.session.get('company', -1),
                 post=post, name="changed")
         return render(request, "manager/editServiceplan.html", context)
+    print(form.is_valid)
+    print(form.errors)
     return render(request, "manager/editPlans.html", context)
 
 

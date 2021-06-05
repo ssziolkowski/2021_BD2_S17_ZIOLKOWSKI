@@ -27,58 +27,14 @@
   <hr>
   <div class="container" id="data">
     <center>
-      <h5><b>Manager {{manager.personal_ID.name }} {{manager.personal_ID.surname }} details</b></h5>
+      <h5><b>Manager {{manager.personal_ID.name }} {{manager.personal_ID.surname }} </b></h5>
     </center>
     <hr>
-    <table margin="0" id="t">
-      <tr>
-        <form enctype="multipart/form-data" method="post" action="">{% csrf_token %}
-            <td>
-                <label for="id"><b>Manger Id</b></label>
-            </td>
-        <td>
-            <input type="number" placeholder="xD" value="{{ manager.id }}" name="id" readonly="readonly" required>
-          </td>
-        </tr><tr>
-            <td>
-                <label for="personal_ID_id"><b>Personal Id</b></label>
-            </td>
-          <td>
-            <input type="number" placeholder="xD" value="{{ manager.personal_ID_id }}" name="personal_ID_id" readonly="readonly" required>
-          </td>
-        </tr><tr>
-            <td>
-                <label for="name"><b>Name</b></label>
-            </td>
-          <td>
-            <input type="text" placeholder="N/A" value="{{ manager.personal_ID.name }}" name="name" readonly="readonly" required>
-          </td>
-        </tr><tr>
-            <td>
-                <label for="surname"><b>Surname</b></label>
-            </td>
-          <td>
-            <input type="text" placeholder="N/A" value="{{ manager.personal_ID.surname }}" name="surname" readonly="readonly" required>
-          </td>
-        </tr><tr>
-            <td>
-                <label for="num_cars"><b>Cars under managment:</b></label>
-            </td>
-          <td>
-            <input type="text" placeholder="N/A" value="{{ manager.num_cars }}" name="num_cars" readonly="readonly" required>
-          </td>
-        </form>
-        </tr><tr>
-          <td></td>
-          <td>
-            <form enctype="multipart/form-data" method="post" action="{% url 'add_manager_vehicle_view' mid=manager.personal_ID_id %}">{% csrf_token %}
-            <input type="submit" name="update" value="Add new vehicle"></form></td>
-      </tr>
-    </table>
+
   </div>
   <hr>
   <center>
-    <h5><b>Managed vehicles</b></h5>
+    <h5><b>Available vehicles</b></h5>
   </center>
   <div class="container" style="background-color: #f1f1f1;padding:10px;">
     <section class="mainContent">
@@ -90,12 +46,12 @@
               <img class="card-img-top" src="{{vehicle.VIN.picture.url}} " alt="Card image cap">
               <div class="card-body">
                 <h5 class="card-title">{{vehicle.VIN.model}}</h5>
-                <p class="card-text">{{vehicle.date_start}} - {{vehicle.date_end}}</p></p>
+                <p class="card-text">{{vehicle.date_start}} - {{vehicle.date_end}}</p>
                 <form action="{% url 'selectedVehicleView' %}" method="post">
                   <input type="hidden" name="VIN" readonly="readonly" value={{vehicle.VIN}}>
                   {% csrf_token %}
                   <button type="submit" class="btn btn-primary">
-                    Inspect
+                    Select
                   </button>
                 </form>
               </div>

@@ -18,6 +18,8 @@ urlpatterns = [
         views.manager_update_view, name='manager_update_view'),
     url(r'^updateVehicle/(?P<uvid>[\w]+)/$',
         views.vehicle_update_view, name='vehicle_update_view'),
+    url(r'^addNewManagerVehicle/(?P<mid>[\w]+)/$',
+        views.add_manager_vehicle_view, name='add_manager_vehicle_view'),
     path('', views.fleetManager, name='fleetManager'),
     path('allVehicles', views.allVehicles, name='allVehicles'),
     path('addVehicle', views.addVehicle, name='addVehicle'),
