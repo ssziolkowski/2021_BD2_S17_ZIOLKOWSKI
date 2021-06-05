@@ -30,7 +30,6 @@
       <h5><b>Manager {{manager.personal_ID.name }} {{manager.personal_ID.surname }} </b></h5>
     </center>
     <hr>
-
   </div>
   <hr>
   <center>
@@ -43,14 +42,59 @@
           {% for vehicle in vehicles %}
           <div class="col-md-4 pb-1 pb-md-0" >
             <div class="card">
-              <img class="card-img-top" src="{{vehicle.VIN.picture.url}} " alt="Card image cap">
+                <div id="{{vehicle.VIN}} div" style="display:none">
+                    <form enctype="multipart/form-data" method="post" action="">{% csrf_token %}
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="date_start"><b>Starting date:</b></label>
+                            </td>
+                        <td>
+                            <input type="date" value="" name="date_start" required>
+                          </td>
+                        </tr>
+                        <tr><td><br></td></tr>
+                        <tr>
+                            <td>
+                                <label for="date_end"><b>Date untill:</b></label>
+                            </td>
+                          <td>
+                            <input type="date" value="" name="date_end" required>
+                          </td>
+                        </tr>
+                        <tr><td><br></td></tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                              <input type="submit" value="Confirm">
+                            </td>
+                          </tr>
+                    </table>
+                    </form>
+                    </div>
+              <img class="card-img-top" src="{{vehicle.picture.url}}" alt="Card image cap" id="{{vehicle.VIN}}">
               <div class="card-body">
-                <h5 class="card-title">{{vehicle.VIN.model}}</h5>
-                <p class="card-text">{{vehicle.date_start}} - {{vehicle.date_end}}</p>
-                <form action="{% url 'selectedVehicleView' %}" method="post">
-                  <input type="hidden" name="VIN" readonly="readonly" value={{vehicle.VIN}}>
+                <h5 class="card-title">{{vehicle.model}}</h5>
+                <p class="card-text"></p>
+                    <script>
+                    function {{vehicle.VIN}}fun() {
+                        var x = document.getElementById("{{vehicle.VIN}}");
+                        var y = document.getElementById("{{vehicle.VIN}} div");
+                        if (x.style.visibility === "hidden") {
+                          x.style.visibility = "visible";
+                          y.style.display ="none";
+                        } else {
+                          x.style.visibility = "hidden";
+                          y.style.position = "absolute";
+                          y.style.top = "15%";
+                          y.style.left = "10%";
+                          y.style.display ="block";
+                        }
+                      } 
+                    </script>
+                  <input type="hidden" name="VIN" readonly="readonly" value="{{vehicle.VIN}}">
                   {% csrf_token %}
-                  <button type="submit" class="btn btn-primary">
+                  <button class="btn btn-primary" onclick="{{vehicle.VIN}}fun()">
                     Select
                   </button>
                 </form>

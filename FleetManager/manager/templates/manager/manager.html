@@ -92,7 +92,7 @@
                 <h5 class="card-title">{{vehicle.VIN.model}}</h5>
                 <p class="card-text">{{vehicle.date_start}} - {{vehicle.date_end}}</p></p>
                 <form action="{% url 'selectedVehicleView' %}" method="post">
-                  <input type="hidden" name="VIN" readonly="readonly" value={{vehicle.VIN}}>
+                  <input type="hidden" name="VIN" readonly="readonly" value={{vehicle.VIN_id}}>
                   {% csrf_token %}
                   <button type="submit" class="btn btn-primary">
                     Inspect

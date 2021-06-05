@@ -12,7 +12,7 @@ import pdfkit
 import datetime
 from reportlab.pdfgen import canvas
 import re
-
+import zipfile
 
 def managerPanel(request):
     if request.session.get('currentUser', 'none') == 'none':
@@ -105,9 +105,10 @@ def person_update_view(request, upid):
     }
 
     if form.is_valid():
-        post = form.save()
-        saveLog(id=request.session.get('company', -1),
-                post=post, name="changed")
+        post = form.save(commit=False)
+        saveChangeLog(id=request.session.get('company', -1),
+                post=post, name="changed", obj2 = post, obj = Person.objects.filter(ID=post.ID).first())
+        post.save()
         return render(request, "manager/editPersonel.html", context)
     return render(request, "manager/editPerson.html", context)
 
@@ -141,7 +142,8 @@ def add_manager_vehicle_view(request, mid):
     managed_vehicles = Manager.objects.select_related('VIN')
     manager = Manager.objects.filter(personal_ID_id=mid).first()
     print(managed_vehicles.values())
-    vehicles = Vehicle.objects.filter(companyID=request.session.get('company', -1))
+    vehicles = Vehicle.objects.filter(companyID=request.session.get('company', -1)).exclude(
+            VIN__in=[o.VIN_id for o in managed_vehicles])
     #form = ManagerForm(request.POST or None, instance=manager)
     context = {
         'manager': manager,
@@ -217,7 +219,6 @@ def addVehicle(request):
     if request.method == "POST":
         form = VehiclesForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
             post = form.save(commit=False)
             post.companyID = Company.objects.get(
                 id=request.session.get('company', -1))
@@ -340,6 +341,8 @@ def reserveVehicle(request):
 
             rental.rent_status = 'reserved'
             rental.save()
+            rentalLog(name='reserved', person=rental.renter_id,
+                      companyId=request.session.get('company', -1), post=rental)
 
             if rental.rent_start == datetime.date.today():
                 context = {
@@ -381,6 +384,8 @@ def startRent(request):
     if rental is not None:
         rental.starting_mileage = starting_mileage
         rental.rent_status = 'rented'
+        rentalLog(name='rented', person=rental.renter_id,
+                  companyId=request.session.get('company', -1), post=rental)
         rental.save()
 
     context = {
@@ -412,6 +417,8 @@ def endRent(request):
         rental.exploitation_cost = cost
         rental.costs_description = description
         rental.rent_status = 'given'
+        rentalLog(name='returned', person=rental.renter_id,
+                  companyId=request.session.get('company', -1), post=rental)
         rental.save()
 
     context = {
@@ -530,7 +537,6 @@ def addPerson(request):
     if request.method == "POST":
         form = PersonForm(request.POST)
         if form.is_valid():
-            form.save()
             person = form.save(commit=False)
             person.companyID = Company.objects.get(
                 id=request.session.get('company', -1))
@@ -555,7 +561,6 @@ def addService(request):
     if request.method == "POST":
         form = ServiceForm(request.POST)
         if form.is_valid():
-            form.save()
             service = form.save(commit=False)
             service.save()
             saveLog(id=request.session.get('company', -1),
@@ -680,22 +685,12 @@ def vehicle_update_view(request, uvid):
     }
 
     if form.is_valid():
-        post = form.save()
-        saveLog(id=request.session.get('company', -1),
-                post=post, name="changed")
+        post = form.save(commit = False)
+        saveChangeLog(id=request.session.get('company', -1),
+                post=post, name="changed", obj2 = post, obj = Vehicle.objects.filter(VIN=post.VIN).first())
+        post.save()
         return render(request, "manager/editVehicles.html", context)
     return render(request, "manager/editVehicle.html", context)
-
-
-def editService(request):
-    if request.session.get('currentUser', 'none') == 'none':
-        return redirect('login')
-
-    context = {
-        'user': request.session.get('currentUser', 'none'),
-        'name': request.session.get('name', 'FleetManager')
-    }
-    return render(request, 'manager/editService.html', context)
 
 
 def editService(request):
@@ -774,7 +769,31 @@ def saveLog(name, id, post):
     f.close()
 
 
+def saveChangeLog(name, id, post, obj, obj2):
+    f = open("logFile.txt", "a")
+    logDate = datetime.datetime.now()
+    differences = findDiff(obj, obj2)
+    f.write("{} was {} by company id = {} date = {}\n".format(
+        post, name, id, logDate.strftime("%x %X")))
+    f.write("{}\n".format(len(differences)))
+    for diff in differences:
+        f.write("{} before: {} now: {}\n".format(diff, getattr(obj, diff), getattr(obj2, diff)))
+    f.close()
+
+
+def rentalLog(name, person, post, companyId):
+    f = open("rentalLog.txt", "a")
+    logDate = datetime.datetime.now()
+    f.write("{} was {} by company id = {}, person id = {} date = {}\n".format(
+        post, name, companyId, person.ID, logDate.strftime("%x %X")))
+    f.close()
+
+
 def generateReport(request):
+
+    if request.session.get('currentUser', 'none') != 'admin':
+        return redirect('login')
+
 
     buffer = io.BytesIO()
     p = canvas.Canvas(buffer)
@@ -785,32 +804,113 @@ def generateReport(request):
     textobject = p.beginText()
     textobject.setTextOrigin(10, 830)
     textobject.setFont('Times-Roman', 12)
-
-    for line in text:
-        companyID = re.search("company id = \d+", line)
+    i = 0
+    while  i < len(text):
+        companyID = re.search("company id = \d+", text[i])
         if request.session.get('id', -1) == int(companyID[0][13:]):
-            if re.search("Person object", line) is not None:
 
-                personID = re.search("\(\d+\)", line)
+            if re.search("Person object", text[i]) is not None:
+
+                personID = re.search("\(\d+\)", text[i])
 
                 person = Person.objects.filter(
                     ID=int(personID[0][1:-1])).first()
 
                 textobject.textLine("{} {} {} {}".format(
-                    line[:personID.start()], person.name, person.surname, line[personID.start():]))
+                    text[i][:personID.start()], person.name, person.surname, text[i][personID.start():]))
 
             else:
-                personID = re.search("\(\d+\)", line)
-
-                vehicleVIN = re.search("\(\w+\)", line)
+                vehicleVIN = re.search("\(\w+\)", text[i])
                 vehicle = Vehicle.objects.filter(
                     VIN=vehicleVIN[0][1:-1]).first()
                 textobject.textLine("{} {} {} {}".format(
-                    line[:personID.start()], vehicle.brand, vehicle.model, line[personID.start():]))
+                    text[i][:vehicleVIN.start()], vehicle.brand, vehicle.model, text[i][vehicleVIN.start():]))
+            operation = re.search("was \w+ by", text[i])
+            if text[i][operation.start():operation.end()] == "was changed by":
+                 i += 1
+                 j = int(text[i])
+                
+                 for k in range(0, j):
+                    i += 1    
+                    textobject.textLine("{}".format(text[i]))
+            i += 1
+            textobject.textLine("")
 
     p.drawText(textobject)
     p.showPage()
     p.save()
 
     buffer.seek(0)
-    return FileResponse(buffer, as_attachment=True, filename="Report {}.pdf".format(datetime.datetime.now().strftime("%x %X")))
+    pdf = buffer.getvalue()
+    buffer.close()
+    pdf2 = generateRentalReport(request.session.get('id', -1))
+    response = HttpResponse(content_type='application/zip')
+    zf = zipfile.ZipFile(response, 'w')
+    #zf.writestr("Report {}.pdf".format(datetime.datetime.now().strftime("%x %X")), pdf)
+    zf.writestr("Report.pdf", pdf)
+    zf.writestr("RentalReport.pdf", pdf2)
+    return response
+    #return FileResponse(buffer, as_attachment=True, filename="Report {}.pdf".format(datetime.datetime.now().strftime("%x %X")))
+
+
+
+def generateRentalReport(companyId):
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer)
+
+    f = open("rentalLog.txt", 'r')
+    text = f.readlines()
+
+    textobject = p.beginText()
+    textobject.setTextOrigin(10, 830)
+    textobject.setFont('Times-Roman', 12)
+
+    for line in text:
+        companyID = re.search("company id = \d+", line)
+        if companyId == int(companyID[0][13:]):
+
+            rentalID = re.search("\(\d+\)", line)
+
+            rental = Rental.objects.filter(
+                rent_id=int(rentalID[0][1:-1])).first()
+
+            coma = re.search(",", line)
+
+            type = re.search("was \w+ by", line)
+
+            textobject.textLine("{} dates from: {} to: {} ".format(
+                line[:rentalID.end()], rental.rent_start, rental.rent_end))
+
+            textobject.textLine("renter: {} {} vehicle: {} {} {}".format(
+                rental.renter_id.name, rental.renter_id.surname,  rental.vehicle_id.VIN, rental.vehicle_id.model, rental.vehicle_id.brand))
+
+            textobject.textLine("{} {} ".format(
+                line[type.start(): type.end()], line[coma.end()+1:]))
+
+            textobject.textLine("")
+
+    p.drawText(textobject)
+    p.showPage()
+    p.save()
+
+    buffer.seek(0)
+    buffer.seek(0)
+    pdf = buffer.getvalue()
+    buffer.close()
+    return pdf
+    #return FileResponse(buffer, as_attachment=True, filename="Rental Report {}.pdf".format(datetime.datetime.now().strftime("%x %X")))
+
+
+def findDiff(obj1, obj2):
+    fields = [field.name for field in obj1._meta.get_fields()]
+
+    diff = []
+    for field in fields:
+        try:
+            if getattr(obj1, field) != getattr(obj2, field):
+                diff.append(field)
+                print(field)
+        except AttributeError:
+            pass
+
+    return diff
