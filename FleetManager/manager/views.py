@@ -14,6 +14,7 @@ from reportlab.pdfgen import canvas
 import re
 import zipfile
 
+
 def managerPanel(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
@@ -35,7 +36,7 @@ def managerManager(request):
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', ''),
         'managers': Manager.objects.annotate(num_cars=Count("personal_ID_id")).order_by('id'),
-        #'mmanagers': Manager.objects.aggregate(num_cars=Count('personal_ID_id')),
+        # 'mmanagers': Manager.objects.aggregate(num_cars=Count('personal_ID_id')),
 
         'records': Manager.objects.select_related('personal_ID')
 
@@ -109,7 +110,7 @@ def person_update_view(request, upid):
     if form.is_valid():
         post = form.save(commit=False)
         saveChangeLog(id=request.session.get('company', -1),
-                post=post, name="changed", obj2 = post, obj = Person.objects.filter(ID=post.ID).first())
+                      post=post, name="changed", obj2=post, obj=Person.objects.filter(ID=post.ID).first())
         post.save()
         return render(request, "manager/editPersonel.html", context)
     return render(request, "manager/editPerson.html", context)
@@ -119,8 +120,10 @@ def manager_update_view(request, umid):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
-    manager = Manager.objects.filter(personal_ID_id=umid).annotate(num_cars=Count('VIN')).first()
-    vehicles = Manager.objects.filter(personal_ID_id=umid).select_related('VIN')
+    manager = Manager.objects.filter(personal_ID_id=umid).annotate(
+        num_cars=Count('VIN')).first()
+    vehicles = Manager.objects.filter(
+        personal_ID_id=umid).select_related('VIN')
     #form = ManagerForm(request.POST or None, instance=manager)
     context = {
         'manager': manager,
@@ -137,6 +140,7 @@ def manager_update_view(request, umid):
     #    return render(request, "manager/manager.html", context)
     return render(request, "manager/manager.html", context)
 
+
 def add_manager_vehicle_view(request, mid):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
@@ -144,7 +148,7 @@ def add_manager_vehicle_view(request, mid):
     managed_vehicles = Manager.objects.select_related('VIN')
     manager = Manager.objects.filter(personal_ID_id=mid).first()
     vehicles = Vehicle.objects.filter(companyID=request.session.get('company', -1)).exclude(
-            VIN__in=[o.VIN_id for o in managed_vehicles])
+        VIN__in=[o.VIN_id for o in managed_vehicles])
     #form = ManagerForm(request.POST or None, instance=manager)
     context = {
         'manager': manager,
@@ -305,12 +309,15 @@ def managedVehicle(request):
         vehicle = Vehicle.objects.filter(VIN=vin).first()
         context['vehicle'] = vehicle
 
+        services = Service.objects.filter(vehicle_id=vehicle)
+        context['services'] = services
+
         services = Service.objects.exclude(
             plan=None).filter(vehicle_id=vehicle)
         serviceplan = Serviceplan.objects.exclude(
             id__in=[o.plan.id for o in services]).filter(
                 brand=vehicle.brand, model=vehicle.model, version=vehicle.version, accessories=vehicle.accessories)
-           
+
         context['serviceplan'] = serviceplan
 
     return render(request, 'manager/managedVehicle.html', context)
@@ -436,7 +443,7 @@ def endRent(request):
     vehicle = Vehicle.objects.filter(VIN=vin).first()
 
     rental = Rental.objects.filter(
-        rent_id = rental_id).first()
+        rent_id=rental_id).first()
 
     if rental is not None:
         rental.final_mileage = final_mileage
@@ -713,9 +720,9 @@ def vehicle_update_view(request, uvid):
     }
 
     if form.is_valid():
-        post = form.save(commit = False)
+        post = form.save(commit=False)
         saveChangeLog(id=request.session.get('company', -1),
-                post=post, name="changed", obj2 = post, obj = Vehicle.objects.filter(VIN=post.VIN).first())
+                      post=post, name="changed", obj2=post, obj=Vehicle.objects.filter(VIN=post.VIN).first())
         post.save()
         return render(request, "manager/editVehicles.html", context)
     return render(request, "manager/editVehicle.html", context)
@@ -780,9 +787,9 @@ def updatePlan(request):
         'name': request.session.get('name', '')
     }
     if form.is_valid():
-        post = form.save(commit = False)
+        post = form.save(commit=False)
         saveChangeLog(id=request.session.get('company', -1),
-                post=post, name="changed", obj = Serviceplan.objects.filter(id = post.id).first(), obj2 = post)
+                      post=post, name="changed", obj=Serviceplan.objects.filter(id=post.id).first(), obj2=post)
         post.save()
         return render(request, "manager/editServiceplan.html", context)
     print(form.is_valid)
@@ -806,7 +813,8 @@ def saveChangeLog(name, id, post, obj, obj2):
         post, name, id, logDate.strftime("%x %X")))
     f.write("{}\n".format(len(differences)))
     for diff in differences:
-        f.write("{} before: {} now: {}\n".format(diff, getattr(obj, diff), getattr(obj2, diff)))
+        f.write("{} before: {} now: {}\n".format(
+            diff, getattr(obj, diff), getattr(obj2, diff)))
     f.close()
 
 
@@ -823,7 +831,6 @@ def generateReport(request):
     if request.session.get('currentUser', 'none') != 'admin':
         return redirect('login')
 
-
     buffer = io.BytesIO()
     p = canvas.Canvas(buffer)
 
@@ -835,7 +842,7 @@ def generateReport(request):
     textobject.setFont('Times-Roman', 12)
     i = 0
     page = 1
-    while  i < len(text):
+    while i < len(text):
         companyID = re.search("company id = \d+", text[i])
         if request.session.get('id', -1) == int(companyID[0][13:]):
 
@@ -856,13 +863,13 @@ def generateReport(request):
                 textobject.textLine("{} {} {} {}".format(
                     text[i][:vehicleVIN.start()], vehicle.brand, vehicle.model, text[i][vehicleVIN.start():]))
 
-
             elif re.search("Vehicle object", text[i]) is not None:
                 managerID = re.search("\(\d+\)", text[i])
                 manager = Manager.objects.filter(
                     id=int(managerID[0][1:-1])).first()
 
-                personManager = Person.objects.filter(ID = manager.personal_ID).first()
+                personManager = Person.objects.filter(
+                    ID=manager.personal_ID).first()
 
                 textobject.textLine("{} {} {} {}".format(
                     text[i][:vehicleVIN.start()], personManager.name, personManager.surname, text[i][vehicleVIN.start():]))
@@ -883,16 +890,14 @@ def generateReport(request):
                 textobject.setTextOrigin(10, 830)
                 textobject.setFont('Times-Roman', 12)
 
-
             operation = re.search("was \w+ by", text[i])
 
-
             if text[i][operation.start():operation.end()] == "was changed by":
-                 i += 1
-                 j = int(text[i])
-                
-                 for k in range(0, j):
-                    i += 1    
+                i += 1
+                j = int(text[i])
+
+                for k in range(0, j):
+                    i += 1
                     textobject.textLine("{}".format(text[i]))
             i += 1
             textobject.textLine("")
@@ -910,7 +915,6 @@ def generateReport(request):
     zf.writestr("Report.pdf", pdf)
     zf.writestr("RentalReport.pdf", pdf2)
     return response
-
 
 
 def generateRentalReport(companyId):
