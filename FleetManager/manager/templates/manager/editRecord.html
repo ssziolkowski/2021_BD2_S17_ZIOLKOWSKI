@@ -1,0 +1,87 @@
+{%extends "manager/base.html"%}
+{%block content%}
+{% load static %}
+
+<style>
+  html body div div.container table#t {
+    align-content: center;
+    margin: auto;
+    column-span: 50px;
+    width: 100%;
+    text-align: center;
+  }
+
+  th {
+    margin: 7px;
+  }
+
+  td {
+    text-align: center;
+    vertical-align: center;
+    width: 100%/6;
+    text-align: center;
+  }
+
+</style>
+<div style="padding:10px;"></div>
+<div class="container" style="background-color: #f1f1f1;padding:10px;" >
+  <hr>
+  <div class="container" id="data">
+  </div>
+  <hr>
+  <div class="container" style="background-color: #f1f1f1;padding:10px;">
+    <div class="container" id="records">
+      <center>
+        <h5><b>Manager record</b></h5>
+      </center>
+      <hr>
+      <table margin="0" id="t">
+        <tr>
+          <form enctype="multipart/form-data" method="post" action="">{% csrf_token %}
+            <td>
+                <label for="id"><b>Record id: </b></label>
+            </td>
+            <td>
+              <input type="number" placeholder="xD" value="{{ record.id }}" name="id" readonly="readonly" required>
+            </td>
+        </tr><tr>
+            <td>
+                <label for="id"><b>Personal id: </b></label>
+            </td>
+            <td>
+              <input type="number" placeholder="xD" value="{{ record.personal_ID_id }}" name="personal_ID" readonly="readonly" required>
+            </td>
+        </tr><tr>
+            <td>
+                <label for="date_start"><b>Starting date: </b></label>
+            </td>
+            <td>
+              <input type="date" placeholder="starting date" value="{{ record.date_start|date:"Y-m-d" }}" name="date_start" required>
+            </td>
+        </tr><tr>
+            <td>
+                <label for="date_end"><b>Date untill: </b></label>
+            </td>
+            <td>
+              <input type="date" placeholder="date untill" value="{{ record.date_end|date:"Y-m-d" }}" name="date_end"  required>
+            </td>
+        </tr><tr>
+            <td>
+                <label for="VIN"><b>Car vin: </b></label>
+            </td>
+            <td>
+              <input type="text" placeholder="N/A" value="{{ record.VIN_id }}" name="VIN" readonly="readonly" required>
+            </td>
+        </tr><tr>
+            <td>
+            <td><input type="submit" class="btn btn-primary" value="Edit"></td></td></tr>
+          </form>
+        </tr>
+      </table>
+    </div>
+  <div class="container">
+    <div class="row"></div>
+  </div>
+
+</div>
+{%endblock content%}

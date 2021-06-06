@@ -21,6 +21,7 @@ def managerPanel(request):
         return redirect('login')
 
     id = request.session.get('id', -1)
+
     context = {
         'vehicles': Manager.objects.select_related('personal_ID').filter(personal_ID=id),
         'user': request.session.get('currentUser', 'none'),
@@ -38,11 +39,30 @@ def managerManager(request):
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', ''),
         'managers': Person.objects.filter(companyID=request.session.get('company', -1)).order_by('ID').filter(
-            ID__in=[r.personal_ID_id for r in records]),
-        'managerss': Person.objects.raw('SELECT p."ID" AS id, p.name AS n, p.surname AS s FROM manager_manager m JOIN manager_person p ON m."personal_ID_id"=p."ID" GROUP BY p."ID", p.name, p.surname'),
-        'records': Manager.objects.select_related('personal_ID')
+            ID__in=[r.personal_ID_id for r in records]).order_by('ID'),
+        'records': Manager.objects.select_related('personal_ID').order_by('id')
    }
     return render(request, 'manager/managerManager.html', context)
+
+
+def edit_manager_record(request, rid):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    record = Manager.objects.filter(id=rid).first()
+    form = ManagerForm(request.POST or None, instance=record)
+    context = {
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', ''),
+        'record': record
+    }
+    if form.is_valid():
+        post = form.save(commit=False)
+        saveChangeLog(id=request.session.get('company', -1),
+                      post=post, name="changed", obj2=post, obj=Manager.objects.filter(id=post.id).first())
+        post.save()
+        return redirect('managerManager')
+    return render(request, 'manager/editRecord.html', context)
 
 
 def fleetManager(request):
