@@ -25,18 +25,51 @@
      width:40% 
   }
 </style>
+<script type="text/javascript">
+    function peopleToggle() {
+    var x = document.getElementById("ppl");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+  } 
+  function vehicleToggle() {
+    var x = document.getElementById("vhlcls");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+  } 
+  </script>
 <div style="padding:10px;"></div>
 <div class="container" style="background-color: #f1f1f1;padding:10px;" >
   <hr>
   <div class="container" style="background-color: #f1f1f1;padding:10px;">
-    <div class="container" id="records">
+    <div class="container">
       <center>
         <h5><b>New Manager</b></h5>
       </center>
       <hr>
+      <table id="forms" align="left" width="100%">
+        <tr>
+          <td>
+            <button class="btn btn-primary" onclick="peopleToggle()">Show/hide Suitable people</button>
+          </td><td>
+            <button class="btn btn-primary" onclick="vehicleToggle()">Show/hide Available vehicles</button>
+          </td>
+        </tr>
+      </table>
+      <br>
+      </div>
+      <div class="container">
+      <br>
+      <hr>
+
       <table margin="0" id="t">
         <tr>
-          <form enctype="multipart/form-data" method="post" action="">{% csrf_token %}
+          <form enctype="multipart/form-data" method="post" action="newManager">{% csrf_token %}
         </tr><tr>
             <td>
                 <label for="id"><b>Personal id: </b></label>
@@ -75,7 +108,7 @@
     <hr>
   <div class="container">
     <div class="row"></div>
-    <div class="container" id="data">
+    <div class="container" id="ppl">
         <center>
           <h5><b>Potential manager list</b></h5>
         </center>
@@ -108,9 +141,9 @@
           {% endfor %}
         </table>
   </div>
-  </div>
+  
   <hr>
-  <div class="container" id="cars">
+  <div class="container" id="vhlcls">
     <center>
         <h5><b>Available vehicles list</b></h5>
       </center>
