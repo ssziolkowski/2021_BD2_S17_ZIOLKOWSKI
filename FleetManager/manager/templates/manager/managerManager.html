@@ -48,47 +48,19 @@ function recordToggle() {
     <h5><b>Search Person</b></h5>
   </center>
   <hr>
-  <table id="forms" align="left" width="70%">
-    <!-- 
+  <table id="forms" align="left" width="100%">
     <tr>
       <td>
-        <label for="id"><b>Person ID:</b></label>
-      </td>
-      <td>
-        <form enctype="multipart/form-data" method="post" action="{% url 'editPerson' %}">{% csrf_token %}
-          {{ form.as_ps }}
-          <input type="number" placeholder="Enter Id" name="ID" id="id" required>
-          <input type="submit" name="searchbyid" value="Search">
+        <button class="btn btn-primary" onclick="managerToggle()">Show/hide current managers</button>
+      </td><td>
+        <button class="btn btn-primary" onclick="recordToggle()">Show/hide manager records</button>
+      </td><td>
+        <form enctype="multipart/form-data" method="post" action="{% url 'addManager' %}">{% csrf_token %}
+        <button type="submit" class="btn btn-primary">New Manager</button>
         </form>
-      </td>
-    </tr>
-  -->
-    <tr>
-      <td>
-        <form enctype="multipart/form-data" method="get" action="">{% csrf_token %}
-          {{ form.as_ps }}
-          <label for="phrase"><b>Filter by:</b></label>
-          <select placeholder="Select filter" name="filter" required>
-            <option value="ID">Id</option>
-            <option value="login">Login</option>
-            <option value="name">Name</option>
-            <option value="surname" default>Surname</option>
-            <option value="phone_number">Phone</option>
-            <option value="position">Position</option>
-            <option value="address">Address</option>
-            <option value="salary">Salary</option>
-            <option value="status">Status</option>
-          </select>
-          <input type="text" placeholder="Enter phrase" name="phrase" id="phrase">
-          <input type="submit" name="search" value="Search">
-        </form>
-      </td>
+        </td>
     </tr>
   </table>
-  </form>
-<button onclick="managerToggle()">Show/hide current managers</button>
-<button onclick="recordToggle()">Show/hide manager records</button>
-<button>New Manager</button>
 </div>
 <div class="container" style="background-color: #f1f1f1;padding:10px;"></div>
 <div class="container" style="background-color: #f1f1f1;padding:10px;" >

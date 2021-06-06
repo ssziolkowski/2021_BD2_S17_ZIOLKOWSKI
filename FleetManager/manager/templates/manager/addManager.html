@@ -28,30 +28,21 @@
 <div style="padding:10px;"></div>
 <div class="container" style="background-color: #f1f1f1;padding:10px;" >
   <hr>
-  <div class="container" id="data">
-  </div>
-  <hr>
   <div class="container" style="background-color: #f1f1f1;padding:10px;">
     <div class="container" id="records">
       <center>
-        <h5><b>Manager record</b></h5>
+        <h5><b>New Manager</b></h5>
       </center>
       <hr>
       <table margin="0" id="t">
         <tr>
           <form enctype="multipart/form-data" method="post" action="">{% csrf_token %}
-            <td>
-                <label for="id"><b>Record id: </b></label>
-            </td>
-            <td>
-              <input type="number" placeholder="xD" value="{{ record.id }}" name="id" readonly="readonly" required>
-            </td>
         </tr><tr>
             <td>
                 <label for="id"><b>Personal id: </b></label>
             </td>
             <td>
-              <input type="number" placeholder="xD" value="{{ record.personal_ID_id }}" name="personal_ID" readonly="readonly" required>
+              <input type="number" placeholder="Choose Person" value="{{ selPerson }}" name="personal_ID" readonly="readonly" required>
             </td>
         </tr><tr>
             <td>
@@ -72,17 +63,51 @@
                 <label for="VIN"><b>Car vin: </b></label>
             </td>
             <td>
-              <input type="text" placeholder="N/A" value="{{ record.VIN_id }}" name="VIN" readonly="readonly" required>
+              <input type="text" placeholder="Choose vehicle" value="{{ record.VIN_id }}" name="VIN" readonly="readonly" required>
             </td>
         </tr><tr>
-            <td>
-            <td><input type="submit" class="btn btn-primary" value="Edit"></td></td></tr>
+            <td><input type="reset" class="btn btn-primary" value="Reset"></td>
+            <td><input type="submit" class="btn btn-primary" value="Confirm"></td></tr>
           </form>
         </tr>
       </table>
     </div>
+    <hr>
   <div class="container">
     <div class="row"></div>
+    <div class="container" id="data">
+        <center>
+          <h5><b>Potential manager list</b></h5>
+        </center>
+        <hr>
+        <table margin="0" id="t">
+          <tr>
+            <th>Personal ID</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Details/Edit</th>
+          </tr>
+          {% for manager in potentialManagers %}
+          <tr>
+            <form enctype="multipart/form-data" method="post" action="{% url 'addManager' %}">{% csrf_token %}
+              <td>
+                {{manager.ID }}
+                <input type="number" placeholder="xD" value="{{ manager.ID }}" name="selectedID" readonly="readonly" hidden required>
+              </td>
+              <td>
+                {{manager.name }}
+                <input type="text" placeholder="N/A" value="{{ manager.n }}" name="name" disabled hidden required>
+              </td>
+              <td>
+                {{manager.surname }}
+                <input type="text" placeholder="N/A" value="{{ manager.surname }}" name="surname" disabled hidden required>
+              </td>
+              <td><input type="submit" class="btn btn-primary" value="Select"></td>
+            </form>
+          </tr>
+          {% endfor %}
+        </table>
+  </div>
   </div>
 
 </div>

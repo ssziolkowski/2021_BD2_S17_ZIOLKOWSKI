@@ -65,6 +65,32 @@ def edit_manager_record(request, rid):
     return render(request, 'manager/editRecord.html', context)
 
 
+def addManager(request):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    records = Manager.objects.all()
+    form = ManagerForm(request.POST)
+    selected_id = request.POST.get('selectedID')
+    managed_vehicles = Manager.objects.select_related('VIN')
+    context = {
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', ''),
+        'potentialManagers': Person.objects.filter(companyID=request.session.get('company', -1)).order_by('ID').exclude(
+            ID__in=[r.personal_ID_id for r in records]).order_by('ID'),
+        'selPerson': selected_id,
+        'vehicles': Vehicle.objects.filter(companyID=request.session.get('company', -1)).exclude(
+        VIN__in=[o.VIN_id for o in managed_vehicles])
+    }
+    if form.is_valid():
+        post = form.save(commit=False)
+        saveChangeLog(id=request.session.get('company', -1),
+                      post=post, name="changed", obj2=post, obj=Manager.objects.filter(id=post.id).first())
+        post.save()
+        return redirect('managerManager')
+    return render(request, 'manager/addManager.html', context)
+
+
 def fleetManager(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
@@ -144,7 +170,6 @@ def manager_update_view(request, umid):
         num_cars=Count('VIN')).first()
     vehicles = Manager.objects.filter(
         personal_ID_id=umid).select_related('VIN')
-    #form = ManagerForm(request.POST or None, instance=manager)
     context = {
         'manager': manager,
         #    'persons': Person.objects.filter(companyID=request.session.get('company', -1)).order_by("ID"),
@@ -152,12 +177,6 @@ def manager_update_view(request, umid):
         'vehicles': vehicles,
         'name': request.session.get('name', '')
     }
-
-    # if form.is_valid():
-    #    post = form.save()
-    #    saveLog(id=request.session.get('company', -1),
-    #            post=post, name="changed")
-    #    return render(request, "manager/manager.html", context)
     return render(request, "manager/manager.html", context)
 
 
@@ -169,7 +188,6 @@ def add_manager_vehicle_view(request, mid):
     manager = Manager.objects.filter(personal_ID_id=mid).first()
     vehicles = Vehicle.objects.filter(companyID=request.session.get('company', -1)).exclude(
         VIN__in=[o.VIN_id for o in managed_vehicles])
-    #form = ManagerForm(request.POST or None, instance=manager)
     context = {
         'manager': manager,
         #    'persons': Person.objects.filter(companyID=request.session.get('company', -1)).order_by("ID"),
@@ -177,12 +195,6 @@ def add_manager_vehicle_view(request, mid):
         'vehicles': vehicles,
         'name': request.session.get('name', '')
     }
-
-    # if form.is_valid():
-    #    post = form.save()
-    #    saveLog(id=request.session.get('company', -1),
-    #            post=post, name="changed")
-    #    return render(request, "manager/manager.html", context)
     return render(request, "manager/addManagerVehicle.html", context)
 
 
