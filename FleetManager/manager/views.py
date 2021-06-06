@@ -72,13 +72,16 @@ def addManager(request):
     records = Manager.objects.all()
     form = ManagerForm(request.POST)
     selected_id = request.POST.get('selectedID')
+    selected_vin = request.POST.get('selectedVIN')
     managed_vehicles = Manager.objects.select_related('VIN')
+    print(selected_vin)
     context = {
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', ''),
         'potentialManagers': Person.objects.filter(companyID=request.session.get('company', -1)).order_by('ID').exclude(
             ID__in=[r.personal_ID_id for r in records]).order_by('ID'),
         'selPerson': selected_id,
+        'selVehicle': selected_vin,
         'vehicles': Vehicle.objects.filter(companyID=request.session.get('company', -1)).exclude(
         VIN__in=[o.VIN_id for o in managed_vehicles])
     }
@@ -89,6 +92,37 @@ def addManager(request):
         post.save()
         return redirect('managerManager')
     return render(request, 'manager/addManager.html', context)
+
+
+def newManager(request):
+    if request.session.get('currentUser', 'none') == 'none':
+        return redirect('login')
+
+    form = ManagerForm(request.POST)
+    selected_id = request.POST.get('selectedID')
+    selected_vin = request.POST.get('selectedVIN')
+    records = Manager.objects.all()
+    managed_vehicles = Manager.objects.select_related('VIN')
+    context = {
+        'user': request.session.get('currentUser', 'none'),
+        'name': request.session.get('name', ''),
+        'potentialManagers': Person.objects.filter(companyID=request.session.get('company', -1)).order_by('ID').exclude(
+            ID__in=[r.personal_ID_id for r in records]).order_by('ID'),
+        'selPerson': selected_id,
+        'selVehicle': selected_vin,
+        'vehicles': Vehicle.objects.filter(companyID=request.session.get('company', -1)).exclude(
+        VIN__in=[o.VIN_id for o in managed_vehicles])
+    }
+    print(selected_vin)
+    print(selected_vin)
+
+    if form.is_valid():
+        post = form.save(commit=False)
+        saveChangeLog(id=request.session.get('company', -1),
+                      post=post, name="changed", obj2=post, obj=Manager.objects.filter(id=post.id).first())
+        post.save()
+        return redirect('managerManager')
+    return render(request, 'manager/addManager.html')
 
 
 def fleetManager(request):

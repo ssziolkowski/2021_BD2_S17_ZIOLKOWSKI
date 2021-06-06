@@ -26,6 +26,7 @@ urlpatterns = [
     path('allVehicles', views.allVehicles, name='allVehicles'),
     path('addVehicle', views.addVehicle, name='addVehicle'),
     path('addManager', views.addManager, name='addManager'),
+    path('newManager', views.newManager, name='newManager'),
     path('login', views.login, name='login'),
     path('rentVehicle', views.rentVehicle, name='rentVehicle'),
     path('selectedVehicle', views.selectedVehicle_view,

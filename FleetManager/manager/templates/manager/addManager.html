@@ -1,7 +1,7 @@
 {%extends "manager/base.html"%}
 {%block content%}
 {% load static %}
-
+<!--Pokazuje plady z js, ale działa-->
 <style>
   html body div div.container table#t {
     align-content: center;
@@ -18,11 +18,11 @@
   td {
     text-align: center;
     vertical-align: center;
-    width: 100%/6;
+    width: 100%/7;
     text-align: center;
   }
   input{
-     width:30% 
+     width:40% 
   }
 </style>
 <div style="padding:10px;"></div>
@@ -42,7 +42,7 @@
                 <label for="id"><b>Personal id: </b></label>
             </td>
             <td>
-              <input type="number" placeholder="Choose Person" value="{{ selPerson }}" name="personal_ID" readonly="readonly" required>
+              <input type="number" id="selectID" placeholder="Choose Person" value="{{ selPerson }}" name="personal_ID" readonly="readonly" required>
             </td>
         </tr><tr>
             <td>
@@ -63,7 +63,7 @@
                 <label for="VIN"><b>Car vin: </b></label>
             </td>
             <td>
-              <input type="text" placeholder="Choose vehicle" value="{{ record.VIN_id }}" name="VIN" readonly="readonly" required>
+              <input type="text" id="selectVIN" placeholder="Choose vehicle" value="{{ selVehicle }}" name="VIN" readonly="readonly" required>
             </td>
         </tr><tr>
             <td><input type="reset" class="btn btn-primary" value="Reset"></td>
@@ -102,13 +102,63 @@
                 {{manager.surname }}
                 <input type="text" placeholder="N/A" value="{{ manager.surname }}" name="surname" disabled hidden required>
               </td>
-              <td><input type="submit" class="btn btn-primary" value="Select"></td>
+              <td><input type="button" onclick="document.getElementById('selectID').value={{ manager.ID }}" class="btn btn-primary" value="Select"></td>
             </form>
           </tr>
           {% endfor %}
         </table>
   </div>
   </div>
-
+  <hr>
+  <div class="container" id="cars">
+    <center>
+        <h5><b>Available vehicles list</b></h5>
+      </center>
+      <hr>
+    <table margin="0" id="t" class="table">
+        <thead class="thead-dark">
+      <tr>
+        <th>VIN</th>
+        <th>Picture</th>
+        <th>Brand</th>
+        <th>Version</th>
+        <th>Model</th>
+        <th>Number plate</th>
+        <th>select</th>
+        </thead>
+      </tr>
+      {% for vehicle in vehicles %}
+      <tr>
+        <form enctype="multipart/form-data" method="post" action="{% url 'addManager' %}">{% csrf_token %}
+          <td>
+            {{vehicle.VIN }}
+            <input type="text" placeholder="xD" value="{{ vehicle.VIN }}" name="selectedVIN" readonly="readonly" hidden required>
+          </td>
+          <td>
+            <img src="{{vehicle.picture.url}} " alt="Card image cap" width="100%" height="100px">
+            <input type="file" placeholder="Upload picture" name="picture" disabled hidden required>
+          </td>
+          <td>
+            {{vehicle.brand }}
+            <input type="text" placeholder="Login" value="{{ vehicle.brand }}" name="brand" disabled hidden required>
+          </td>
+          <td>
+            {{vehicle.version }}
+            <input type="text" placeholder="N/A" value="{{ vehicle.version }}" name="version" disabled hidden required>
+          </td>
+          <td>
+            {{vehicle.model }}
+            <input type="text" placeholder="N/A" value="{{ vehicle.model }}" name="model" disabled hidden required>
+          </td>
+          <td>
+            {{vehicle.plate_number }}
+            <input type="text" placeholder="N/A" value="{{ vehicle.plate_number }}" name="plate_number" disabled hidden required>
+          </td>
+          <td><input type="button" onclick="document.getElementById('selectVIN').value={{ vehicle.VIN }}" class="btn btn-primary" value="Select"></td>
+        </form>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
 </div>
 {%endblock content%}
