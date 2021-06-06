@@ -1,0 +1,5 @@
+Rental object (40) was reserved by company id = 1, person id = 13 date = 06/07/21 00:34:17
+Rental object (40) was rented by company id = 1, person id = 13 date = 06/07/21 00:34:30
+Rental object (41) was reserved by company id = 1, person id = 13 date = 06/07/21 00:35:00
+Rental object (41) was rented by company id = 1, person id = 13 date = 06/07/21 00:35:11
+Rental object (40) was returned by company id = 1, person id = 13 date = 06/07/21 00:41:30

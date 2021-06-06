@@ -118,9 +118,9 @@ def newManager(request):
 
     if form.is_valid():
         post = form.save(commit=False)
-        saveLog(id=request.session.get('company', -1),
-                      post=post, name="changed")
         post.save()
+        saveLog(id=request.session.get('company', -1),
+                      post=post, name="added")
         return redirect('managerManager')
     return render(request, 'manager/addManager.html')
 
@@ -930,7 +930,6 @@ def generateReport(request):
                 managerID = re.search("\(\d+\)", text[i])
                 manager = Manager.objects.filter(
                     id=int(managerID[0][1:-1])).first()
-
                 personManager = Person.objects.filter(
                     ID=manager.personal_ID.ID).first()
 
