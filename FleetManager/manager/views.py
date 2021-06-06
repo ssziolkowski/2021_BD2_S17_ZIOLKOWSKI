@@ -58,8 +58,8 @@ def edit_manager_record(request, rid):
     }
     if form.is_valid():
         post = form.save(commit=False)
-        saveChangeLog(id=request.session.get('company', -1),
-                      post=post, name="changed", obj2=post, obj=Manager.objects.filter(id=post.id).first())
+        saveLog(id=request.session.get('company', -1),
+                      post=post, name="added")
         post.save()
         return redirect('managerManager')
     return render(request, 'manager/editRecord.html', context)
@@ -87,8 +87,8 @@ def addManager(request):
     }
     if form.is_valid():
         post = form.save(commit=False)
-        saveChangeLog(id=request.session.get('company', -1),
-                      post=post, name="changed", obj2=post, obj=Manager.objects.filter(id=post.id).first())
+        saveLog(id=request.session.get('company', -1),
+                      post=post, name="changed")
         post.save()
         return redirect('managerManager')
     return render(request, 'manager/addManager.html', context)
@@ -118,8 +118,8 @@ def newManager(request):
 
     if form.is_valid():
         post = form.save(commit=False)
-        saveChangeLog(id=request.session.get('company', -1),
-                      post=post, name="changed", obj2=post, obj=Manager.objects.filter(id=post.id).first())
+        saveLog(id=request.session.get('company', -1),
+                      post=post, name="changed")
         post.save()
         return redirect('managerManager')
     return render(request, 'manager/addManager.html')
@@ -928,16 +928,16 @@ def generateReport(request):
                 textobject.textLine("{} {} {} {}".format(
                     text[i][:vehicleVIN.start()], vehicle.brand, vehicle.model, text[i][vehicleVIN.start():]))
 
-            elif re.search("Vehicle object", text[i]) is not None:
+            elif re.search("Manager object", text[i]) is not None:
                 managerID = re.search("\(\d+\)", text[i])
                 manager = Manager.objects.filter(
                     id=int(managerID[0][1:-1])).first()
 
                 personManager = Person.objects.filter(
-                    ID=manager.personal_ID).first()
+                    ID=manager.personal_ID.ID).first()
 
-                textobject.textLine("{} {} {} {}".format(
-                    text[i][:vehicleVIN.start()], personManager.name, personManager.surname, text[i][vehicleVIN.start():]))
+                textobject.textLine("{} {} {} {} {} {}".format(
+                    text[i][:managerID.start()], personManager.name, personManager.surname, manager.date_start, manager.date_end,  text[i][managerID.start():]))
             else:
                 servicePlanID = re.search("\(\d+\)", text[i])
 
