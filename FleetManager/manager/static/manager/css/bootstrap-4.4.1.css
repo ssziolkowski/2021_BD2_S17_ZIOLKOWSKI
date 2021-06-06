@@ -94,6 +94,29 @@ abbr[data-original-title] {
   text-decoration-skip-ink: none;
 }
 
+html body div div.container table#t {
+  align-content: center;
+  margin: auto;
+  column-span: 50px;
+  width: 100%;
+  text-align: center;
+}
+
+;
+
+th {
+  margin: 7px;
+}
+
+td {
+  text-align: center;
+  vertical-align: center;
+  width: 100%/10;
+  text-align: center;
+}
+
+;
+
 address {
   margin-bottom: 1rem;
   font-style: normal;

@@ -2,32 +2,6 @@
 {%block content%}
 {% load static %}
 
-<style>
-  html body div div.container table#t {
-    align-content: center;
-    margin: auto;
-    column-span: 50px;
-    width: 100%;
-    text-align: center;
-  }
-
-  ;
-
-  th {
-    margin: 7px;
-  }
-
-  td {
-    text-align: center;
-    vertical-align: center;
-    width: 100%/10;
-    text-align: center;
-  }
-
-  ;
-</style>
-
-
 <div style="padding:10px;"></div>
 <div class="container" style="background-color: #f1f1f1;padding:10px;">
   <center>
@@ -35,20 +9,6 @@
   </center>
   <hr>
   <table id="forms" align="left" width="70%">
-    <!-- 
-    <tr>
-      <td>
-        <label for="id"><b>Person ID:</b></label>
-      </td>
-      <td>
-        <form enctype="multipart/form-data" method="post" action="{% url 'editPerson' %}">{% csrf_token %}
-          {{ form.as_ps }}
-          <input type="number" placeholder="Enter Id" name="ID" id="id" required>
-          <input type="submit" name="searchbyid" value="Search">
-        </form>
-      </td>
-    </tr>
-  -->
     <tr>
       <td>
         <form enctype="multipart/form-data" method="get" action="{% url 'editPersonel' %}">{% csrf_token %}
