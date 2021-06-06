@@ -857,8 +857,6 @@ def updatePlan(request):
                       post=post, name="changed", obj=Serviceplan.objects.filter(id=post.id).first(), obj2=post)
         post.save()
         return render(request, "manager/editServiceplan.html", context)
-    print(form.is_valid)
-    print(form.errors)
     return render(request, "manager/editPlans.html", context)
 
 

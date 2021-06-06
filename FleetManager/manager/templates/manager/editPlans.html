@@ -74,8 +74,8 @@
             {{serviceplan.date }}
             <input type="date" placeholder="N/A" value="{{ serviceplan.date|date:"Y-m-d" }}" name="date"  readonly="readonly" hidden required>
           </td>
+          <input type="number" readonly="readonly" name="id" value={{serviceplan.id}} hidden>
           <td><input type="submit" class="btn btn-primary" value="Edit"></td>
-          <input type="hidden" name="id" value={{serviceplan.id}}>
         </form>
       </tr>
       {% endfor %}

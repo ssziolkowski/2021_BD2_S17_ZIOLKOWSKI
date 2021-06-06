@@ -1,3 +1,0 @@
-Rental object (11) was reserved by company id = 1, person id = 4 date = 06/06/21 12:49:18
-Rental object (11) was rented by company id = 1, person id = 4 date = 06/06/21 12:49:26
-Rental object (11) was returned by company id = 1, person id = 4 date = 06/06/21 12:49:55

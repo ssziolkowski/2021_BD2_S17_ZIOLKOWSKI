@@ -52,7 +52,7 @@ class ServiceplanForm(forms.ModelForm):
 
     class Meta:
         model = Serviceplan
-        fields = ('model', 'version', 'accessories', 'brand',
+        fields = ('id', 'model', 'version', 'accessories', 'brand',
                   'date', 'service_performed', 'mileage')
 
 
