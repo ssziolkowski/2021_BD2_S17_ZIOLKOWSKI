@@ -27,21 +27,22 @@
             </td>
             <td>
             {% now "m-d-Y" as todays_date %}
-            {% if todays_date <= rent.5|date:"m-d-Y" %}
             {% if rent.6 == 'reserved' %}
+            {% if todays_date == rent.4|date:"m-d-Y" %}
             <form action="{% url 'toStartRent' %}" method="post">
                 <input type="hidden" name="VIN" value={{rent.2}}>
                 {% csrf_token %}
                 <button type="submit" class="btn btn-primary">Rent</button>
               </form>
-              {% elif rent.6 == 'rented' %}
+              {% endif %}
+              {% endif %}
+              {% if rent.6 == 'rented' %}
               <form action="{% url 'toEndRent' %}" method="post">
                 <input type="hidden" name="VIN" value={{rent.2}}>
                 <input type="hidden" name="ID" value={{rent.3}}>
                 {% csrf_token %}
-                <button type="submit" class="btn btn-primary">Give vehicle</button>
+                <button type="submit" class="btn btn-primary">Return vehicle</button>
               </form>
-              {% endif %}
              </td>
             {% endif %}
         </tr>

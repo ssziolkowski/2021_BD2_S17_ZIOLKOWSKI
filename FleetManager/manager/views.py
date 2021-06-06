@@ -834,6 +834,7 @@ def generateReport(request):
     textobject.setTextOrigin(10, 830)
     textobject.setFont('Times-Roman', 12)
     i = 0
+    page = 1
     while  i < len(text):
         companyID = re.search("company id = \d+", text[i])
         if request.session.get('id', -1) == int(companyID[0][13:]):
@@ -854,6 +855,17 @@ def generateReport(request):
                     VIN=vehicleVIN[0][1:-1]).first()
                 textobject.textLine("{} {} {} {}".format(
                     text[i][:vehicleVIN.start()], vehicle.brand, vehicle.model, text[i][vehicleVIN.start():]))
+
+
+            elif re.search("Vehicle object", text[i]) is not None:
+                managerID = re.search("\(\d+\)", text[i])
+                manager = Manager.objects.filter(
+                    id=int(managerID[0][1:-1])).first()
+
+                personManager = Person.objects.filter(ID = manager.personal_ID).first()
+
+                textobject.textLine("{} {} {} {}".format(
+                    text[i][:vehicleVIN.start()], personManager.name, personManager.surname, text[i][vehicleVIN.start():]))
             else:
                 servicePlanID = re.search("\(\d+\)", text[i])
 
@@ -863,6 +875,13 @@ def generateReport(request):
                 textobject.textLine("{} {} {} {} {} {}".format(
                     text[i][:servicePlanID.start()], servicePlan.model, servicePlan.brand, servicePlan.version, servicePlan.accessories, text[i][servicePlanID.start():]))
 
+            if i >= 40*page:
+                page += 1
+                p.drawText(textobject)
+                p.showPage()
+                textobject = p.beginText()
+                textobject.setTextOrigin(10, 830)
+                textobject.setFont('Times-Roman', 12)
 
 
             operation = re.search("was \w+ by", text[i])
@@ -888,11 +907,9 @@ def generateReport(request):
     pdf2 = generateRentalReport(request.session.get('id', -1))
     response = HttpResponse(content_type='application/zip')
     zf = zipfile.ZipFile(response, 'w')
-    #zf.writestr("Report {}.pdf".format(datetime.datetime.now().strftime("%x %X")), pdf)
     zf.writestr("Report.pdf", pdf)
     zf.writestr("RentalReport.pdf", pdf2)
     return response
-    #return FileResponse(buffer, as_attachment=True, filename="Report {}.pdf".format(datetime.datetime.now().strftime("%x %X")))
 
 
 
@@ -907,7 +924,9 @@ def generateRentalReport(companyId):
     textobject.setTextOrigin(10, 830)
     textobject.setFont('Times-Roman', 12)
 
+    i = 0
     for line in text:
+        i += 4
         companyID = re.search("company id = \d+", line)
         if companyId == int(companyID[0][13:]):
 
@@ -931,6 +950,13 @@ def generateRentalReport(companyId):
 
             textobject.textLine("")
 
+            if i % 56 == 0:
+                p.drawText(textobject)
+                p.showPage()
+                textobject = p.beginText()
+                textobject.setTextOrigin(10, 830)
+                textobject.setFont('Times-Roman', 12)
+
     p.drawText(textobject)
     p.showPage()
     p.save()
@@ -940,7 +966,6 @@ def generateRentalReport(companyId):
     pdf = buffer.getvalue()
     buffer.close()
     return pdf
-    #return FileResponse(buffer, as_attachment=True, filename="Rental Report {}.pdf".format(datetime.datetime.now().strftime("%x %X")))
 
 
 def findDiff(obj1, obj2):
