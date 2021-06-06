@@ -18,7 +18,7 @@
   td {
     text-align: center;
     vertical-align: center;
-    width: 100%/8;
+    width: 100%/6;
     text-align: center;
   }
 
@@ -100,35 +100,25 @@ function recordToggle() {
     <hr>
     <table margin="0" id="t">
       <tr>
-        <th>ID</th>
         <th>Personal ID</th>
         <th>Name</th>
         <th>Surname</th>
-        <th>Managed cars</th>
         <th>Details/Edit</th>
       </tr>
       {% for manager in managers %}
       <tr>
-        <form enctype="multipart/form-data" method="post" action="{% url 'manager_update_view' umid=manager.personal_ID_id %}">{% csrf_token %}
+        <form enctype="multipart/form-data" method="post" action="{% url 'manager_update_view' umid=manager.ID %}">{% csrf_token %}
           <td>
-            {{manager.id }}
-            <input type="number" placeholder="xD" value="{{ manager.id }}" name="ID" disabled hidden required>
+            {{manager.ID }}
+            <input type="number" placeholder="xD" value="{{ manager.ID }}" name="ID" disabled hidden required>
           </td>
           <td>
-            {{manager.personal_ID_id }}
-            <input type="number" placeholder="xD" value="{{ manager.personal_ID }}" name="ID" disabled hidden required>
+            {{manager.name }}
+            <input type="text" placeholder="N/A" value="{{ manager.n }}" name="name" disabled hidden required>
           </td>
           <td>
-            {{manager.personal_ID.name }}
-            <input type="text" placeholder="N/A" value="{{ manager.name }}" name="name" disabled hidden required>
-          </td>
-          <td>
-            {{manager.personal_ID.surname }}
+            {{manager.surname }}
             <input type="text" placeholder="N/A" value="{{ manager.surname }}" name="surname" disabled hidden required>
-          </td>
-          <td>
-            {{manager.num_cars }}
-            <input type="text" placeholder="N/A" value="{{ manager.num_cars }}" name="num_cars" disabled hidden required>
           </td>
           <td><input type="submit" class="btn btn-primary" value="View"></td>
         </form>

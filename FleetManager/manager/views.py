@@ -13,6 +13,7 @@ import datetime
 from reportlab.pdfgen import canvas
 import re
 import zipfile
+from django.db import connection
 
 def managerPanel(request):
     if request.session.get('currentUser', 'none') == 'none':
@@ -31,16 +32,15 @@ def managerManager(request):
     if request.session.get('currentUser', 'none') == 'none':
         return redirect('login')
 
+    records = Manager.objects.all()
     context = {
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', ''),
-        'managers': Manager.objects.annotate(num_cars=Count("personal_ID_id")).order_by('id'),
-        #'mmanagers': Manager.objects.aggregate(num_cars=Count('personal_ID_id')),
-
+        'managers': Person.objects.filter(companyID=request.session.get('company', -1)).order_by('ID').filter(
+            ID__in=[r.personal_ID_id for r in records]),
+        'managerss': Person.objects.raw('SELECT p."ID" AS id, p.name AS n, p.surname AS s FROM manager_manager m JOIN manager_person p ON m."personal_ID_id"=p."ID" GROUP BY p."ID", p.name, p.surname'),
         'records': Manager.objects.select_related('personal_ID')
-
-        # 'persons': Person.objects.filter(companyID=request.session.get('company', -1)).select_related() .order_by("ID"),
-    }
+   }
     return render(request, 'manager/managerManager.html', context)
 
 
@@ -574,7 +574,6 @@ def addPerson(request):
             return redirect('addPerson')
         else:
             form = PersonForm()
-
     context = {
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', 'FleetManager')
