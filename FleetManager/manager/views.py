@@ -844,7 +844,7 @@ def updatePlan(request):
     print(id)
     serviceplan = Serviceplan.objects.filter(id=id).first()
     print(serviceplan)
-    form = ServiceplanForm(request.POST or None, instance=serviceplan)
+    form = ServiceplanForm(request.POST, instance=serviceplan)
     context = {
         'plan': serviceplan,
         'serviceplans': Serviceplan.objects.all().order_by('brand', 'model', 'version', 'accessories', 'date'),

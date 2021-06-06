@@ -170,7 +170,7 @@
             {{vehicle.plate_number }}
             <input type="text" placeholder="N/A" value="{{ vehicle.plate_number }}" name="plate_number" disabled hidden required>
           </td>
-          <td><input type="button" onclick="document.getElementById('selectVIN').value={{ vehicle.VIN }}" class="btn btn-primary" value="Select"></td>
+          <td><input type="button" onclick="document.getElementById('selectVIN').value='{{ vehicle.VIN }}'" class="btn btn-primary" value="Select"></td>
         </form>
       </tr>
       {% endfor %}
