@@ -74,7 +74,6 @@ def addManager(request):
     selected_id = request.POST.get('selectedID')
     selected_vin = request.POST.get('selectedVIN')
     managed_vehicles = Manager.objects.select_related('VIN')
-    print(selected_vin)
     context = {
         'user': request.session.get('currentUser', 'none'),
         'name': request.session.get('name', ''),
